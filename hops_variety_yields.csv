@@ -1,1277 +1,1291 @@
-Variety,Yield,Year,State,File
-Cascade,1802,2012,Oregon,10.pdf
-Centennial,1779,2012,Oregon,10.pdf
-Golding,1527,2012,Oregon,10.pdf
-Liberty,2519,2012,Oregon,10.pdf
-Magnum,1737,2012,Oregon,10.pdf
-Millennium,,2012,Oregon,10.pdf
-Mt. Hood,1737,2012,Oregon,10.pdf
-Nugget,2071,2012,Oregon,10.pdf
-Perle,,2012,Oregon,10.pdf
-Sterling,,2012,Oregon,10.pdf
-Super Galena,2763,2012,Oregon,10.pdf
-Tettnanger,1493,2012,Oregon,10.pdf
-Willamette,1663,2012,Oregon,10.pdf
-Other,1690,2012,Oregon,10.pdf
-Ahtanum YCR 1,1489,2012,Washington,10.pdf
-Apollo,2655,2012,Washington,10.pdf
-Bravo,2647,2012,Washington,10.pdf
-Cascade,1854,2012,Washington,10.pdf
-Centennial,1354,2012,Washington,10.pdf
-Chelan,,2012,Washington,10.pdf
-Chinook,1699,2012,Washington,10.pdf
-Citra HBC 394,1342,2012,Washington,10.pdf
-Cluster,1965,2012,Washington,10.pdf
-Columbus/Tomahawk,2280,2012,Washington,10.pdf
-Crystal,1184,2012,Washington,10.pdf
-Galena,1742,2012,Washington,10.pdf
-Glacier,1461,2012,Washington,10.pdf
-Golding,,2012,Washington,10.pdf
-Millennium,2017,2012,Washington,10.pdf
-Mt. Hood,1264,2012,Washington,10.pdf
-Northern Brewer,1443,2012,Washington,10.pdf
-Nugget,1679,2012,Washington,10.pdf
-Simcoe YCR 14,1679,2012,Washington,10.pdf
-Summit,2084,2012,Washington,10.pdf
-Super Galena,2645,2012,Washington,10.pdf
-Tettnanger,1003,2012,Washington,10.pdf
-Vanguard,1280,2012,Washington,10.pdf
-Willamette,1359,2012,Washington,10.pdf
-Palisade YCR 4,2356,2012,Washington,10.pdf
-Warrior YCR 5,1968,2012,Washington,10.pdf
-Zeus,2390,2012,Washington,10.pdf
-Other,1455,2012,Washington,10.pdf
-Apollo,1798,2017,Idaho,105.pdf
-Bravo,2799,2017,Idaho,105.pdf
-Calypso,2159,2017,Idaho,105.pdf
-Cascade,1771,2017,Idaho,105.pdf
-Centennial,2028,2017,Idaho,105.pdf
-Chinook,1665,2017,Idaho,105.pdf
-Citra HBC 394,1657,2017,Idaho,105.pdf
-Crystal,2084,2017,Idaho,105.pdf
-El Dorado,2163,2017,Idaho,105.pdf
-Mosaic HBC 369,2581,2017,Idaho,105.pdf
-Ahtanum YCR 1,1494,2017,Idaho,105.pdf
-Super Galena,,2017,Idaho,105.pdf
-Willamette,1689,2017,Idaho,105.pdf
-Zeus,2756,2017,Idaho,105.pdf
-Experimental,611,2017,Idaho,105.pdf
-Other Varieties,1929,2017,Idaho,105.pdf
-Cascade,1425,2017,Oregon,105.pdf
-Centennial,1273,2017,Oregon,105.pdf
-Chinook,1667,2017,Oregon,105.pdf
-Citra HBC 394,1475,2017,Oregon,105.pdf
-Crystal,1772,2017,Oregon,105.pdf
-Fuggle,1251,2017,Oregon,105.pdf
-Golding,1181,2017,Oregon,105.pdf
-Liberty,,2017,Oregon,105.pdf
-Magnum,1714,2017,Oregon,105.pdf
-Mosaic HBC 369,1875,2017,Oregon,105.pdf
-Mt. Hood,1439,2017,Oregon,105.pdf
-Nugget,1820,2017,Oregon,105.pdf
-Perle,1164,2017,Oregon,105.pdf
-Ahtanum YCR 1,1421,2017,Oregon,105.pdf
-Sterling,1407,2017,Oregon,105.pdf
-Super Galena,2096,2017,Oregon,105.pdf
-Tettnanger,1013,2017,Oregon,105.pdf
-Willamette,1324,2017,Oregon,105.pdf
-Experimental,,2017,Oregon,105.pdf
-Other Varieties,1573,2017,Oregon,105.pdf
-Azacca ADHA-483,2463,2017,Washington,105.pdf
-Ahtanum YCR 1,1052,2017,Washington,105.pdf
-Amarillo VGXP01,1687,2017,Washington,105.pdf
-Apollo,2729,2017,Washington,105.pdf
-Bravo,2671,2017,Washington,105.pdf
-Cascade,2124,2017,Washington,105.pdf
-Centennial,1703,2017,Washington,105.pdf
-Chinook,1784,2017,Washington,105.pdf
-Citra HBC 394,1748,2017,Washington,105.pdf
-Cluster,1937,2017,Washington,105.pdf
-Columbus/Tomahawk,2646,2017,Washington,105.pdf
-Comet,1855,2017,Washington,105.pdf
-Crystal,2063,2017,Washington,105.pdf
-Ekuanot HBC 366,2740,2017,Washington,105.pdf
-El Dorado,1946,2017,Washington,105.pdf
-Eureka!,2244,2017,Washington,105.pdf
-Galena,2134,2017,Washington,105.pdf
-Glacier,,2017,Washington,105.pdf
-Golding,,2017,Washington,105.pdf
-Jarrylo ADHA-881,,2017,Washington,105.pdf
-Loral HBC 291,2295,2017,Washington,105.pdf
-Magnum,,2017,Washington,105.pdf
-Millennium,,2017,Washington,105.pdf
-Mosaic HBC 369,2439,2017,Washington,105.pdf
-Mt. Hood,1043,2017,Washington,105.pdf
-Northern Brewer,,2017,Washington,105.pdf
-Nugget,1950,2017,Washington,105.pdf
-Palisade YCR 4,2209,2017,Washington,105.pdf
-Ahtanum YCR 1,1792,2017,Washington,105.pdf
-Summit,2067,2017,Washington,105.pdf
-Super Galena,2647,2017,Washington,105.pdf
-Tahoma,1752,2017,Washington,105.pdf
-Tettnanger,1202,2017,Washington,105.pdf
-Vanguard,,2017,Washington,105.pdf
-Warrior YCR 5,,2017,Washington,105.pdf
-Willamette,1446,2017,Washington,105.pdf
-Zeus,3088,2017,Washington,105.pdf
-Experimental,1901,2017,Washington,105.pdf
-Other Varieties,1746,2017,Washington,105.pdf
-Cascade,1616,2011,Oregon,11.pdf
-Golding,,2011,Oregon,11.pdf
-Liberty,1326,2011,Oregon,11.pdf
-Magnum,1928,2011,Oregon,11.pdf
-Millennium,,2011,Oregon,11.pdf
-Mt. Hood,1890,2011,Oregon,11.pdf
-Nugget,2317,2011,Oregon,11.pdf
-Perle,1622,2011,Oregon,11.pdf
-Sterling,1915,2011,Oregon,11.pdf
-Super Galena,2263,2011,Oregon,11.pdf
-Tettnanger,1634,2011,Oregon,11.pdf
-Willamette,1716,2011,Oregon,11.pdf
-Other,1511,2011,Oregon,11.pdf
-Ahtanum YCR 1,,2011,Washington,11.pdf
-Apollo,2758,2011,Washington,11.pdf
-Bravo,2609,2011,Washington,11.pdf
-Cascade,1955,2011,Washington,11.pdf
-Centennial,1403,2011,Washington,11.pdf
-Chelan,,2011,Washington,11.pdf
-Chinook,1718,2011,Washington,11.pdf
-Citra HBC 394,1812,2011,Washington,11.pdf
-Cluster,2019,2011,Washington,11.pdf
-Columbus/Tomahawk,2519,2011,Washington,11.pdf
-Galena,1821,2011,Washington,11.pdf
-Glacier,2182,2011,Washington,11.pdf
-Golding,,2011,Washington,11.pdf
-Hallertau,,2011,Washington,11.pdf
-Millennium,2562,2011,Washington,11.pdf
-Mt. Hood,838,2011,Washington,11.pdf
-Northern Brewer,1698,2011,Washington,11.pdf
-Nugget,1969,2011,Washington,11.pdf
-Simcoe YCR 14,1779,2011,Washington,11.pdf
-Summit,,2011,Washington,11.pdf
-Super Galena,3041,2011,Washington,11.pdf
-Vanguard,,2011,Washington,11.pdf
-Willamette,1510,2011,Washington,11.pdf
-Palisade YCR 4,2562,2011,Washington,11.pdf
-Warrior YCR 5,2061,2011,Washington,11.pdf
-Zeus,2572,2011,Washington,11.pdf
-Other,,2011,Washington,11.pdf
-Cascade,1680,2010,Oregon,12.pdf
-Golding,,2010,Oregon,12.pdf
-Millennium,,2010,Oregon,12.pdf
-Mt. Hood,1640,2010,Oregon,12.pdf
-Nugget,2119,2010,Oregon,12.pdf
-Sterling,1644,2010,Oregon,12.pdf
-Super Galena,,2010,Oregon,12.pdf
-Willamette,1535,2010,Oregon,12.pdf
-Other,1711,2010,Oregon,12.pdf
-Ahtanum YCR 1,,2010,Washington,12.pdf
-Apollo,2778,2010,Washington,12.pdf
-Bravo,2566,2010,Washington,12.pdf
-Cascade,1905,2010,Washington,12.pdf
-Centennial,1791,2010,Washington,12.pdf
-Chelan,,2010,Washington,12.pdf
-Chinook,1963,2010,Washington,12.pdf
-Citra HBC 394,1930,2010,Washington,12.pdf
-Cluster,2060,2010,Washington,12.pdf
-Columbus/Tomahawk,2350,2010,Washington,12.pdf
-Galena,1810,2010,Washington,12.pdf
-Glacier,1943,2010,Washington,12.pdf
-Golding,,2010,Washington,12.pdf
-Hallertau,,2010,Washington,12.pdf
-Millennium,2185,2010,Washington,12.pdf
-Mt. Hood,1211,2010,Washington,12.pdf
-Northern Brewer,1270,2010,Washington,12.pdf
-Nugget,1808,2010,Washington,12.pdf
-Simcoe YCR 14,1698,2010,Washington,12.pdf
-Sterling,,2010,Washington,12.pdf
-Summit,,2010,Washington,12.pdf
-Super Galena,2622,2010,Washington,12.pdf
-Vanguard,,2010,Washington,12.pdf
-Willamette,1350,2010,Washington,12.pdf
-Palisade YCR 4,2431,2010,Washington,12.pdf
-Warrior YCR 5,1778,2010,Washington,12.pdf
-Zeus,2678,2010,Washington,12.pdf
-Other,1968,2010,Washington,12.pdf
-Cascade,1741,2009,Oregon,13.pdf
-Glacier,,2009,Oregon,13.pdf
-Golding,,2009,Oregon,13.pdf
-Millennium,2552,2009,Oregon,13.pdf
-Mt. Hood,1671,2009,Oregon,13.pdf
-Nugget,2548,2009,Oregon,13.pdf
-Sterling,1684,2009,Oregon,13.pdf
-Super Galena,,2009,Oregon,13.pdf
-Willamette,1561,2009,Oregon,13.pdf
-Other,1601,2009,Oregon,13.pdf
-Ahtanum YCR 1,,2009,Washington,13.pdf
-Apollo,,2009,Washington,13.pdf
-Bravo,,2009,Washington,13.pdf
-Cascade,2120,2009,Washington,13.pdf
-Centennial,1490,2009,Washington,13.pdf
-Chelan,2680,2009,Washington,13.pdf
-Chinook,1819,2009,Washington,13.pdf
-Cluster,2370,2009,Washington,13.pdf
-Columbus/Tomahawk,2790,2009,Washington,13.pdf
-Galena,1852,2009,Washington,13.pdf
-Glacier,2093,2009,Washington,13.pdf
-Golding,826,2009,Washington,13.pdf
-Hallertau,,2009,Washington,13.pdf
-Millennium,2465,2009,Washington,13.pdf
-Mt. Hood,1570,2009,Washington,13.pdf
-Northern Brewer,753,2009,Washington,13.pdf
-Nugget,2060,2009,Washington,13.pdf
-Simcoe YCR 14,2137,2009,Washington,13.pdf
-Sterling,,2009,Washington,13.pdf
-Summit,,2009,Washington,13.pdf
-Super Galena,3186,2009,Washington,13.pdf
-Vanguard,,2009,Washington,13.pdf
-Willamette,1455,2009,Washington,13.pdf
-Palisade YCR 4,2756,2009,Washington,13.pdf
-Warrior YCR 5,2110,2009,Washington,13.pdf
-Zeus,3387,2009,Washington,13.pdf
-Other,1567,2009,Washington,13.pdf
-Cascade,1068,2008,Oregon,14.pdf
-Glacier,,2008,Oregon,14.pdf
-Golding,1307,2008,Oregon,14.pdf
-Millennium,2179,2008,Oregon,14.pdf
-Mt. Hood,1552,2008,Oregon,14.pdf
-Nugget,1758,2008,Oregon,14.pdf
-Perle,,2008,Oregon,14.pdf
-Sterling,1667,2008,Oregon,14.pdf
-Willamette,1539,2008,Oregon,14.pdf
-Other,992,2008,Oregon,14.pdf
-Ahtanum YCR 1,,2008,Washington,14.pdf
-Apollo,,2008,Washington,14.pdf
-Bravo,,2008,Washington,14.pdf
-Cascade,1781,2008,Washington,14.pdf
-Centennial,1452,2008,Washington,14.pdf
-Chelan,2178,2008,Washington,14.pdf
-Chinook,1775,2008,Washington,14.pdf
-Cluster,2038,2008,Washington,14.pdf
-Columbus/Tomahawk,2585,2008,Washington,14.pdf
-Galena,1826,2008,Washington,14.pdf
-Glacier,1795,2008,Washington,14.pdf
-Golding,1385,2008,Washington,14.pdf
-Hallertau,,2008,Washington,14.pdf
-Millennium,2440,2008,Washington,14.pdf
-Mt. Hood,1572,2008,Washington,14.pdf
-Northern Brewer,,2008,Washington,14.pdf
-Nugget,2068,2008,Washington,14.pdf
-Perle,,2008,Washington,14.pdf
-Simcoe YCR 14,1758,2008,Washington,14.pdf
-Sterling,,2008,Washington,14.pdf
-Summit,,2008,Washington,14.pdf
-Super Galena,2104,2008,Washington,14.pdf
-Vanguard,,2008,Washington,14.pdf
-Willamette,1351,2008,Washington,14.pdf
-Palisade YCR 4,2091,2008,Washington,14.pdf
-Warrior YCR 5,1846,2008,Washington,14.pdf
-Zeus,2618,2008,Washington,14.pdf
-Other,,2008,Washington,14.pdf
-Cascade,,2007,Oregon,15.pdf
-Glacier,,2007,Oregon,15.pdf
-Golding,1403,2007,Oregon,15.pdf
-Millennium,2323,2007,Oregon,15.pdf
-Mt. Hood,1640,2007,Oregon,15.pdf
-Nugget,2231,2007,Oregon,15.pdf
-Perle,,2007,Oregon,15.pdf
-Sterling,1665,2007,Oregon,15.pdf
-Willamette,1577,2007,Oregon,15.pdf
-Other,1416,2007,Oregon,15.pdf
-Ahtanum YCR 1,1964,2007,Washington,15.pdf
-Cascade,2031,2007,Washington,15.pdf
-Centennial,,2007,Washington,15.pdf
-Chelan,2364,2007,Washington,15.pdf
-Chinook,1818,2007,Washington,15.pdf
-Cluster,2030,2007,Washington,15.pdf
-Columbus/Tomahawk,2533,2007,Washington,15.pdf
-Galena,1776,2007,Washington,15.pdf
-Glacier,1619,2007,Washington,15.pdf
-Golding,1500,2007,Washington,15.pdf
-Hallertau,763,2007,Washington,15.pdf
-Millennium,2350,2007,Washington,15.pdf
-Mt. Hood,1316,2007,Washington,15.pdf
-Northern Brewer,,2007,Washington,15.pdf
-Nugget,1909,2007,Washington,15.pdf
-Perle,,2007,Washington,15.pdf
-Sterling,,2007,Washington,15.pdf
-Summit,1822,2007,Washington,15.pdf
-Vanguard,1470,2007,Washington,15.pdf
-Willamette,1318,2007,Washington,15.pdf
-Palisade YCR 4,2519,2007,Washington,15.pdf
-Warrior YCR 5,1903,2007,Washington,15.pdf
-Zeus,2839,2007,Washington,15.pdf
-Other,1355,2007,Washington,15.pdf
-Cascade,,2006,Oregon,16.pdf
-Glacier,,2006,Oregon,16.pdf
-Golding,1744,2006,Oregon,16.pdf
-Millennium,2884,2006,Oregon,16.pdf
-Mt. Hood,2200,2006,Oregon,16.pdf
-Nugget,2303,2006,Oregon,16.pdf
-Perle,,2006,Oregon,16.pdf
-Sterling,2672,2006,Oregon,16.pdf
-Willamette,1459,2006,Oregon,16.pdf
-Other Varieties,882,2006,Oregon,16.pdf
-Ahtanum YCR 1,2110,2006,Washington,16.pdf
-Cascade,1954,2006,Washington,16.pdf
-Centennial,,2006,Washington,16.pdf
-Chelan,2187,2006,Washington,16.pdf
-Chinook,1871,2006,Washington,16.pdf
-Cluster,2184,2006,Washington,16.pdf
-Columbus/Tomahawk,2660,2006,Washington,16.pdf
-Galena,1820,2006,Washington,16.pdf
-Glacier,1441,2006,Washington,16.pdf
-Golding,992,2006,Washington,16.pdf
-Hallertau,812,2006,Washington,16.pdf
-Millennium,2324,2006,Washington,16.pdf
-Mt. Hood,1109,2006,Washington,16.pdf
-Northern Brewer,,2006,Washington,16.pdf
-Nugget,1841,2006,Washington,16.pdf
-Perle,,2006,Washington,16.pdf
-Sterling,1419,2006,Washington,16.pdf
-Summit,1864,2006,Washington,16.pdf
-Willamette,1222,2006,Washington,16.pdf
-Palisade YCR 4,2998,2006,Washington,16.pdf
-Warrior YCR 5,2159,2006,Washington,16.pdf
-Zeus,2962,2006,Washington,16.pdf
-Other,1775,2006,Washington,16.pdf
-Apollo,1951,2018,Idaho,168.pdf
-Bravo,2226,2018,Idaho,168.pdf
-Calypso,2138,2018,Idaho,168.pdf
-Cascade,1716,2018,Idaho,168.pdf
-Centennial,,2018,Idaho,168.pdf
-Chinook,1873,2018,Idaho,168.pdf
-Citra HBC 394,1415,2018,Idaho,168.pdf
-Cluster,2126,2018,Idaho,168.pdf
-Crystal,1927,2018,Idaho,168.pdf
-El Dorado,1463,2018,Idaho,168.pdf
-Eureka!,2299,2018,Idaho,168.pdf
-Galena,1715,2018,Idaho,168.pdf
-Mosaic HBC 369,2333,2018,Idaho,168.pdf
-Ahtanum YCR 1,1245,2018,Idaho,168.pdf
-Super Galena,2493,2018,Idaho,168.pdf
-Willamette,,2018,Idaho,168.pdf
-Zeus,2764,2018,Idaho,168.pdf
-Experimental,,2018,Idaho,168.pdf
-Other Varieties,1845,2018,Idaho,168.pdf
-Cascade,1623,2018,Oregon,168.pdf
-Centennial,1277,2018,Oregon,168.pdf
-Chinook,1674,2018,Oregon,168.pdf
-Citra HBC 394,1600,2018,Oregon,168.pdf
-Crystal,1819,2018,Oregon,168.pdf
-Fuggle,1034,2018,Oregon,168.pdf
-Golding,1160,2018,Oregon,168.pdf
-Liberty,,2018,Oregon,168.pdf
-Magnum,1284,2018,Oregon,168.pdf
-Mosaic HBC 369,,2018,Oregon,168.pdf
-Mt. Hood,1411,2018,Oregon,168.pdf
-Nugget,1946,2018,Oregon,168.pdf
-Perle,1093,2018,Oregon,168.pdf
-Ahtanum YCR 1,1588,2018,Oregon,168.pdf
-Sterling,1760,2018,Oregon,168.pdf
-Super Galena,2216,2018,Oregon,168.pdf
-Tettnanger,1027,2018,Oregon,168.pdf
-Willamette,1484,2018,Oregon,168.pdf
-Other Varieties,2068,2018,Oregon,168.pdf
-Ahtanum YCR 1,2730,2018,Washington,168.pdf
-Amarillo VGXP01,1868,2018,Washington,168.pdf
-Apollo,2848,2018,Washington,168.pdf
-Azacca ADHA-483,2491,2018,Washington,168.pdf
-Bravo,2671,2018,Washington,168.pdf
-Cascade,1972,2018,Washington,168.pdf
-Cashmere,1519,2018,Washington,168.pdf
-Centennial,1364,2018,Washington,168.pdf
-Chinook,1875,2018,Washington,168.pdf
-Citra HBC 394,1611,2018,Washington,168.pdf
-Cluster,1813,2018,Washington,168.pdf
-Columbus/Tomahawk,2482,2018,Washington,168.pdf
-Comet,1750,2018,Washington,168.pdf
-Crystal,2357,2018,Washington,168.pdf
-Ekuanot HBC 366,2583,2018,Washington,168.pdf
-El Dorado,1880,2018,Washington,168.pdf
-Eureka!,2954,2018,Washington,168.pdf
-Galena,2149,2018,Washington,168.pdf
-Glacier,,2018,Washington,168.pdf
-Golding,,2018,Washington,168.pdf
-Jarrylo ADHA-881,,2018,Washington,168.pdf
-Loral HBC 291,2349,2018,Washington,168.pdf
-Magnum,,2018,Washington,168.pdf
-Millennium,,2018,Washington,168.pdf
-Mosaic HBC 369,2351,2018,Washington,168.pdf
-Mt. Hood,1454,2018,Washington,168.pdf
-Mt. Rainier,1899,2018,Washington,168.pdf
-Northern Brewer,,2018,Washington,168.pdf
-Nugget,1498,2018,Washington,168.pdf
-Pahto HBC 682,2087,2018,Washington,168.pdf
-Palisade YCR 4,2441,2018,Washington,168.pdf
-Pekko ADHA-871,1889,2018,Washington,168.pdf
-Ahtanum YCR 1,1642,2018,Washington,168.pdf
-Sorachi Ace,1042,2018,Washington,168.pdf
-Summit,1826,2018,Washington,168.pdf
-Super Galena,3133,2018,Washington,168.pdf
-Tahoma,2147,2018,Washington,168.pdf
-Tettnanger,,2018,Washington,168.pdf
-Vanguard,,2018,Washington,168.pdf
-Warrior YCR 5,,2018,Washington,168.pdf
-Willamette,1348,2018,Washington,168.pdf
-Zeus,2619,2018,Washington,168.pdf
-Experimental,1889,2018,Washington,168.pdf
-Other Varieties,1896,2018,Washington,168.pdf
-Cluster,,2005,Idaho,17.pdf
-Galena,,2005,Idaho,17.pdf
-Mt. Hood,,2005,Idaho,17.pdf
-Nugget,,2005,Idaho,17.pdf
-Willamette,,2005,Idaho,17.pdf
-Zeus,,2005,Idaho,17.pdf
-Other Varieties,,2005,Idaho,17.pdf
-Cascade,1365,2005,Oregon,17.pdf
-Glacier,1330,2005,Oregon,17.pdf
-Golding,1017,2005,Oregon,17.pdf
-Millennium,1876,2005,Oregon,17.pdf
-Mt. Hood,1414,2005,Oregon,17.pdf
-Nugget,2046,2005,Oregon,17.pdf
-Perle,,2005,Oregon,17.pdf
-Sterling,1451,2005,Oregon,17.pdf
-Willamette,1385,2005,Oregon,17.pdf
-Other Varieties,1048,2005,Oregon,17.pdf
-Ahtanum YCR 1,758,2005,Washington,17.pdf
-Cascade,2036,2005,Washington,17.pdf
-Centennial,1375,2005,Washington,17.pdf
-Chelan,2244,2005,Washington,17.pdf
-Chinook,1844,2005,Washington,17.pdf
-Cluster,1782,2005,Washington,17.pdf
-Columbus/Tomahawk,2516,2005,Washington,17.pdf
-Galena,1737,2005,Washington,17.pdf
-Glacier,1063,2005,Washington,17.pdf
-Golding,886,2005,Washington,17.pdf
-Hallertau,967,2005,Washington,17.pdf
-Horizon,,2005,Washington,17.pdf
-Millennium,1908,2005,Washington,17.pdf
-Mt. Hood,1267,2005,Washington,17.pdf
-Northern Brewer,,2005,Washington,17.pdf
-Nugget,1727,2005,Washington,17.pdf
-Palisade YCR 4,2759,2005,Washington,17.pdf
-Perle,,2005,Washington,17.pdf
-Sterling,1527,2005,Washington,17.pdf
-Tillicum,,2005,Washington,17.pdf
-Willamette,1333,2005,Washington,17.pdf
-Warrior YCR 5,1830,2005,Washington,17.pdf
-Zeus,2255,2005,Washington,17.pdf
-Other,1576,2005,Washington,17.pdf
-Cluster,,2004,Idaho,18.pdf
-Galena,,2004,Idaho,18.pdf
-Mt. Hood,,2004,Idaho,18.pdf
-Nugget,,2004,Idaho,18.pdf
-Willamette,,2004,Idaho,18.pdf
-Zeus,,2004,Idaho,18.pdf
-Other Varieties,,2004,Idaho,18.pdf
-Cascade,1393,2004,Oregon,18.pdf
-Glacier,1521,2004,Oregon,18.pdf
-Golding,1309,2004,Oregon,18.pdf
-Liberty,,2004,Oregon,18.pdf
-Millennium,2030,2004,Oregon,18.pdf
-Mt. Hood,1620,2004,Oregon,18.pdf
-Nugget,2229,2004,Oregon,18.pdf
-Perle,1327,2004,Oregon,18.pdf
-Sterling,1209,2004,Oregon,18.pdf
-Willamette,1507,2004,Oregon,18.pdf
-Other Varieties,1370,2004,Oregon,18.pdf
-Cascade,2006,2004,Washington,18.pdf
-Chelan,2482,2004,Washington,18.pdf
-Chinook,1900,2004,Washington,18.pdf
-Cluster,2034,2004,Washington,18.pdf
-Columbus/Tomahawk,2557,2004,Washington,18.pdf
-Galena,1860,2004,Washington,18.pdf
-Golding,989,2004,Washington,18.pdf
-Hallertau,1057,2004,Washington,18.pdf
-Horizon,,2004,Washington,18.pdf
-Magnum,,2004,Washington,18.pdf
-Millennium,2339,2004,Washington,18.pdf
-Mt. Hood,1387,2004,Washington,18.pdf
-Northern Brewer,2191,2004,Washington,18.pdf
-Nugget,2073,2004,Washington,18.pdf
-Perle,1245,2004,Washington,18.pdf
-Tettnanger,,2004,Washington,18.pdf
-Tillicum,,2004,Washington,18.pdf
-Vanguard,,2004,Washington,18.pdf
-Willamette,1411,2004,Washington,18.pdf
-Warrior YCR 5,2300,2004,Washington,18.pdf
-Zeus,3125,2004,Washington,18.pdf
-Other Alpha,,2004,Washington,18.pdf
-Other Aroma,,2004,Washington,18.pdf
-Other,1641,2004,Washington,18.pdf
-Cluster,,2003,Idaho,19.pdf
-Galena,,2003,Idaho,19.pdf
-Mt. Hood,,2003,Idaho,19.pdf
-Nugget,,2003,Idaho,19.pdf
-Willamette,,2003,Idaho,19.pdf
-Zeus,,2003,Idaho,19.pdf
-Other Varieties,,2003,Idaho,19.pdf
-Cascade,,2003,Oregon,19.pdf
-Glacier,677,2003,Oregon,19.pdf
-Golding,996,2003,Oregon,19.pdf
-Liberty,,2003,Oregon,19.pdf
-Millennium,,2003,Oregon,19.pdf
-Mt. Hood,1569,2003,Oregon,19.pdf
-Nugget,2169,2003,Oregon,19.pdf
-Perle,1026,2003,Oregon,19.pdf
-Sterling,2005,2003,Oregon,19.pdf
-Willamette,1369,2003,Oregon,19.pdf
-Other Varieties,1942,2003,Oregon,19.pdf
-Cascade,1808,2003,Washington,19.pdf
-Chelan,2545,2003,Washington,19.pdf
-Chinook,1903,2003,Washington,19.pdf
-Cluster,2003,2003,Washington,19.pdf
-Columbus/Tomahawk,2745,2003,Washington,19.pdf
-Galena,1914,2003,Washington,19.pdf
-Golding,1118,2003,Washington,19.pdf
-Hallertau,885,2003,Washington,19.pdf
-Horizon,1430,2003,Washington,19.pdf
-Magnum,,2003,Washington,19.pdf
-Millennium,2267,2003,Washington,19.pdf
-Mt. Hood,1475,2003,Washington,19.pdf
-Northern Brewer,1755,2003,Washington,19.pdf
-Nugget,1882,2003,Washington,19.pdf
-Perle,919,2003,Washington,19.pdf
-Tettnanger,,2003,Washington,19.pdf
-Tillicum,2325,2003,Washington,19.pdf
-Vanguard,,2003,Washington,19.pdf
-Willamette,1332,2003,Washington,19.pdf
-Warrior YCR 5,2126,2003,Washington,19.pdf
-Zeus,2904,2003,Washington,19.pdf
-Other Alpha,,2003,Washington,19.pdf
-Other Aroma,,2003,Washington,19.pdf
-Other,1436,2003,Washington,19.pdf
-Cluster,,2002,Idaho,20.pdf
-Galena,,2002,Idaho,20.pdf
-Mt. Hood,,2002,Idaho,20.pdf
-Nugget,,2002,Idaho,20.pdf
-Willamette,,2002,Idaho,20.pdf
-Zeus,,2002,Idaho,20.pdf
-Other Varieties,,2002,Idaho,20.pdf
-Cascade,1477,2002,Oregon,20.pdf
-Fuggle,,2002,Oregon,20.pdf
-Golding,,2002,Oregon,20.pdf
-Liberty,1467,2002,Oregon,20.pdf
-Millennium,1501,2002,Oregon,20.pdf
-Mt. Hood,1729,2002,Oregon,20.pdf
-Nugget,2032,2002,Oregon,20.pdf
-Perle,1163,2002,Oregon,20.pdf
-Santiam,,2002,Oregon,20.pdf
-Sterling,1895,2002,Oregon,20.pdf
-Willamette,1528,2002,Oregon,20.pdf
-Other Varieties,1669,2002,Oregon,20.pdf
-Cascade,1748,2002,Washington,20.pdf
-Chelan,2211,2002,Washington,20.pdf
-Chinook,1902,2002,Washington,20.pdf
-Cluster,1996,2002,Washington,20.pdf
-Columbus/Tomahawk,2876,2002,Washington,20.pdf
-Galena,1905,2002,Washington,20.pdf
-Golding,1188,2002,Washington,20.pdf
-Hallertau,1193,2002,Washington,20.pdf
-Horizon,1409,2002,Washington,20.pdf
-Magnum,,2002,Washington,20.pdf
-Millennium,2349,2002,Washington,20.pdf
-Mt. Hood,1272,2002,Washington,20.pdf
-Northern Brewer,,2002,Washington,20.pdf
-Nugget,2095,2002,Washington,20.pdf
-Perle,969,2002,Washington,20.pdf
-Tettnanger,1277,2002,Washington,20.pdf
-Tillicum,2075,2002,Washington,20.pdf
-Vanguard,,2002,Washington,20.pdf
-Willamette,1381,2002,Washington,20.pdf
-Warrior YCR 5,2125,2002,Washington,20.pdf
-Zeus,2993,2002,Washington,20.pdf
-Other Alpha,1619,2002,Washington,20.pdf
-Other Aroma,1340,2002,Washington,20.pdf
-Other,1610,2002,Washington,20.pdf
-Cluster,1553,2001,Idaho,21.pdf
-Galena,1492,2001,Idaho,21.pdf
-Horizon,,2001,Idaho,21.pdf
-Mt. Hood,1200,2001,Idaho,21.pdf
-Nugget,1500,2001,Idaho,21.pdf
-Willamette,1077,2001,Idaho,21.pdf
-Zeus,,2001,Idaho,21.pdf
-Other Varieties,1111,2001,Idaho,21.pdf
-Fuggle,,2001,Oregon,21.pdf
-Golding,,2001,Oregon,21.pdf
-Millennium,2570,2001,Oregon,21.pdf
-Mt. Hood,1970,2001,Oregon,21.pdf
-Nugget,2445,2001,Oregon,21.pdf
-Perle,1355,2001,Oregon,21.pdf
-Santiam,,2001,Oregon,21.pdf
-Sterling,2065,2001,Oregon,21.pdf
-Willamette,1423,2001,Oregon,21.pdf
-Other Varieties,1740,2001,Oregon,21.pdf
-Cascade,1785,2001,Washington,21.pdf
-Chelan,1809,2001,Washington,21.pdf
-Chinook,1717,2001,Washington,21.pdf
-Cluster,1958,2001,Washington,21.pdf
-Columbus/Tomahawk,2493,2001,Washington,21.pdf
-Galena,1679,2001,Washington,21.pdf
-Golding,1231,2001,Washington,21.pdf
-Hallertau,968,2001,Washington,21.pdf
-Horizon,1224,2001,Washington,21.pdf
-Magnum,1424,2001,Washington,21.pdf
-Millennium,2037,2001,Washington,21.pdf
-Mt. Hood,1130,2001,Washington,21.pdf
-Nugget,1968,2001,Washington,21.pdf
-Perle,1083,2001,Washington,21.pdf
-Tettnanger,1058,2001,Washington,21.pdf
-Tillicum,1836,2001,Washington,21.pdf
-Vanguard,1372,2001,Washington,21.pdf
-Willamette,1309,2001,Washington,21.pdf
-Warrior YCR 5,1949,2001,Washington,21.pdf
-Zeus,2669,2001,Washington,21.pdf
-High Alpha,2072,2001,Washington,21.pdf
-Alpha,1589,2001,Washington,21.pdf
-Aroma,1378,2001,Washington,21.pdf
-Other,1224,2001,Washington,21.pdf
-Chinook,2000,2000,Idaho,22.pdf
-Cluster,1943,2000,Idaho,22.pdf
-Galena,1815,2000,Idaho,22.pdf
-Horizon,,2000,Idaho,22.pdf
-Mt. Hood,2000,2000,Idaho,22.pdf
-Nugget,2000,2000,Idaho,22.pdf
-Willamette,1534,2000,Idaho,22.pdf
-Zeus,,2000,Idaho,22.pdf
-Other Varieties,1100,2000,Idaho,22.pdf
-Fuggle,1065,2000,Oregon,22.pdf
-Golding,1170,2000,Oregon,22.pdf
-Mt. Hood,1790,2000,Oregon,22.pdf
-Nugget,2162,2000,Oregon,22.pdf
-Perle,1130,2000,Oregon,22.pdf
-Santiam,,2000,Oregon,22.pdf
-Sterling,,2000,Oregon,22.pdf
-Tettnanger,,2000,Oregon,22.pdf
-Willamette,1549,2000,Oregon,22.pdf
-Other Varieties,1843,2000,Oregon,22.pdf
-Cascade,1806,2000,Washington,22.pdf
-Chinook,1957,2000,Washington,22.pdf
-Cluster,1997,2000,Washington,22.pdf
-Columbus/Tomahawk,2564,2000,Washington,22.pdf
-Eroica,,2000,Washington,22.pdf
-Galena,1891,2000,Washington,22.pdf
-Golding,1098,2000,Washington,22.pdf
-Horizon,1250,2000,Washington,22.pdf
-Magnum,1616,2000,Washington,22.pdf
-Mt. Hood,1147,2000,Washington,22.pdf
-Nugget,1854,2000,Washington,22.pdf
-Olympic,,2000,Washington,22.pdf
-Perle,785,2000,Washington,22.pdf
-Tettnanger,,2000,Washington,22.pdf
-Willamette,1372,2000,Washington,22.pdf
-Zeus,2699,2000,Washington,22.pdf
-High Alpha,1772,2000,Washington,22.pdf
-Alpha,1557,2000,Washington,22.pdf
-Aroma,1134,2000,Washington,22.pdf
-Other,1748,2000,Washington,22.pdf
-Apollo,,2019,Idaho,273.pdf
-Bravo,,2019,Idaho,273.pdf
-Calypso,1901,2019,Idaho,273.pdf
-Cascade,1823,2019,Idaho,273.pdf
-Centennial,,2019,Idaho,273.pdf
-Chinook,2215,2019,Idaho,273.pdf
-Citra HBC 394,1532,2019,Idaho,273.pdf
-Cluster,,2019,Idaho,273.pdf
-Columbus/Tomahawk/Zeus,3002,2019,Idaho,273.pdf
-Comet,1970,2019,Idaho,273.pdf
-Crystal,1971,2019,Idaho,273.pdf
-El Dorado,1352,2019,Idaho,273.pdf
-Eureka!,2243,2019,Idaho,273.pdf
-Galena,1773,2019,Idaho,273.pdf
-Idaho 7,,2019,Idaho,273.pdf
-Mosaic HBC 369,2296,2019,Idaho,273.pdf
-Saaz,771,2019,Idaho,273.pdf
-Ahtanum YCR 1,1164,2019,Idaho,273.pdf
-Super Galena,,2019,Idaho,273.pdf
-Willamette,1695,2019,Idaho,273.pdf
-Zeus,2672,2019,Idaho,273.pdf
-Experimental,,2019,Idaho,273.pdf
-Other Varieties,1907,2019,Idaho,273.pdf
-Amarillo VGXP01,2208,2019,Oregon,273.pdf
-Cascade,1620,2019,Oregon,273.pdf
-Centennial,1661,2019,Oregon,273.pdf
-Chinook,1733,2019,Oregon,273.pdf
-Citra HBC 394,1476,2019,Oregon,273.pdf
-Crystal,1943,2019,Oregon,273.pdf
-Fuggle,1243,2019,Oregon,273.pdf
-Golding,1351,2019,Oregon,273.pdf
-Hallertau Magnum,,2019,Oregon,273.pdf
-Liberty,,2019,Oregon,273.pdf
-Mosaic HBC 369,2113,2019,Oregon,273.pdf
-Mt. Hood,1538,2019,Oregon,273.pdf
-Nugget,2130,2019,Oregon,273.pdf
-Perle,,2019,Oregon,273.pdf
-Ahtanum YCR 1,1845,2019,Oregon,273.pdf
-Sterling,1643,2019,Oregon,273.pdf
-Strata OR 91331,2066,2019,Oregon,273.pdf
-Super Galena,2580,2019,Oregon,273.pdf
-Tettnanger,,2019,Oregon,273.pdf
-Willamette,1717,2019,Oregon,273.pdf
-Other Varieties,1644,2019,Oregon,273.pdf
-Ahtanum YCR 1,1960,2019,Washington,273.pdf
-Amarillo VGXP01,1946,2019,Washington,273.pdf
-Apollo,2735,2019,Washington,273.pdf
-Azacca ADHA-483,2441,2019,Washington,273.pdf
-Bravo,3216,2019,Washington,273.pdf
-Cascade,1920,2019,Washington,273.pdf
-Cashmere,1699,2019,Washington,273.pdf
-Centennial,1820,2019,Washington,273.pdf
-Chinook,1942,2019,Washington,273.pdf
-Citra HBC 394,1424,2019,Washington,273.pdf
-Cluster,1815,2019,Washington,273.pdf
-Columbus/Tomahawk/Zeus,2584,2019,Washington,273.pdf
-Comet,1311,2019,Washington,273.pdf
-Crystal,1989,2019,Washington,273.pdf
-Ekuanot HBC 366,2483,2019,Washington,273.pdf
-El Dorado,2032,2019,Washington,273.pdf
-Eureka!,3188,2019,Washington,273.pdf
-Galena,2045,2019,Washington,273.pdf
-Glacier,,2019,Washington,273.pdf
-Golding,,2019,Washington,273.pdf
-Hallertau Magnum,,2019,Washington,273.pdf
-Idaho 7,1544,2019,Washington,273.pdf
-Jarrylo ADHA-881,,2019,Washington,273.pdf
-Loral HBC 291,2515,2019,Washington,273.pdf
-Mosaic HBC 369,2054,2019,Washington,273.pdf
-Mt. Hood,1037,2019,Washington,273.pdf
-Mt. Rainier,2149,2019,Washington,273.pdf
-Northern Brewer,,2019,Washington,273.pdf
-Nugget,2313,2019,Washington,273.pdf
-Pahto HBC 682,2398,2019,Washington,273.pdf
-Palisade YCR 4,2520,2019,Washington,273.pdf
-Pekko ADHA-871,,2019,Washington,273.pdf
-Sabro HBC 438,1612,2019,Washington,273.pdf
-Ahtanum YCR 1,1788,2019,Washington,273.pdf
-Sorachi Ace,,2019,Washington,273.pdf
-Summit,1816,2019,Washington,273.pdf
-Super Galena,2871,2019,Washington,273.pdf
-Tahoma,1958,2019,Washington,273.pdf
-Tettnanger,,2019,Washington,273.pdf
-Vanguard,,2019,Washington,273.pdf
-Willamette,1596,2019,Washington,273.pdf
-Zeus,2620,2019,Washington,273.pdf
-Experimental,2251,2019,Washington,273.pdf
-Other Varieties,1888,2019,Washington,273.pdf
-Apollo,,2020,Idaho,346.pdf
-Bravo,,2020,Idaho,346.pdf
-Calypso,,2020,Idaho,346.pdf
-Cascade,1213,2020,Idaho,346.pdf
-Cashmere,1578,2020,Idaho,346.pdf
-Centennial,,2020,Idaho,346.pdf
-Chinook,1614,2020,Idaho,346.pdf
-Citra HBC 394,1686,2020,Idaho,346.pdf
-Cluster,,2020,Idaho,346.pdf
-Columbus/Tomahawk/Zeus,2673,2020,Idaho,346.pdf
-Comet,1740,2020,Idaho,346.pdf
-Crystal,,2020,Idaho,346.pdf
-El Dorado,1590,2020,Idaho,346.pdf
-Eureka!,,2020,Idaho,346.pdf
-Galena,,2020,Idaho,346.pdf
-Hallertau,614,2020,Idaho,346.pdf
-Idaho 7,2442,2020,Idaho,346.pdf
-Mosaic HBC 369,2335,2020,Idaho,346.pdf
-Northern Brewer,1432,2020,Idaho,346.pdf
-Saaz,,2020,Idaho,346.pdf
-Ahtanum YCR 1,992,2020,Idaho,346.pdf
-Super Galena,,2020,Idaho,346.pdf
-Triumph,365,2020,Idaho,346.pdf
-Willamette,,2020,Idaho,346.pdf
-Zeus,,2020,Idaho,346.pdf
-Experimental,,2020,Idaho,346.pdf
-Other Varieties,1567,2020,Idaho,346.pdf
-Amarillo VGXP01,2360,2020,Oregon,346.pdf
-Cascade,1639,2020,Oregon,346.pdf
-Centennial,1675,2020,Oregon,346.pdf
-Chinook,1481,2020,Oregon,346.pdf
-Citra HBC 394,1506,2020,Oregon,346.pdf
-Crystal,,2020,Oregon,346.pdf
-Fuggle,,2020,Oregon,346.pdf
-Golding,,2020,Oregon,346.pdf
-Hallertau Magnum,,2020,Oregon,346.pdf
-Liberty,2289,2020,Oregon,346.pdf
-Mosaic HBC 369,2155,2020,Oregon,346.pdf
-Mt. Hood,1551,2020,Oregon,346.pdf
-Nugget,1841,2020,Oregon,346.pdf
-Perle,,2020,Oregon,346.pdf
-Sabro HBC 438,870,2020,Oregon,346.pdf
-Ahtanum YCR 1,1823,2020,Oregon,346.pdf
-Sterling,1728,2020,Oregon,346.pdf
-Strata OR 91331,2068,2020,Oregon,346.pdf
-Super Galena,2801,2020,Oregon,346.pdf
-Tettnanger,,2020,Oregon,346.pdf
-Willamette,1857,2020,Oregon,346.pdf
-Other Varieties,1479,2020,Oregon,346.pdf
-Ahtanum YCR 1,2134,2020,Washington,346.pdf
-Amarillo VGXP01,1649,2020,Washington,346.pdf
-Apollo,2248,2020,Washington,346.pdf
-Azacca ADHA-483,1527,2020,Washington,346.pdf
-Bravo,2308,2020,Washington,346.pdf
-Cascade,1551,2020,Washington,346.pdf
-Cashmere,1514,2020,Washington,346.pdf
-Centennial,1640,2020,Washington,346.pdf
-Chinook,1665,2020,Washington,346.pdf
-Citra HBC 394,1526,2020,Washington,346.pdf
-Cluster,2065,2020,Washington,346.pdf
-Columbus/Tomahawk/Zeus,2176,2020,Washington,346.pdf
-Comet,872,2020,Washington,346.pdf
-Crystal,,2020,Washington,346.pdf
-Ekuanot HBC 366,2158,2020,Washington,346.pdf
-El Dorado,1516,2020,Washington,346.pdf
-Eureka!,2332,2020,Washington,346.pdf
-Galena,1838,2020,Washington,346.pdf
-Glacier,,2020,Washington,346.pdf
-Idaho 7,1736,2020,Washington,346.pdf
-Jarrylo ADHA-881,1428,2020,Washington,346.pdf
-Loral HBC 291,1874,2020,Washington,346.pdf
-Mosaic HBC 369,1998,2020,Washington,346.pdf
-Mt. Hood,1139,2020,Washington,346.pdf
-Mt. Rainier,1586,2020,Washington,346.pdf
-Nugget,,2020,Washington,346.pdf
-Pahto HBC 682,2019,2020,Washington,346.pdf
-Palisade YCR 4,2114,2020,Washington,346.pdf
-Pekko ADHA-871,1239,2020,Washington,346.pdf
-Sabro HBC 438,1886,2020,Washington,346.pdf
-Ahtanum YCR 1,1643,2020,Washington,346.pdf
-Sorachi Ace,,2020,Washington,346.pdf
-Summit,1096,2020,Washington,346.pdf
-Super Galena,2636,2020,Washington,346.pdf
-Tahoma,1588,2020,Washington,346.pdf
-Tettnanger,,2020,Washington,346.pdf
-Warrior YCR 5,1669,2020,Washington,346.pdf
-Willamette,1458,2020,Washington,346.pdf
-Zeus,,2020,Washington,346.pdf
-Experimental,1207,2020,Washington,346.pdf
-Other Varieties,1737,2020,Washington,346.pdf
-Apollo,2535,2021,Idaho,405.pdf
-Bravo,1163,2021,Idaho,405.pdf
-Calypso,1974,2021,Idaho,405.pdf
-Cascade,1559,2021,Idaho,405.pdf
-Cashmere,1828,2021,Idaho,405.pdf
-Centennial,,2021,Idaho,405.pdf
-Chinook,2104,2021,Idaho,405.pdf
-Citra HBC 394,1413,2021,Idaho,405.pdf
-Cluster,,2021,Idaho,405.pdf
-Columbus/Tomahawk/Zeus,3169,2021,Idaho,405.pdf
-Comet,1663,2021,Idaho,405.pdf
-Crystal,,2021,Idaho,405.pdf
-El Dorado,1778,2021,Idaho,405.pdf
-Eureka!,2433,2021,Idaho,405.pdf
-Galena,,2021,Idaho,405.pdf
-Hallertau,1272,2021,Idaho,405.pdf
-Idaho 7,2837,2021,Idaho,405.pdf
-Mosaic HBC 369,2141,2021,Idaho,405.pdf
-Mt. Rainier,985,2021,Idaho,405.pdf
-Northern Brewer,1266,2021,Idaho,405.pdf
-Saaz,620,2021,Idaho,405.pdf
-Ahtanum YCR 1,1121,2021,Idaho,405.pdf
-Super Galena,2127,2021,Idaho,405.pdf
-Triumph,1063,2021,Idaho,405.pdf
-Willamette,1311,2021,Idaho,405.pdf
-Zeus,,2021,Idaho,405.pdf
-Experimental,,2021,Idaho,405.pdf
-Other Varieties,1725,2021,Idaho,405.pdf
-Amarillo VGXP01,2186,2021,Oregon,405.pdf
-Cascade,1595,2021,Oregon,405.pdf
-Centennial,1384,2021,Oregon,405.pdf
-Chinook,1794,2021,Oregon,405.pdf
-Citra HBC 394,1414,2021,Oregon,405.pdf
-Crystal,1816,2021,Oregon,405.pdf
-Eureka!,2292,2021,Oregon,405.pdf
-Fuggle,,2021,Oregon,405.pdf
-Golding,927,2021,Oregon,405.pdf
-Hallertau Magnum,,2021,Oregon,405.pdf
-Liberty,1506,2021,Oregon,405.pdf
-Mosaic HBC 369,2077,2021,Oregon,405.pdf
-Mt. Hood,1624,2021,Oregon,405.pdf
-Nugget,2162,2021,Oregon,405.pdf
-Perle,,2021,Oregon,405.pdf
-Sabro HBC 438,1749,2021,Oregon,405.pdf
-Ahtanum YCR 1,1643,2021,Oregon,405.pdf
-Sterling,1321,2021,Oregon,405.pdf
-Strata OR 91331,1889,2021,Oregon,405.pdf
-Super Galena,,2021,Oregon,405.pdf
-Tettnanger,,2021,Oregon,405.pdf
-Willamette,1461,2021,Oregon,405.pdf
-Other Varieties,1780,2021,Oregon,405.pdf
-Ahtanum YCR 1,2211,2021,Washington,405.pdf
-Amarillo VGXP01,1659,2021,Washington,405.pdf
-Apollo,2949,2021,Washington,405.pdf
-Azacca ADHA-483,1909,2021,Washington,405.pdf
-Bravo,2759,2021,Washington,405.pdf
-Calypso,2930,2021,Washington,405.pdf
-Cascade,1585,2021,Washington,405.pdf
-Cashmere,1395,2021,Washington,405.pdf
-Centennial,1585,2021,Washington,405.pdf
-Chinook,1851,2021,Washington,405.pdf
-Citra HBC 394,1580,2021,Washington,405.pdf
-Cluster,2016,2021,Washington,405.pdf
-Columbus/Tomahawk/Zeus,2656,2021,Washington,405.pdf
-Comet,1632,2021,Washington,405.pdf
-Crystal,,2021,Washington,405.pdf
-Ekuanot HBC 366,2608,2021,Washington,405.pdf
-El Dorado,1876,2021,Washington,405.pdf
-Eureka!,3022,2021,Washington,405.pdf
-Galena,,2021,Washington,405.pdf
-Idaho 7,3197,2021,Washington,405.pdf
-Jarrylo ADHA-881,,2021,Washington,405.pdf
-Loral HBC 291,2088,2021,Washington,405.pdf
-Mosaic HBC 369,2129,2021,Washington,405.pdf
-Mt. Hood,1139,2021,Washington,405.pdf
-Mt. Rainier,,2021,Washington,405.pdf
-Nugget,,2021,Washington,405.pdf
-Pahto HBC 682,2463,2021,Washington,405.pdf
-Palisade YCR 4,1866,2021,Washington,405.pdf
-Pekko ADHA-871,2072,2021,Washington,405.pdf
-Sabro HBC 438,1886,2021,Washington,405.pdf
-Ahtanum YCR 1,1646,2021,Washington,405.pdf
-Sorachi Ace,,2021,Washington,405.pdf
-Summit,1351,2021,Washington,405.pdf
-Super Galena,2849,2021,Washington,405.pdf
-Tahoma,1055,2021,Washington,405.pdf
-Tettnanger,,2021,Washington,405.pdf
-Warrior YCR 5,2240,2021,Washington,405.pdf
-Willamette,,2021,Washington,405.pdf
-Zeus,,2021,Washington,405.pdf
-Experimental,1713,2021,Washington,405.pdf
-Other Varieties,1934,2021,Washington,405.pdf
-Apollo,,2022,Idaho,435.pdf
-Bravo,,2022,Idaho,435.pdf
-Calypso,,2022,Idaho,435.pdf
-Cascade,1494,2022,Idaho,435.pdf
-Cashmere,1622,2022,Idaho,435.pdf
-Chinook,1467,2022,Idaho,435.pdf
-Citra HBC 394,1515,2022,Idaho,435.pdf
-Cluster,,2022,Idaho,435.pdf
-Columbus/Tomahawk/Zeus,3027,2022,Idaho,435.pdf
-Comet,1863,2022,Idaho,435.pdf
-Crystal,,2022,Idaho,435.pdf
-El Dorado,1766,2022,Idaho,435.pdf
-Eureka!,2200,2022,Idaho,435.pdf
-Galena,,2022,Idaho,435.pdf
-Hallertau,1649,2022,Idaho,435.pdf
-Mosaic HBC 369,2103,2022,Idaho,435.pdf
-Mt. Rainier,1364,2022,Idaho,435.pdf
-Northern Brewer,,2022,Idaho,435.pdf
-Saaz,955,2022,Idaho,435.pdf
-Ahtanum YCR 1,1208,2022,Idaho,435.pdf
-Super Galena,,2022,Idaho,435.pdf
-Triumph,871,2022,Idaho,435.pdf
-Willamette,1393,2022,Idaho,435.pdf
-Zeus,,2022,Idaho,435.pdf
-Other Varieties,1587,2022,Idaho,435.pdf
-Amarillo VGXP01,1870,2022,Oregon,435.pdf
-Cascade,1578,2022,Oregon,435.pdf
-Centennial,1575,2022,Oregon,435.pdf
-Chinook,1543,2022,Oregon,435.pdf
-Citra HBC 394,1562,2022,Oregon,435.pdf
-Crystal,1739,2022,Oregon,435.pdf
-Eureka!,,2022,Oregon,435.pdf
-Fuggle,,2022,Oregon,435.pdf
-Golding,,2022,Oregon,435.pdf
-Hallertau Magnum,,2022,Oregon,435.pdf
-Liberty,,2022,Oregon,435.pdf
-Mosaic HBC 369,2059,2022,Oregon,435.pdf
-Mt. Hood,1252,2022,Oregon,435.pdf
-Mt. Rainier,1473,2022,Oregon,435.pdf
-Nugget,2085,2022,Oregon,435.pdf
-Perle,,2022,Oregon,435.pdf
-Sabro HBC 438,1996,2022,Oregon,435.pdf
-Ahtanum YCR 1,1646,2022,Oregon,435.pdf
-Sterling,1559,2022,Oregon,435.pdf
-Strata OR 91331,2000,2022,Oregon,435.pdf
-Super Galena,,2022,Oregon,435.pdf
-Talus HBC 692,1483,2022,Oregon,435.pdf
-Tettnanger,,2022,Oregon,435.pdf
-Willamette,1489,2022,Oregon,435.pdf
-Other Varieties,1567,2022,Oregon,435.pdf
-Ahtanum YCR 1,2032,2022,Washington,435.pdf
-Amarillo VGXP01,1486,2022,Washington,435.pdf
-Apollo,2483,2022,Washington,435.pdf
-Azacca ADHA-483,1559,2022,Washington,435.pdf
-Bravo,2161,2022,Washington,435.pdf
-Calypso,,2022,Washington,435.pdf
-Cascade,1477,2022,Washington,435.pdf
-Cashmere,1521,2022,Washington,435.pdf
-Centennial,1464,2022,Washington,435.pdf
-Chinook,1335,2022,Washington,435.pdf
-Citra HBC 394,1365,2022,Washington,435.pdf
-Cluster,1505,2022,Washington,435.pdf
-Columbus/Tomahawk/Zeus,2256,2022,Washington,435.pdf
-Comet,1299,2022,Washington,435.pdf
-Crystal,,2022,Washington,435.pdf
-Ekuanot HBC 366,2153,2022,Washington,435.pdf
-El Dorado,1685,2022,Washington,435.pdf
-Eureka!,2205,2022,Washington,435.pdf
-Galena,,2022,Washington,435.pdf
-Jarrylo ADHA-881,,2022,Washington,435.pdf
-Loral HBC 291,1843,2022,Washington,435.pdf
-Mosaic HBC 369,1963,2022,Washington,435.pdf
-Mt. Hood,573,2022,Washington,435.pdf
-Mt. Rainier,1563,2022,Washington,435.pdf
-Nugget,,2022,Washington,435.pdf
-Pahto HBC 682,2132,2022,Washington,435.pdf
-Palisade YCR 4,1842,2022,Washington,435.pdf
-Pekko ADHA-871,1882,2022,Washington,435.pdf
-Sabro HBC 438,2052,2022,Washington,435.pdf
-Ahtanum YCR 1,1380,2022,Washington,435.pdf
-Sorachi Ace,,2022,Washington,435.pdf
-Summit,,2022,Washington,435.pdf
-Super Galena,2838,2022,Washington,435.pdf
-Tahoma,1310,2022,Washington,435.pdf
-Talus HBC 692,1703,2022,Washington,435.pdf
-Warrior YCR 5,1610,2022,Washington,435.pdf
-Willamette,991,2022,Washington,435.pdf
-Zappa,839,2022,Washington,435.pdf
-Zeus,,2022,Washington,435.pdf
-Experimental,1717,2022,Washington,435.pdf
-Other Varieties,1577,2022,Washington,435.pdf
-Bravo,2625,2015,Idaho,5.pdf
-Calypso,1710,2015,Idaho,5.pdf
-Cascade,1633,2015,Idaho,5.pdf
-Centennial,,2015,Idaho,5.pdf
-Chinook,1850,2015,Idaho,5.pdf
-Citra HBC 394,1271,2015,Idaho,5.pdf
-Crystal,,2015,Idaho,5.pdf
-El Dorado,1125,2015,Idaho,5.pdf
-Mosaic HBC 369,2278,2015,Idaho,5.pdf
-Ahtanum YCR 1,1576,2015,Idaho,5.pdf
-Super Galena,2189,2015,Idaho,5.pdf
-Zeus,2909,2015,Idaho,5.pdf
-Experimental,1269,2015,Idaho,5.pdf
-Other Varieties,1348,2015,Idaho,5.pdf
-Cascade,1994,2015,Oregon,5.pdf
-Centennial,1352,2015,Oregon,5.pdf
-Chinook,1861,2015,Oregon,5.pdf
-Citra HBC 394,980,2015,Oregon,5.pdf
-Crystal,2011,2015,Oregon,5.pdf
-Fuggle,1066,2015,Oregon,5.pdf
-Golding,837,2015,Oregon,5.pdf
-Liberty,1360,2015,Oregon,5.pdf
-Magnum,1572,2015,Oregon,5.pdf
-Mt. Hood,1276,2015,Oregon,5.pdf
-Nugget,1888,2015,Oregon,5.pdf
-Perle,,2015,Oregon,5.pdf
-Ahtanum YCR 1,1678,2015,Oregon,5.pdf
-Sterling,1344,2015,Oregon,5.pdf
-Super Galena,2340,2015,Oregon,5.pdf
-Tettnanger,1242,2015,Oregon,5.pdf
-Willamette,1226,2015,Oregon,5.pdf
-Experimental,,2015,Oregon,5.pdf
-Other Varieties,1609,2015,Oregon,5.pdf
-Azacca ADHA-483,1872,2015,Washington,5.pdf
-Jarrylo ADHA-881,1541,2015,Washington,5.pdf
-Ahtanum YCR 1,1557,2015,Washington,5.pdf
-Apollo,2738,2015,Washington,5.pdf
-Bravo,2824,2015,Washington,5.pdf
-Cascade,1936,2015,Washington,5.pdf
-Centennial,1145,2015,Washington,5.pdf
-Chinook,1793,2015,Washington,5.pdf
-Citra HBC 394,1541,2015,Washington,5.pdf
-Cluster,1705,2015,Washington,5.pdf
-Columbus/Tomahawk,2524,2015,Washington,5.pdf
-Comet,1780,2015,Washington,5.pdf
-Crystal,1183,2015,Washington,5.pdf
-El Dorado,2155,2015,Washington,5.pdf
-Galena,1968,2015,Washington,5.pdf
-Glacier,996,2015,Washington,5.pdf
-Golding,854,2015,Washington,5.pdf
-Magnum,1255,2015,Washington,5.pdf
-Millennium,,2015,Washington,5.pdf
-Mosaic HBC 369,2036,2015,Washington,5.pdf
-Mt. Hood,1069,2015,Washington,5.pdf
-Northern Brewer,991,2015,Washington,5.pdf
-Nugget,1927,2015,Washington,5.pdf
-Ahtanum YCR 1,1540,2015,Washington,5.pdf
-Summit,1969,2015,Washington,5.pdf
-Super Galena,2729,2015,Washington,5.pdf
-Tettnanger,,2015,Washington,5.pdf
-Vanguard,1223,2015,Washington,5.pdf
-Willamette,1007,2015,Washington,5.pdf
-Palisade YCR 4,1950,2015,Washington,5.pdf
-Warrior YCR 5,,2015,Washington,5.pdf
-Zeus,2819,2015,Washington,5.pdf
-Experimental,1545,2015,Washington,5.pdf
-Other Varieties,1603,2015,Washington,5.pdf
-Bravo,2579,2014,Idaho,6.pdf
-Cascade,1746,2014,Idaho,6.pdf
-Centennial,754,2014,Idaho,6.pdf
-Citra HBC 394,1200,2014,Idaho,6.pdf
-Chinook,1673,2014,Idaho,6.pdf
-Crystal,2186,2014,Idaho,6.pdf
-El Dorado,1144,2014,Idaho,6.pdf
-Simcoe YCR 14,969,2014,Idaho,6.pdf
-Super Galena,2165,2014,Idaho,6.pdf
-Zeus,2891,2014,Idaho,6.pdf
-Experimental,1366,2014,Idaho,6.pdf
-Other Varieties,1354,2014,Idaho,6.pdf
-Cascade,1402,2014,Oregon,6.pdf
-Centennial,1095,2014,Oregon,6.pdf
-Fuggle,,2014,Oregon,6.pdf
-Golding,955,2014,Oregon,6.pdf
-Liberty,,2014,Oregon,6.pdf
-Magnum,1077,2014,Oregon,6.pdf
-Mt. Hood,1450,2014,Oregon,6.pdf
-Nugget,1978,2014,Oregon,6.pdf
-Perle,1057,2014,Oregon,6.pdf
-Sterling,1423,2014,Oregon,6.pdf
-Super Galena,2309,2014,Oregon,6.pdf
-Tettnanger,,2014,Oregon,6.pdf
-Willamette,1453,2014,Oregon,6.pdf
-Experimental,,2014,Oregon,6.pdf
-Other Varieties,1426,2014,Oregon,6.pdf
-Azacca ADHA-483,1704,2014,Washington,6.pdf
-Jarrylo ADHA-881,1548,2014,Washington,6.pdf
-Ahtanum YCR 1,1680,2014,Washington,6.pdf
-Apollo,2649,2014,Washington,6.pdf
-Bravo,2768,2014,Washington,6.pdf
-Cascade,1824,2014,Washington,6.pdf
-Centennial,1347,2014,Washington,6.pdf
-Chinook,1815,2014,Washington,6.pdf
-Citra HBC 394,1570,2014,Washington,6.pdf
-Cluster,1825,2014,Washington,6.pdf
-Columbus/Tomahawk,2629,2014,Washington,6.pdf
-Crystal,1366,2014,Washington,6.pdf
-El Dorado,2206,2014,Washington,6.pdf
-Galena,1801,2014,Washington,6.pdf
-Glacier,1202,2014,Washington,6.pdf
-Golding,772,2014,Washington,6.pdf
-Millennium,1996,2014,Washington,6.pdf
-Mosaic HBC 369,2225,2014,Washington,6.pdf
-Mt. Hood,1333,2014,Washington,6.pdf
-Northern Brewer,1244,2014,Washington,6.pdf
-Nugget,1538,2014,Washington,6.pdf
-Ahtanum YCR 1,1542,2014,Washington,6.pdf
-Summit,2105,2014,Washington,6.pdf
-Super Galena,2562,2014,Washington,6.pdf
-Tettnanger,,2014,Washington,6.pdf
-Vanguard,1455,2014,Washington,6.pdf
-Willamette,1130,2014,Washington,6.pdf
-Palisade YCR 4,2469,2014,Washington,6.pdf
-Warrior YCR 5,1821,2014,Washington,6.pdf
-Zeus,2811,2014,Washington,6.pdf
-Experimental,1625,2014,Washington,6.pdf
-Other Varieties,1418,2014,Washington,6.pdf
-Bravo,2359,2016,Idaho,76.pdf
-Calypso,1937,2016,Idaho,76.pdf
-Cascade,1585,2016,Idaho,76.pdf
-Centennial,,2016,Idaho,76.pdf
-Chinook,1712,2016,Idaho,76.pdf
-Citra HBC 394,1213,2016,Idaho,76.pdf
-Crystal,1678,2016,Idaho,76.pdf
-El Dorado,1658,2016,Idaho,76.pdf
-Mosaic HBC 369,2204,2016,Idaho,76.pdf
-Ahtanum YCR 1,1335,2016,Idaho,76.pdf
-Super Galena,1872,2016,Idaho,76.pdf
-Zeus,2761,2016,Idaho,76.pdf
-Experimental,1000,2016,Idaho,76.pdf
-Other Varieties,1174,2016,Idaho,76.pdf
-Cascade,1597,2016,Oregon,76.pdf
-Centennial,1235,2016,Oregon,76.pdf
-Chinook,1675,2016,Oregon,76.pdf
-Citra HBC 394,1047,2016,Oregon,76.pdf
-Crystal,2216,2016,Oregon,76.pdf
-Fuggle,1021,2016,Oregon,76.pdf
-Golding,,2016,Oregon,76.pdf
-Liberty,,2016,Oregon,76.pdf
-Magnum,1493,2016,Oregon,76.pdf
-Mt. Hood,1463,2016,Oregon,76.pdf
-Nugget,1925,2016,Oregon,76.pdf
-Perle,,2016,Oregon,76.pdf
-Ahtanum YCR 1,1969,2016,Oregon,76.pdf
-Sterling,1626,2016,Oregon,76.pdf
-Super Galena,,2016,Oregon,76.pdf
-Tettnanger,1193,2016,Oregon,76.pdf
-Willamette,1573,2016,Oregon,76.pdf
-Experimental,,2016,Oregon,76.pdf
-Other Varieties,1546,2016,Oregon,76.pdf
-Azacca ADHA-483,1870,2016,Washington,76.pdf
-Ahtanum YCR 1,1012,2016,Washington,76.pdf
-Apollo,2225,2016,Washington,76.pdf
-Bravo,2671,2016,Washington,76.pdf
-Cascade,1727,2016,Washington,76.pdf
-Centennial,1355,2016,Washington,76.pdf
-Chinook,1420,2016,Washington,76.pdf
-Citra HBC 394,1543,2016,Washington,76.pdf
-Cluster,1700,2016,Washington,76.pdf
-Columbus/Tomahawk,1969,2016,Washington,76.pdf
-Comet,949,2016,Washington,76.pdf
-Crystal,1475,2016,Washington,76.pdf
-El Dorado,1904,2016,Washington,76.pdf
-Galena,1692,2016,Washington,76.pdf
-Glacier,1168,2016,Washington,76.pdf
-Golding,,2016,Washington,76.pdf
-Jarrylo ADHA-881,1408,2016,Washington,76.pdf
-Magnum,,2016,Washington,76.pdf
-Millennium,,2016,Washington,76.pdf
-Mosaic HBC 369,2326,2016,Washington,76.pdf
-Mt. Hood,1075,2016,Washington,76.pdf
-Northern Brewer,,2016,Washington,76.pdf
-Nugget,1774,2016,Washington,76.pdf
-Palisade YCR 4,2228,2016,Washington,76.pdf
-Ahtanum YCR 1,1673,2016,Washington,76.pdf
-Summit,1648,2016,Washington,76.pdf
-Super Galena,2501,2016,Washington,76.pdf
-Tettnanger,,2016,Washington,76.pdf
-Vanguard,,2016,Washington,76.pdf
-Warrior YCR 5,,2016,Washington,76.pdf
-Willamette,1277,2016,Washington,76.pdf
-Zeus,2469,2016,Washington,76.pdf
-Experimental,1592,2016,Washington,76.pdf
-Other Varieties,1662,2016,Washington,76.pdf
-Bravo,2635,2013,Idaho,9.pdf
-Cascade,1224,2013,Idaho,9.pdf
-Centennial,1004,2013,Idaho,9.pdf
-Citra HBC 394,1011,2013,Idaho,9.pdf
-Chinook,1801,2013,Idaho,9.pdf
-El Dorado,971,2013,Idaho,9.pdf
-Super Galena,2287,2013,Idaho,9.pdf
-Zeus,3049,2013,Idaho,9.pdf
-Experimental,2800,2013,Idaho,9.pdf
-Other Varieties,1063,2013,Idaho,9.pdf
-Cascade,1483,2013,Oregon,9.pdf
-Centennial,1585,2013,Oregon,9.pdf
-Fuggle,827,2013,Oregon,9.pdf
-Golding,1148,2013,Oregon,9.pdf
-Liberty,,2013,Oregon,9.pdf
-Magnum,1406,2013,Oregon,9.pdf
-Mt. Hood,1567,2013,Oregon,9.pdf
-Nugget,2053,2013,Oregon,9.pdf
-Perle,1178,2013,Oregon,9.pdf
-Sterling,1621,2013,Oregon,9.pdf
-Super Galena,2557,2013,Oregon,9.pdf
-Tettnanger,,2013,Oregon,9.pdf
-Willamette,1491,2013,Oregon,9.pdf
-Experimental,1734,2013,Oregon,9.pdf
-Other Varieties,1931,2013,Oregon,9.pdf
-Ahtanum YCR 1,1647,2013,Washington,9.pdf
-Apollo,2993,2013,Washington,9.pdf
-Bravo,3076,2013,Washington,9.pdf
-Cascade,1723,2013,Washington,9.pdf
-Centennial,1554,2013,Washington,9.pdf
-Chinook,1987,2013,Washington,9.pdf
-Citra HBC 394,1405,2013,Washington,9.pdf
-Cluster,1948,2013,Washington,9.pdf
-Columbus/Tomahawk,2571,2013,Washington,9.pdf
-Crystal,1286,2013,Washington,9.pdf
-El Dorado,1761,2013,Washington,9.pdf
-Galena,1969,2013,Washington,9.pdf
-Glacier,1258,2013,Washington,9.pdf
-Golding,1010,2013,Washington,9.pdf
-Mosaic HBC 369,1709,2013,Washington,9.pdf
-Millennium,2266,2013,Washington,9.pdf
-Mt. Hood,1161,2013,Washington,9.pdf
-Northern Brewer,1256,2013,Washington,9.pdf
-Nugget,1931,2013,Washington,9.pdf
-Ahtanum YCR 1,1682,2013,Washington,9.pdf
-Summit,1873,2013,Washington,9.pdf
-Super Galena,2812,2013,Washington,9.pdf
-Tettnanger,755,2013,Washington,9.pdf
-Vanguard,1349,2013,Washington,9.pdf
-Willamette,1240,2013,Washington,9.pdf
-Palisade YCR 4,2790,2013,Washington,9.pdf
-Warrior YCR 5,2169,2013,Washington,9.pdf
-Zeus,2940,2013,Washington,9.pdf
-Experimental,1562,2013,Washington,9.pdf
-Other,1697,2013,Washington,9.pdf
+Variety,Yield,Year,State,Source
+Chinook,2000,2000,Idaho,HGA 22.pdf
+Cluster,1943,2000,Idaho,HGA 22.pdf
+Galena,1815,2000,Idaho,HGA 22.pdf
+Horizon,,2000,Idaho,HGA 22.pdf
+Mt. Hood,2000,2000,Idaho,HGA 22.pdf
+Nugget,2000,2000,Idaho,HGA 22.pdf
+Other Varieties,1100,2000,Idaho,HGA 22.pdf
+Willamette,1534,2000,Idaho,HGA 22.pdf
+Zeus,,2000,Idaho,HGA 22.pdf
+Cluster,1553,2001,Idaho,HGA 21.pdf
+Galena,1492,2001,Idaho,HGA 21.pdf
+Horizon,,2001,Idaho,HGA 21.pdf
+Mt. Hood,1200,2001,Idaho,HGA 21.pdf
+Nugget,1500,2001,Idaho,HGA 21.pdf
+Other Varieties,1111,2001,Idaho,HGA 21.pdf
+Willamette,1077,2001,Idaho,HGA 21.pdf
+Zeus,,2001,Idaho,HGA 21.pdf
+Chinook,,2002,Idaho,HGA 20.pdf
+Cluster,,2002,Idaho,HGA 20.pdf
+Galena,,2002,Idaho,HGA 20.pdf
+Mt. Hood,,2002,Idaho,HGA 20.pdf
+Nugget,,2002,Idaho,HGA 20.pdf
+Other Varieties,,2002,Idaho,HGA 20.pdf
+Willamette,,2002,Idaho,HGA 20.pdf
+Zeus,,2002,Idaho,HGA 20.pdf
+Chinook,,2003,Idaho,HGA 19.pdf
+Cluster,,2003,Idaho,HGA 19.pdf
+Galena,,2003,Idaho,HGA 19.pdf
+Mt. Hood,,2003,Idaho,HGA 19.pdf
+Nugget,,2003,Idaho,HGA 19.pdf
+Other Varieties,,2003,Idaho,HGA 19.pdf
+Willamette,,2003,Idaho,HGA 19.pdf
+Zeus,,2003,Idaho,HGA 19.pdf
+Chinook,,2004,Idaho,HGA 18.pdf
+Cluster,,2004,Idaho,HGA 18.pdf
+Galena,,2004,Idaho,HGA 18.pdf
+Mt. Hood,,2004,Idaho,HGA 18.pdf
+Nugget,,2004,Idaho,HGA 18.pdf
+Other Varieties,,2004,Idaho,HGA 18.pdf
+Willamette,,2004,Idaho,HGA 18.pdf
+Zeus,,2004,Idaho,HGA 18.pdf
+Chinook,,2005,Idaho,HGA 17.pdf
+Cluster,,2005,Idaho,HGA 17.pdf
+Galena,,2005,Idaho,HGA 17.pdf
+Mt. Hood,,2005,Idaho,HGA 17.pdf
+Nugget,,2005,Idaho,HGA 17.pdf
+Other Varieties,,2005,Idaho,HGA 17.pdf
+Willamette,,2005,Idaho,HGA 17.pdf
+Zeus,,2005,Idaho,HGA 17.pdf
+Apollo,2054,2013,Idaho,HGA 9.pdf
+Bravo,2635,2013,Idaho,HGA 9.pdf
+Cascade,1224,2013,Idaho,HGA 9.pdf
+Centennial,1004,2013,Idaho,HGA 9.pdf
+Chinook,1801,2013,Idaho,HGA 9.pdf
+Citra HBC 394,1011,2013,Idaho,HGA 9.pdf
+El Dorado,971,2013,Idaho,HGA 9.pdf
+Experimental,2800,2013,Idaho,HGA 9.pdf
+Other Varieties,1063,2013,Idaho,HGA 9.pdf
+Super Galena,2287,2013,Idaho,HGA 9.pdf
+Zeus,3049,2013,Idaho,HGA 9.pdf
+Apollo,2004,2014,Idaho,HGA 6.pdf
+Bravo,2579,2014,Idaho,HGA 6.pdf
+Cascade,1746,2014,Idaho,HGA 6.pdf
+Centennial,754,2014,Idaho,HGA 6.pdf
+Chinook,1673,2014,Idaho,HGA 6.pdf
+Citra HBC 394,1200,2014,Idaho,HGA 6.pdf
+Crystal,2186,2014,Idaho,HGA 6.pdf
+El Dorado,1144,2014,Idaho,HGA 6.pdf
+Experimental,1366,2014,Idaho,HGA 6.pdf
+Other Varieties,1354,2014,Idaho,HGA 6.pdf
+Simcoe YCR 14,969,2014,Idaho,HGA 6.pdf
+Super Galena,2165,2014,Idaho,HGA 6.pdf
+Zeus,2891,2014,Idaho,HGA 6.pdf
+Apollo,2062,2015,Idaho,HGA 5.pdf
+Bravo,2625,2015,Idaho,HGA 5.pdf
+Calypso,1710,2015,Idaho,HGA 5.pdf
+Cascade,1633,2015,Idaho,HGA 5.pdf
+Centennial,,2015,Idaho,HGA 5.pdf
+Chinook,1850,2015,Idaho,HGA 5.pdf
+Citra HBC 394,1271,2015,Idaho,HGA 5.pdf
+Crystal,,2015,Idaho,HGA 5.pdf
+El Dorado,1125,2015,Idaho,HGA 5.pdf
+Experimental,1269,2015,Idaho,HGA 5.pdf
+Mosaic HBC 369,2278,2015,Idaho,HGA 5.pdf
+Other Varieties,1348,2015,Idaho,HGA 5.pdf
+Simcoe YCR 14,1576,2015,Idaho,HGA 5.pdf
+Super Galena,2189,2015,Idaho,HGA 5.pdf
+Zeus,2909,2015,Idaho,HGA 5.pdf
+Apollo,1893,2016,Idaho,HGA 76.pdf
+Bravo,2359,2016,Idaho,HGA 76.pdf
+Calypso,1937,2016,Idaho,HGA 76.pdf
+Cascade,1585,2016,Idaho,HGA 76.pdf
+Centennial,,2016,Idaho,HGA 76.pdf
+Chinook,1712,2016,Idaho,HGA 76.pdf
+Citra HBC 394,1213,2016,Idaho,HGA 76.pdf
+Crystal,1678,2016,Idaho,HGA 76.pdf
+El Dorado,1658,2016,Idaho,HGA 76.pdf
+Experimental,1000,2016,Idaho,HGA 76.pdf
+Mosaic HBC 369,2204,2016,Idaho,HGA 76.pdf
+Other Varieties,1174,2016,Idaho,HGA 76.pdf
+Simcoe YCR 14,1335,2016,Idaho,HGA 76.pdf
+Super Galena,1872,2016,Idaho,HGA 76.pdf
+Zeus,2761,2016,Idaho,HGA 76.pdf
+Amarillo VGXP01,1569,2017,Idaho,HGA 105.pdf
+Apollo,1798,2017,Idaho,HGA 105.pdf
+Bravo,2799,2017,Idaho,HGA 105.pdf
+Calypso,2159,2017,Idaho,HGA 105.pdf
+Cascade,1771,2017,Idaho,HGA 105.pdf
+Centennial,2028,2017,Idaho,HGA 105.pdf
+Chinook,1665,2017,Idaho,HGA 105.pdf
+Citra HBC 394,1657,2017,Idaho,HGA 105.pdf
+Crystal,2084,2017,Idaho,HGA 105.pdf
+El Dorado,2163,2017,Idaho,HGA 105.pdf
+Experimental,611,2017,Idaho,HGA 105.pdf
+Mosaic HBC 369,2581,2017,Idaho,HGA 105.pdf
+Other Varieties,1929,2017,Idaho,HGA 105.pdf
+Simcoe YCR 14,1494,2017,Idaho,HGA 105.pdf
+Super Galena,,2017,Idaho,HGA 105.pdf
+Willamette,1689,2017,Idaho,HGA 105.pdf
+Zeus,2756,2017,Idaho,HGA 105.pdf
+Amarillo VGXP01,2009,2018,Idaho,HGA 168.pdf
+Apollo,1951,2018,Idaho,HGA 168.pdf
+Bravo,2226,2018,Idaho,HGA 168.pdf
+Calypso,2138,2018,Idaho,HGA 168.pdf
+Cascade,1716,2018,Idaho,HGA 168.pdf
+Centennial,,2018,Idaho,HGA 168.pdf
+Chinook,1873,2018,Idaho,HGA 168.pdf
+Citra HBC 394,1415,2018,Idaho,HGA 168.pdf
+Cluster,2126,2018,Idaho,HGA 168.pdf
+Crystal,1927,2018,Idaho,HGA 168.pdf
+El Dorado,1463,2018,Idaho,HGA 168.pdf
+Eureka!,2299,2018,Idaho,HGA 168.pdf
+Experimental,,2018,Idaho,HGA 168.pdf
+Galena,1715,2018,Idaho,HGA 168.pdf
+Mosaic HBC 369,2333,2018,Idaho,HGA 168.pdf
+Other Varieties,1845,2018,Idaho,HGA 168.pdf
+Simcoe YCR 14,1245,2018,Idaho,HGA 168.pdf
+Super Galena,2493,2018,Idaho,HGA 168.pdf
+Willamette,,2018,Idaho,HGA 168.pdf
+Zeus,2764,2018,Idaho,HGA 168.pdf
+Amarillo VGXP01,1613,2019,Idaho,HGA 273.pdf
+Apollo,,2019,Idaho,HGA 273.pdf
+Bravo,,2019,Idaho,HGA 273.pdf
+Calypso,1901,2019,Idaho,HGA 273.pdf
+Cascade,1823,2019,Idaho,HGA 273.pdf
+Centennial,,2019,Idaho,HGA 273.pdf
+Chinook,2215,2019,Idaho,HGA 273.pdf
+Citra HBC 394,1532,2019,Idaho,HGA 273.pdf
+Cluster,,2019,Idaho,HGA 273.pdf
+Columbus/Tomahawk/Zeus,3002,2019,Idaho,HGA 273.pdf
+Comet,1970,2019,Idaho,HGA 273.pdf
+Crystal,1971,2019,Idaho,HGA 273.pdf
+El Dorado,1352,2019,Idaho,HGA 273.pdf
+Eureka!,2243,2019,Idaho,HGA 273.pdf
+Experimental,,2019,Idaho,HGA 273.pdf
+Galena,1773,2019,Idaho,HGA 273.pdf
+Idaho 7,,2019,Idaho,HGA 273.pdf
+Mosaic HBC 369,2296,2019,Idaho,HGA 273.pdf
+Other Varieties,1907,2019,Idaho,HGA 273.pdf
+Saaz,771,2019,Idaho,HGA 273.pdf
+Simcoe YCR 14,1164,2019,Idaho,HGA 273.pdf
+Super Galena,,2019,Idaho,HGA 273.pdf
+Willamette,1695,2019,Idaho,HGA 273.pdf
+Zeus,2672,2019,Idaho,HGA 273.pdf
+Amarillo VGXP01,1576,2020,Idaho,HGA 346.pdf
+Apollo,,2020,Idaho,HGA 346.pdf
+Bravo,,2020,Idaho,HGA 346.pdf
+Calypso,,2020,Idaho,HGA 346.pdf
+Cascade,1213,2020,Idaho,HGA 346.pdf
+Cashmere,1578,2020,Idaho,HGA 346.pdf
+Centennial,,2020,Idaho,HGA 346.pdf
+Chinook,1614,2020,Idaho,HGA 346.pdf
+Citra HBC 394,1686,2020,Idaho,HGA 346.pdf
+Cluster,,2020,Idaho,HGA 346.pdf
+Columbus/Tomahawk/Zeus,2673,2020,Idaho,HGA 346.pdf
+Comet,1740,2020,Idaho,HGA 346.pdf
+Crystal,,2020,Idaho,HGA 346.pdf
+El Dorado,1590,2020,Idaho,HGA 346.pdf
+Eureka!,,2020,Idaho,HGA 346.pdf
+Experimental,,2020,Idaho,HGA 346.pdf
+Galena,,2020,Idaho,HGA 346.pdf
+Hallertau,614,2020,Idaho,HGA 346.pdf
+Idaho 7,2442,2020,Idaho,HGA 346.pdf
+Mosaic HBC 369,2335,2020,Idaho,HGA 346.pdf
+Northern Brewer,1432,2020,Idaho,HGA 346.pdf
+Other Varieties,1567,2020,Idaho,HGA 346.pdf
+Saaz,,2020,Idaho,HGA 346.pdf
+Simcoe YCR 14,992,2020,Idaho,HGA 346.pdf
+Super Galena,,2020,Idaho,HGA 346.pdf
+Triumph,365,2020,Idaho,HGA 346.pdf
+Willamette,,2020,Idaho,HGA 346.pdf
+Zeus,,2020,Idaho,HGA 346.pdf
+Amarillo VGXP01,1813,2021,Idaho,HGA 405.pdf
+Apollo,2535,2021,Idaho,HGA 405.pdf
+Bravo,1163,2021,Idaho,HGA 405.pdf
+Calypso,1974,2021,Idaho,HGA 405.pdf
+Cascade,1559,2021,Idaho,HGA 405.pdf
+Cashmere,1828,2021,Idaho,HGA 405.pdf
+Centennial,,2021,Idaho,HGA 405.pdf
+Chinook,2104,2021,Idaho,HGA 405.pdf
+Citra HBC 394,1413,2021,Idaho,HGA 405.pdf
+Cluster,,2021,Idaho,HGA 405.pdf
+Columbus/Tomahawk/Zeus,3169,2021,Idaho,HGA 405.pdf
+Comet,1663,2021,Idaho,HGA 405.pdf
+Crystal,,2021,Idaho,HGA 405.pdf
+El Dorado,1778,2021,Idaho,HGA 405.pdf
+Eureka!,2433,2021,Idaho,HGA 405.pdf
+Experimental,,2021,Idaho,HGA 405.pdf
+Galena,,2021,Idaho,HGA 405.pdf
+Hallertau,1272,2021,Idaho,HGA 405.pdf
+Idaho 7,2837,2021,Idaho,HGA 405.pdf
+Mosaic HBC 369,2141,2021,Idaho,HGA 405.pdf
+Mt. Rainier,985,2021,Idaho,HGA 405.pdf
+Northern Brewer,1266,2021,Idaho,HGA 405.pdf
+Other Varieties,1725,2021,Idaho,HGA 405.pdf
+Saaz,620,2021,Idaho,HGA 405.pdf
+Simcoe YCR 14,1121,2021,Idaho,HGA 405.pdf
+Super Galena,2127,2021,Idaho,HGA 405.pdf
+Triumph,1063,2021,Idaho,HGA 405.pdf
+Willamette,1311,2021,Idaho,HGA 405.pdf
+Zeus,,2021,Idaho,HGA 405.pdf
+Amarillo VGXP01,1458,2022,Idaho,HGA 435.pdf
+Apollo,,2022,Idaho,HGA 435.pdf
+Bravo,,2022,Idaho,HGA 435.pdf
+Calypso,,2022,Idaho,HGA 435.pdf
+Cascade,1494,2022,Idaho,HGA 435.pdf
+Cashmere,1622,2022,Idaho,HGA 435.pdf
+Chinook,1467,2022,Idaho,HGA 435.pdf
+Citra HBC 394,1515,2022,Idaho,HGA 435.pdf
+Cluster,,2022,Idaho,HGA 435.pdf
+Columbus/Tomahawk/Zeus,3027,2022,Idaho,HGA 435.pdf
+Comet,1863,2022,Idaho,HGA 435.pdf
+Crystal,,2022,Idaho,HGA 435.pdf
+El Dorado,1766,2022,Idaho,HGA 435.pdf
+Eureka!,2200,2022,Idaho,HGA 435.pdf
+Galena,,2022,Idaho,HGA 435.pdf
+Hallertau,1649,2022,Idaho,HGA 435.pdf
+Mosaic HBC 369,2103,2022,Idaho,HGA 435.pdf
+Mt. Rainier,1364,2022,Idaho,HGA 435.pdf
+Northern Brewer,,2022,Idaho,HGA 435.pdf
+Other Varieties,1587,2022,Idaho,HGA 435.pdf
+Saaz,955,2022,Idaho,HGA 435.pdf
+Simcoe YCR 14,1208,2022,Idaho,HGA 435.pdf
+Super Galena,,2022,Idaho,HGA 435.pdf
+Triumph,871,2022,Idaho,HGA 435.pdf
+Willamette,1393,2022,Idaho,HGA 435.pdf
+Zeus,,2022,Idaho,HGA 435.pdf
+Fuggle,1065,2000,Oregon,HGA 22.pdf
+Golding,1170,2000,Oregon,HGA 22.pdf
+Mt. Hood,1790,2000,Oregon,HGA 22.pdf
+Nugget,2162,2000,Oregon,HGA 22.pdf
+Other Varieties,1843,2000,Oregon,HGA 22.pdf
+Perle,1130,2000,Oregon,HGA 22.pdf
+Santiam,,2000,Oregon,HGA 22.pdf
+Sterling,,2000,Oregon,HGA 22.pdf
+Tettnanger,,2000,Oregon,HGA 22.pdf
+Willamette,1549,2000,Oregon,HGA 22.pdf
+Fuggle,,2001,Oregon,HGA 21.pdf
+Golding,,2001,Oregon,HGA 21.pdf
+Millennium,2570,2001,Oregon,HGA 21.pdf
+Mt. Hood,1970,2001,Oregon,HGA 21.pdf
+Nugget,2445,2001,Oregon,HGA 21.pdf
+Other Varieties,1740,2001,Oregon,HGA 21.pdf
+Perle,1355,2001,Oregon,HGA 21.pdf
+Santiam,,2001,Oregon,HGA 21.pdf
+Sterling,2065,2001,Oregon,HGA 21.pdf
+Willamette,1423,2001,Oregon,HGA 21.pdf
+Cascade,1477,2002,Oregon,HGA 20.pdf
+Fuggle,,2002,Oregon,HGA 20.pdf
+Golding,,2002,Oregon,HGA 20.pdf
+Liberty,1467,2002,Oregon,HGA 20.pdf
+Millennium,1501,2002,Oregon,HGA 20.pdf
+Mt. Hood,1729,2002,Oregon,HGA 20.pdf
+Nugget,2032,2002,Oregon,HGA 20.pdf
+Other Varieties,1669,2002,Oregon,HGA 20.pdf
+Perle,1163,2002,Oregon,HGA 20.pdf
+Santiam,,2002,Oregon,HGA 20.pdf
+Sterling,1895,2002,Oregon,HGA 20.pdf
+Willamette,1528,2002,Oregon,HGA 20.pdf
+Cascade,,2003,Oregon,HGA 19.pdf
+Glacier,677,2003,Oregon,HGA 19.pdf
+Golding,996,2003,Oregon,HGA 19.pdf
+Liberty,,2003,Oregon,HGA 19.pdf
+Millennium,,2003,Oregon,HGA 19.pdf
+Mt. Hood,1569,2003,Oregon,HGA 19.pdf
+Nugget,2169,2003,Oregon,HGA 19.pdf
+Other Varieties,1942,2003,Oregon,HGA 19.pdf
+Perle,1026,2003,Oregon,HGA 19.pdf
+Sterling,2005,2003,Oregon,HGA 19.pdf
+Willamette,1369,2003,Oregon,HGA 19.pdf
+Cascade,1393,2004,Oregon,HGA 18.pdf
+Glacier,1521,2004,Oregon,HGA 18.pdf
+Golding,1309,2004,Oregon,HGA 18.pdf
+Liberty,,2004,Oregon,HGA 18.pdf
+Millennium,2030,2004,Oregon,HGA 18.pdf
+Mt. Hood,1620,2004,Oregon,HGA 18.pdf
+Nugget,2229,2004,Oregon,HGA 18.pdf
+Other Varieties,1370,2004,Oregon,HGA 18.pdf
+Perle,1327,2004,Oregon,HGA 18.pdf
+Sterling,1209,2004,Oregon,HGA 18.pdf
+Willamette,1507,2004,Oregon,HGA 18.pdf
+Cascade,1365,2005,Oregon,HGA 17.pdf
+Glacier,1330,2005,Oregon,HGA 17.pdf
+Golding,1017,2005,Oregon,HGA 17.pdf
+Millennium,1876,2005,Oregon,HGA 17.pdf
+Mt. Hood,1414,2005,Oregon,HGA 17.pdf
+Nugget,2046,2005,Oregon,HGA 17.pdf
+Other Varieties,1048,2005,Oregon,HGA 17.pdf
+Perle,,2005,Oregon,HGA 17.pdf
+Sterling,1451,2005,Oregon,HGA 17.pdf
+Willamette,1385,2005,Oregon,HGA 17.pdf
+Cascade,,2006,Oregon,HGA 16.pdf
+Glacier,,2006,Oregon,HGA 16.pdf
+Golding,1744,2006,Oregon,HGA 16.pdf
+Millennium,2884,2006,Oregon,HGA 16.pdf
+Mt. Hood,2200,2006,Oregon,HGA 16.pdf
+Nugget,2303,2006,Oregon,HGA 16.pdf
+Other Varieties,882,2006,Oregon,HGA 16.pdf
+Perle,,2006,Oregon,HGA 16.pdf
+Sterling,2672,2006,Oregon,HGA 16.pdf
+Willamette,1459,2006,Oregon,HGA 16.pdf
+Cascade,,2007,Oregon,HGA 15.pdf
+Glacier,,2007,Oregon,HGA 15.pdf
+Golding,1403,2007,Oregon,HGA 15.pdf
+Millennium,2323,2007,Oregon,HGA 15.pdf
+Mt. Hood,1640,2007,Oregon,HGA 15.pdf
+Nugget,2231,2007,Oregon,HGA 15.pdf
+Other,1416,2007,Oregon,HGA 15.pdf
+Perle,,2007,Oregon,HGA 15.pdf
+Sterling,1665,2007,Oregon,HGA 15.pdf
+Willamette,1577,2007,Oregon,HGA 15.pdf
+Cascade,1068,2008,Oregon,HGA 14.pdf
+Glacier,,2008,Oregon,HGA 14.pdf
+Golding,1307,2008,Oregon,HGA 14.pdf
+Millennium,2179,2008,Oregon,HGA 14.pdf
+Mt. Hood,1552,2008,Oregon,HGA 14.pdf
+Nugget,1758,2008,Oregon,HGA 14.pdf
+Other,992,2008,Oregon,HGA 14.pdf
+Perle,,2008,Oregon,HGA 14.pdf
+Sterling,1667,2008,Oregon,HGA 14.pdf
+Willamette,1539,2008,Oregon,HGA 14.pdf
+Cascade,1741,2009,Oregon,HGA 13.pdf
+Glacier,,2009,Oregon,HGA 13.pdf
+Golding,,2009,Oregon,HGA 13.pdf
+Millennium,2552,2009,Oregon,HGA 13.pdf
+Mt. Hood,1671,2009,Oregon,HGA 13.pdf
+Nugget,2548,2009,Oregon,HGA 13.pdf
+Other,1601,2009,Oregon,HGA 13.pdf
+Sterling,1684,2009,Oregon,HGA 13.pdf
+Super Galena,,2009,Oregon,HGA 13.pdf
+Willamette,1561,2009,Oregon,HGA 13.pdf
+Cascade,1680,2010,Oregon,HGA 12.pdf
+Golding,,2010,Oregon,HGA 12.pdf
+Millennium,,2010,Oregon,HGA 12.pdf
+Mt. Hood,1640,2010,Oregon,HGA 12.pdf
+Nugget,2119,2010,Oregon,HGA 12.pdf
+Other,1711,2010,Oregon,HGA 12.pdf
+Sterling,1644,2010,Oregon,HGA 12.pdf
+Super Galena,,2010,Oregon,HGA 12.pdf
+Willamette,1535,2010,Oregon,HGA 12.pdf
+Cascade,1616,2011,Oregon,HGA 11.pdf
+Golding,,2011,Oregon,HGA 11.pdf
+Liberty,1326,2011,Oregon,HGA 11.pdf
+Magnum,1928,2011,Oregon,HGA 11.pdf
+Millennium,,2011,Oregon,HGA 11.pdf
+Mt. Hood,1890,2011,Oregon,HGA 11.pdf
+Nugget,2317,2011,Oregon,HGA 11.pdf
+Other,1511,2011,Oregon,HGA 11.pdf
+Perle,1622,2011,Oregon,HGA 11.pdf
+Sterling,1915,2011,Oregon,HGA 11.pdf
+Super Galena,2263,2011,Oregon,HGA 11.pdf
+Tettnanger,1634,2011,Oregon,HGA 11.pdf
+Willamette,1716,2011,Oregon,HGA 11.pdf
+Cascade,1802,2012,Oregon,HGA 10.pdf
+Centennial,1779,2012,Oregon,HGA 10.pdf
+Golding,1527,2012,Oregon,HGA 10.pdf
+Liberty,2519,2012,Oregon,HGA 10.pdf
+Magnum,1737,2012,Oregon,HGA 10.pdf
+Millennium,,2012,Oregon,HGA 10.pdf
+Mt. Hood,1737,2012,Oregon,HGA 10.pdf
+Nugget,2071,2012,Oregon,HGA 10.pdf
+Other,1690,2012,Oregon,HGA 10.pdf
+Perle,,2012,Oregon,HGA 10.pdf
+Sterling,,2012,Oregon,HGA 10.pdf
+Super Galena,2763,2012,Oregon,HGA 10.pdf
+Tettnanger,1493,2012,Oregon,HGA 10.pdf
+Willamette,1663,2012,Oregon,HGA 10.pdf
+Cascade,1483,2013,Oregon,HGA 9.pdf
+Centennial,1585,2013,Oregon,HGA 9.pdf
+Experimental,1734,2013,Oregon,HGA 9.pdf
+Fuggle,827,2013,Oregon,HGA 9.pdf
+Golding,1148,2013,Oregon,HGA 9.pdf
+Liberty,,2013,Oregon,HGA 9.pdf
+Magnum,1406,2013,Oregon,HGA 9.pdf
+Mt. Hood,1567,2013,Oregon,HGA 9.pdf
+Nugget,2053,2013,Oregon,HGA 9.pdf
+Other Varieties,1931,2013,Oregon,HGA 9.pdf
+Perle,1178,2013,Oregon,HGA 9.pdf
+Sterling,1621,2013,Oregon,HGA 9.pdf
+Super Galena,2557,2013,Oregon,HGA 9.pdf
+Tettnanger,,2013,Oregon,HGA 9.pdf
+Willamette,1491,2013,Oregon,HGA 9.pdf
+Cascade,1402,2014,Oregon,HGA 6.pdf
+Centennial,1095,2014,Oregon,HGA 6.pdf
+Experimental,,2014,Oregon,HGA 6.pdf
+Fuggle,,2014,Oregon,HGA 6.pdf
+Golding,955,2014,Oregon,HGA 6.pdf
+Liberty,,2014,Oregon,HGA 6.pdf
+Magnum,1077,2014,Oregon,HGA 6.pdf
+Mt. Hood,1450,2014,Oregon,HGA 6.pdf
+Nugget,1978,2014,Oregon,HGA 6.pdf
+Other Varieties,1426,2014,Oregon,HGA 6.pdf
+Perle,1057,2014,Oregon,HGA 6.pdf
+Sterling,1423,2014,Oregon,HGA 6.pdf
+Super Galena,2309,2014,Oregon,HGA 6.pdf
+Tettnanger,,2014,Oregon,HGA 6.pdf
+Willamette,1453,2014,Oregon,HGA 6.pdf
+Cascade,1994,2015,Oregon,HGA 5.pdf
+Centennial,1352,2015,Oregon,HGA 5.pdf
+Chinook,1861,2015,Oregon,HGA 5.pdf
+Citra HBC 394,980,2015,Oregon,HGA 5.pdf
+Crystal,2011,2015,Oregon,HGA 5.pdf
+Experimental,,2015,Oregon,HGA 5.pdf
+Fuggle,1066,2015,Oregon,HGA 5.pdf
+Golding,837,2015,Oregon,HGA 5.pdf
+Liberty,1360,2015,Oregon,HGA 5.pdf
+Magnum,1572,2015,Oregon,HGA 5.pdf
+Mt. Hood,1276,2015,Oregon,HGA 5.pdf
+Nugget,1888,2015,Oregon,HGA 5.pdf
+Other Varieties,1609,2015,Oregon,HGA 5.pdf
+Perle,,2015,Oregon,HGA 5.pdf
+Simcoe YCR 14,1678,2015,Oregon,HGA 5.pdf
+Sterling,1344,2015,Oregon,HGA 5.pdf
+Super Galena,2340,2015,Oregon,HGA 5.pdf
+Tettnanger,1242,2015,Oregon,HGA 5.pdf
+Willamette,1226,2015,Oregon,HGA 5.pdf
+Cascade,1597,2016,Oregon,HGA 76.pdf
+Centennial,1235,2016,Oregon,HGA 76.pdf
+Chinook,1675,2016,Oregon,HGA 76.pdf
+Citra HBC 394,1047,2016,Oregon,HGA 76.pdf
+Crystal,2216,2016,Oregon,HGA 76.pdf
+Experimental,,2016,Oregon,HGA 76.pdf
+Fuggle,1021,2016,Oregon,HGA 76.pdf
+Golding,,2016,Oregon,HGA 76.pdf
+Liberty,,2016,Oregon,HGA 76.pdf
+Magnum,1493,2016,Oregon,HGA 76.pdf
+Mt. Hood,1463,2016,Oregon,HGA 76.pdf
+Nugget,1925,2016,Oregon,HGA 76.pdf
+Other Varieties,1546,2016,Oregon,HGA 76.pdf
+Perle,,2016,Oregon,HGA 76.pdf
+Simcoe YCR 14,1969,2016,Oregon,HGA 76.pdf
+Sterling,1626,2016,Oregon,HGA 76.pdf
+Super Galena,,2016,Oregon,HGA 76.pdf
+Tettnanger,1193,2016,Oregon,HGA 76.pdf
+Willamette,1573,2016,Oregon,HGA 76.pdf
+Cascade,1425,2017,Oregon,HGA 105.pdf
+Centennial,1273,2017,Oregon,HGA 105.pdf
+Chinook,1667,2017,Oregon,HGA 105.pdf
+Citra HBC 394,1475,2017,Oregon,HGA 105.pdf
+Crystal,1772,2017,Oregon,HGA 105.pdf
+Experimental,,2017,Oregon,HGA 105.pdf
+Fuggle,1251,2017,Oregon,HGA 105.pdf
+Golding,1181,2017,Oregon,HGA 105.pdf
+Liberty,,2017,Oregon,HGA 105.pdf
+Magnum,1714,2017,Oregon,HGA 105.pdf
+Mosaic HBC 369,1875,2017,Oregon,HGA 105.pdf
+Mt. Hood,1439,2017,Oregon,HGA 105.pdf
+Nugget,1820,2017,Oregon,HGA 105.pdf
+Other Varieties,1573,2017,Oregon,HGA 105.pdf
+Perle,1164,2017,Oregon,HGA 105.pdf
+Simcoe YCR 14,1421,2017,Oregon,HGA 105.pdf
+Sterling,1407,2017,Oregon,HGA 105.pdf
+Super Galena,2096,2017,Oregon,HGA 105.pdf
+Tettnanger,1013,2017,Oregon,HGA 105.pdf
+Willamette,1324,2017,Oregon,HGA 105.pdf
+Cascade,1623,2018,Oregon,HGA 168.pdf
+Centennial,1277,2018,Oregon,HGA 168.pdf
+Chinook,1674,2018,Oregon,HGA 168.pdf
+Citra HBC 394,1600,2018,Oregon,HGA 168.pdf
+Crystal,1819,2018,Oregon,HGA 168.pdf
+Fuggle,1034,2018,Oregon,HGA 168.pdf
+Golding,1160,2018,Oregon,HGA 168.pdf
+Liberty,,2018,Oregon,HGA 168.pdf
+Magnum,1284,2018,Oregon,HGA 168.pdf
+Mosaic HBC 369,,2018,Oregon,HGA 168.pdf
+Mt. Hood,1411,2018,Oregon,HGA 168.pdf
+Nugget,1946,2018,Oregon,HGA 168.pdf
+Other Varieties,2068,2018,Oregon,HGA 168.pdf
+Perle,1093,2018,Oregon,HGA 168.pdf
+Simcoe YCR 14,1588,2018,Oregon,HGA 168.pdf
+Sterling,1760,2018,Oregon,HGA 168.pdf
+Super Galena,2216,2018,Oregon,HGA 168.pdf
+Tettnanger,1027,2018,Oregon,HGA 168.pdf
+Willamette,1484,2018,Oregon,HGA 168.pdf
+Amarillo VGXP01,2208,2019,Oregon,HGA 273.pdf
+Cascade,1620,2019,Oregon,HGA 273.pdf
+Centennial,1661,2019,Oregon,HGA 273.pdf
+Chinook,1733,2019,Oregon,HGA 273.pdf
+Citra HBC 394,1476,2019,Oregon,HGA 273.pdf
+Crystal,1943,2019,Oregon,HGA 273.pdf
+Fuggle,1243,2019,Oregon,HGA 273.pdf
+Golding,1351,2019,Oregon,HGA 273.pdf
+Hallertau Magnum,,2019,Oregon,HGA 273.pdf
+Liberty,,2019,Oregon,HGA 273.pdf
+Mosaic HBC 369,2113,2019,Oregon,HGA 273.pdf
+Mt. Hood,1538,2019,Oregon,HGA 273.pdf
+Nugget,2130,2019,Oregon,HGA 273.pdf
+Other Varieties,1644,2019,Oregon,HGA 273.pdf
+Perle,,2019,Oregon,HGA 273.pdf
+Simcoe YCR 14,1845,2019,Oregon,HGA 273.pdf
+Sterling,1643,2019,Oregon,HGA 273.pdf
+Strata OR 91331,2066,2019,Oregon,HGA 273.pdf
+Super Galena,2580,2019,Oregon,HGA 273.pdf
+Tettnanger,,2019,Oregon,HGA 273.pdf
+Willamette,1717,2019,Oregon,HGA 273.pdf
+Amarillo VGXP01,2360,2020,Oregon,HGA 346.pdf
+Cascade,1639,2020,Oregon,HGA 346.pdf
+Centennial,1675,2020,Oregon,HGA 346.pdf
+Chinook,1481,2020,Oregon,HGA 346.pdf
+Citra HBC 394,1506,2020,Oregon,HGA 346.pdf
+Crystal,,2020,Oregon,HGA 346.pdf
+Fuggle,,2020,Oregon,HGA 346.pdf
+Golding,,2020,Oregon,HGA 346.pdf
+Hallertau Magnum,,2020,Oregon,HGA 346.pdf
+Liberty,2289,2020,Oregon,HGA 346.pdf
+Mosaic HBC 369,2155,2020,Oregon,HGA 346.pdf
+Mt. Hood,1551,2020,Oregon,HGA 346.pdf
+Nugget,1841,2020,Oregon,HGA 346.pdf
+Other Varieties,1479,2020,Oregon,HGA 346.pdf
+Perle,,2020,Oregon,HGA 346.pdf
+Sabro HBC 438,870,2020,Oregon,HGA 346.pdf
+Simcoe YCR 14,1823,2020,Oregon,HGA 346.pdf
+Sterling,1728,2020,Oregon,HGA 346.pdf
+Strata OR 91331,2068,2020,Oregon,HGA 346.pdf
+Super Galena,2801,2020,Oregon,HGA 346.pdf
+Tettnanger,,2020,Oregon,HGA 346.pdf
+Willamette,1857,2020,Oregon,HGA 346.pdf
+Amarillo VGXP01,2186,2021,Oregon,HGA 405.pdf
+Cascade,1595,2021,Oregon,HGA 405.pdf
+Centennial,1384,2021,Oregon,HGA 405.pdf
+Chinook,1794,2021,Oregon,HGA 405.pdf
+Citra HBC 394,1414,2021,Oregon,HGA 405.pdf
+Crystal,1816,2021,Oregon,HGA 405.pdf
+Eureka!,2292,2021,Oregon,HGA 405.pdf
+Fuggle,,2021,Oregon,HGA 405.pdf
+Golding,927,2021,Oregon,HGA 405.pdf
+Hallertau Magnum,,2021,Oregon,HGA 405.pdf
+Liberty,1506,2021,Oregon,HGA 405.pdf
+Mosaic HBC 369,2077,2021,Oregon,HGA 405.pdf
+Mt. Hood,1624,2021,Oregon,HGA 405.pdf
+Nugget,2162,2021,Oregon,HGA 405.pdf
+Other Varieties,1780,2021,Oregon,HGA 405.pdf
+Perle,,2021,Oregon,HGA 405.pdf
+Sabro HBC 438,1749,2021,Oregon,HGA 405.pdf
+Simcoe YCR 14,1643,2021,Oregon,HGA 405.pdf
+Sterling,1321,2021,Oregon,HGA 405.pdf
+Strata OR 91331,1889,2021,Oregon,HGA 405.pdf
+Super Galena,,2021,Oregon,HGA 405.pdf
+Tettnanger,,2021,Oregon,HGA 405.pdf
+Willamette,1461,2021,Oregon,HGA 405.pdf
+Amarillo VGXP01,1870,2022,Oregon,HGA 435.pdf
+Cascade,1578,2022,Oregon,HGA 435.pdf
+Centennial,1575,2022,Oregon,HGA 435.pdf
+Chinook,1543,2022,Oregon,HGA 435.pdf
+Citra HBC 394,1562,2022,Oregon,HGA 435.pdf
+Crystal,1739,2022,Oregon,HGA 435.pdf
+Eureka!,,2022,Oregon,HGA 435.pdf
+Fuggle,,2022,Oregon,HGA 435.pdf
+Golding,,2022,Oregon,HGA 435.pdf
+Hallertau Magnum,,2022,Oregon,HGA 435.pdf
+Liberty,,2022,Oregon,HGA 435.pdf
+Mosaic HBC 369,2059,2022,Oregon,HGA 435.pdf
+Mt. Hood,1252,2022,Oregon,HGA 435.pdf
+Mt. Rainier,1473,2022,Oregon,HGA 435.pdf
+Nugget,2085,2022,Oregon,HGA 435.pdf
+Other Varieties,1567,2022,Oregon,HGA 435.pdf
+Perle,,2022,Oregon,HGA 435.pdf
+Sabro HBC 438,1996,2022,Oregon,HGA 435.pdf
+Simcoe YCR 14,1646,2022,Oregon,HGA 435.pdf
+Sterling,1559,2022,Oregon,HGA 435.pdf
+Strata OR 91331,2000,2022,Oregon,HGA 435.pdf
+Super Galena,,2022,Oregon,HGA 435.pdf
+Talus HBC 692,1483,2022,Oregon,HGA 435.pdf
+Tettnanger,,2022,Oregon,HGA 435.pdf
+Willamette,1489,2022,Oregon,HGA 435.pdf
+Alpha,1557,2000,Washington,HGA 22.pdf
+Aroma,1134,2000,Washington,HGA 22.pdf
+Cascade,1806,2000,Washington,HGA 22.pdf
+Chinook,1957,2000,Washington,HGA 22.pdf
+Cluster,1997,2000,Washington,HGA 22.pdf
+Columbus/Tomahawk,2564,2000,Washington,HGA 22.pdf
+Eroica,,2000,Washington,HGA 22.pdf
+Galena,1891,2000,Washington,HGA 22.pdf
+Golding,1098,2000,Washington,HGA 22.pdf
+High Alpha,1772,2000,Washington,HGA 22.pdf
+Horizon,1250,2000,Washington,HGA 22.pdf
+Magnum,1616,2000,Washington,HGA 22.pdf
+Mt. Hood,1147,2000,Washington,HGA 22.pdf
+Nugget,1854,2000,Washington,HGA 22.pdf
+Olympic,,2000,Washington,HGA 22.pdf
+Other,1748,2000,Washington,HGA 22.pdf
+Perle,785,2000,Washington,HGA 22.pdf
+Tettnanger,,2000,Washington,HGA 22.pdf
+Willamette,1372,2000,Washington,HGA 22.pdf
+Zeus,2699,2000,Washington,HGA 22.pdf
+Alpha,1589,2001,Washington,HGA 21.pdf
+Aroma,1378,2001,Washington,HGA 21.pdf
+Cascade,1785,2001,Washington,HGA 21.pdf
+Chelan,1809,2001,Washington,HGA 21.pdf
+Chinook,1717,2001,Washington,HGA 21.pdf
+Cluster,1958,2001,Washington,HGA 21.pdf
+Columbus/Tomahawk,2493,2001,Washington,HGA 21.pdf
+Galena,1679,2001,Washington,HGA 21.pdf
+Golding,1231,2001,Washington,HGA 21.pdf
+Hallertau,968,2001,Washington,HGA 21.pdf
+High Alpha,2072,2001,Washington,HGA 21.pdf
+Horizon,1224,2001,Washington,HGA 21.pdf
+Magnum,1424,2001,Washington,HGA 21.pdf
+Millennium,2037,2001,Washington,HGA 21.pdf
+Mt. Hood,1130,2001,Washington,HGA 21.pdf
+Nugget,1968,2001,Washington,HGA 21.pdf
+Other,1224,2001,Washington,HGA 21.pdf
+Perle,1083,2001,Washington,HGA 21.pdf
+Tettnanger,1058,2001,Washington,HGA 21.pdf
+Tillicum,1836,2001,Washington,HGA 21.pdf
+Vanguard,1372,2001,Washington,HGA 21.pdf
+Warrior YCR 5,1949,2001,Washington,HGA 21.pdf
+Willamette,1309,2001,Washington,HGA 21.pdf
+Zeus,2669,2001,Washington,HGA 21.pdf
+Cascade,1748,2002,Washington,HGA 20.pdf
+Chelan,2211,2002,Washington,HGA 20.pdf
+Chinook,1902,2002,Washington,HGA 20.pdf
+Cluster,1996,2002,Washington,HGA 20.pdf
+Columbus/Tomahawk,2876,2002,Washington,HGA 20.pdf
+Galena,1905,2002,Washington,HGA 20.pdf
+Golding,1188,2002,Washington,HGA 20.pdf
+Hallertau,1193,2002,Washington,HGA 20.pdf
+Horizon,1409,2002,Washington,HGA 20.pdf
+Magnum,,2002,Washington,HGA 20.pdf
+Millennium,2349,2002,Washington,HGA 20.pdf
+Mt. Hood,1272,2002,Washington,HGA 20.pdf
+Northern Brewer,,2002,Washington,HGA 20.pdf
+Nugget,2095,2002,Washington,HGA 20.pdf
+Other,1610,2002,Washington,HGA 20.pdf
+Other Alpha,1619,2002,Washington,HGA 20.pdf
+Other Aroma,1340,2002,Washington,HGA 20.pdf
+Perle,969,2002,Washington,HGA 20.pdf
+Tettnanger,1277,2002,Washington,HGA 20.pdf
+Tillicum,2075,2002,Washington,HGA 20.pdf
+Vanguard,,2002,Washington,HGA 20.pdf
+Warrior YCR 5,2125,2002,Washington,HGA 20.pdf
+Willamette,1381,2002,Washington,HGA 20.pdf
+Zeus,2993,2002,Washington,HGA 20.pdf
+Cascade,1808,2003,Washington,HGA 19.pdf
+Chelan,2545,2003,Washington,HGA 19.pdf
+Chinook,1903,2003,Washington,HGA 19.pdf
+Cluster,2003,2003,Washington,HGA 19.pdf
+Columbus/Tomahawk,2745,2003,Washington,HGA 19.pdf
+Galena,1914,2003,Washington,HGA 19.pdf
+Golding,1118,2003,Washington,HGA 19.pdf
+Hallertau,885,2003,Washington,HGA 19.pdf
+Horizon,1430,2003,Washington,HGA 19.pdf
+Magnum,,2003,Washington,HGA 19.pdf
+Millennium,2267,2003,Washington,HGA 19.pdf
+Mt. Hood,1475,2003,Washington,HGA 19.pdf
+Northern Brewer,1755,2003,Washington,HGA 19.pdf
+Nugget,1882,2003,Washington,HGA 19.pdf
+Other,1436,2003,Washington,HGA 19.pdf
+Other Alpha,,2003,Washington,HGA 19.pdf
+Other Aroma,,2003,Washington,HGA 19.pdf
+Perle,919,2003,Washington,HGA 19.pdf
+Tettnanger,,2003,Washington,HGA 19.pdf
+Tillicum,2325,2003,Washington,HGA 19.pdf
+Vanguard,,2003,Washington,HGA 19.pdf
+Warrior YCR 5,2126,2003,Washington,HGA 19.pdf
+Willamette,1332,2003,Washington,HGA 19.pdf
+Zeus,2904,2003,Washington,HGA 19.pdf
+Cascade,2006,2004,Washington,HGA 18.pdf
+Chelan,2482,2004,Washington,HGA 18.pdf
+Chinook,1900,2004,Washington,HGA 18.pdf
+Cluster,2034,2004,Washington,HGA 18.pdf
+Columbus/Tomahawk,2557,2004,Washington,HGA 18.pdf
+Galena,1860,2004,Washington,HGA 18.pdf
+Golding,989,2004,Washington,HGA 18.pdf
+Hallertau,1057,2004,Washington,HGA 18.pdf
+Horizon,,2004,Washington,HGA 18.pdf
+Magnum,,2004,Washington,HGA 18.pdf
+Millennium,2339,2004,Washington,HGA 18.pdf
+Mt. Hood,1387,2004,Washington,HGA 18.pdf
+Northern Brewer,2191,2004,Washington,HGA 18.pdf
+Nugget,2073,2004,Washington,HGA 18.pdf
+Other,1641,2004,Washington,HGA 18.pdf
+Other Alpha,,2004,Washington,HGA 18.pdf
+Other Aroma,,2004,Washington,HGA 18.pdf
+Perle,1245,2004,Washington,HGA 18.pdf
+Tettnanger,,2004,Washington,HGA 18.pdf
+Tillicum,,2004,Washington,HGA 18.pdf
+Vanguard,,2004,Washington,HGA 18.pdf
+Warrior YCR 5,2300,2004,Washington,HGA 18.pdf
+Willamette,1411,2004,Washington,HGA 18.pdf
+Zeus,3125,2004,Washington,HGA 18.pdf
+Ahtanum YCR 1,758,2005,Washington,HGA 17.pdf
+Cascade,2036,2005,Washington,HGA 17.pdf
+Centennial,1375,2005,Washington,HGA 17.pdf
+Chelan,2244,2005,Washington,HGA 17.pdf
+Chinook,1844,2005,Washington,HGA 17.pdf
+Cluster,1782,2005,Washington,HGA 17.pdf
+Columbus/Tomahawk,2516,2005,Washington,HGA 17.pdf
+Galena,1737,2005,Washington,HGA 17.pdf
+Glacier,1063,2005,Washington,HGA 17.pdf
+Golding,886,2005,Washington,HGA 17.pdf
+Hallertau,967,2005,Washington,HGA 17.pdf
+Horizon,,2005,Washington,HGA 17.pdf
+Millennium,1908,2005,Washington,HGA 17.pdf
+Mt. Hood,1267,2005,Washington,HGA 17.pdf
+Northern Brewer,,2005,Washington,HGA 17.pdf
+Nugget,1727,2005,Washington,HGA 17.pdf
+Other,1576,2005,Washington,HGA 17.pdf
+Palisade YCR 4,2759,2005,Washington,HGA 17.pdf
+Perle,,2005,Washington,HGA 17.pdf
+Sterling,1527,2005,Washington,HGA 17.pdf
+Tillicum,,2005,Washington,HGA 17.pdf
+Warrior YCR 5,1830,2005,Washington,HGA 17.pdf
+Willamette,1333,2005,Washington,HGA 17.pdf
+Zeus,2255,2005,Washington,HGA 17.pdf
+Ahtanum YCR 1,2110,2006,Washington,HGA 16.pdf
+Cascade,1954,2006,Washington,HGA 16.pdf
+Centennial,,2006,Washington,HGA 16.pdf
+Chelan,2187,2006,Washington,HGA 16.pdf
+Chinook,1871,2006,Washington,HGA 16.pdf
+Cluster,2184,2006,Washington,HGA 16.pdf
+Columbus/Tomahawk,2660,2006,Washington,HGA 16.pdf
+Galena,1820,2006,Washington,HGA 16.pdf
+Glacier,1441,2006,Washington,HGA 16.pdf
+Golding,992,2006,Washington,HGA 16.pdf
+Hallertau,812,2006,Washington,HGA 16.pdf
+Millennium,2324,2006,Washington,HGA 16.pdf
+Mt. Hood,1109,2006,Washington,HGA 16.pdf
+Northern Brewer,,2006,Washington,HGA 16.pdf
+Nugget,1841,2006,Washington,HGA 16.pdf
+Other,1775,2006,Washington,HGA 16.pdf
+Palisade YCR 4,2998,2006,Washington,HGA 16.pdf
+Perle,,2006,Washington,HGA 16.pdf
+Sterling,1419,2006,Washington,HGA 16.pdf
+Summit,1864,2006,Washington,HGA 16.pdf
+Warrior YCR 5,2159,2006,Washington,HGA 16.pdf
+Willamette,1222,2006,Washington,HGA 16.pdf
+Zeus,2962,2006,Washington,HGA 16.pdf
+Ahtanum YCR 1,1964,2007,Washington,HGA 15.pdf
+Cascade,2031,2007,Washington,HGA 15.pdf
+Centennial,,2007,Washington,HGA 15.pdf
+Chelan,2364,2007,Washington,HGA 15.pdf
+Chinook,1818,2007,Washington,HGA 15.pdf
+Cluster,2030,2007,Washington,HGA 15.pdf
+Columbus/Tomahawk,2533,2007,Washington,HGA 15.pdf
+Galena,1776,2007,Washington,HGA 15.pdf
+Glacier,1619,2007,Washington,HGA 15.pdf
+Golding,1500,2007,Washington,HGA 15.pdf
+Hallertau,763,2007,Washington,HGA 15.pdf
+Millennium,2350,2007,Washington,HGA 15.pdf
+Mt. Hood,1316,2007,Washington,HGA 15.pdf
+Northern Brewer,,2007,Washington,HGA 15.pdf
+Nugget,1909,2007,Washington,HGA 15.pdf
+Other,1355,2007,Washington,HGA 15.pdf
+Palisade YCR 4,2519,2007,Washington,HGA 15.pdf
+Perle,,2007,Washington,HGA 15.pdf
+Sterling,,2007,Washington,HGA 15.pdf
+Summit,1822,2007,Washington,HGA 15.pdf
+Vanguard,1470,2007,Washington,HGA 15.pdf
+Warrior YCR 5,1903,2007,Washington,HGA 15.pdf
+Willamette,1318,2007,Washington,HGA 15.pdf
+Zeus,2839,2007,Washington,HGA 15.pdf
+Ahtanum YCR 1,,2008,Washington,HGA 14.pdf
+Apollo,,2008,Washington,HGA 14.pdf
+Bravo,,2008,Washington,HGA 14.pdf
+Cascade,1781,2008,Washington,HGA 14.pdf
+Centennial,1452,2008,Washington,HGA 14.pdf
+Chelan,2178,2008,Washington,HGA 14.pdf
+Chinook,1775,2008,Washington,HGA 14.pdf
+Cluster,2038,2008,Washington,HGA 14.pdf
+Columbus/Tomahawk,2585,2008,Washington,HGA 14.pdf
+Galena,1826,2008,Washington,HGA 14.pdf
+Glacier,1795,2008,Washington,HGA 14.pdf
+Golding,1385,2008,Washington,HGA 14.pdf
+Hallertau,,2008,Washington,HGA 14.pdf
+Millennium,2440,2008,Washington,HGA 14.pdf
+Mt. Hood,1572,2008,Washington,HGA 14.pdf
+Northern Brewer,,2008,Washington,HGA 14.pdf
+Nugget,2068,2008,Washington,HGA 14.pdf
+Other,,2008,Washington,HGA 14.pdf
+Palisade YCR 4,2091,2008,Washington,HGA 14.pdf
+Perle,,2008,Washington,HGA 14.pdf
+Simcoe YCR 14,1758,2008,Washington,HGA 14.pdf
+Sterling,,2008,Washington,HGA 14.pdf
+Summit,,2008,Washington,HGA 14.pdf
+Super Galena,2104,2008,Washington,HGA 14.pdf
+Vanguard,,2008,Washington,HGA 14.pdf
+Warrior YCR 5,1846,2008,Washington,HGA 14.pdf
+Willamette,1351,2008,Washington,HGA 14.pdf
+Zeus,2618,2008,Washington,HGA 14.pdf
+Ahtanum YCR 1,,2009,Washington,HGA 13.pdf
+Apollo,,2009,Washington,HGA 13.pdf
+Bravo,,2009,Washington,HGA 13.pdf
+Cascade,2120,2009,Washington,HGA 13.pdf
+Centennial,1490,2009,Washington,HGA 13.pdf
+Chelan,2680,2009,Washington,HGA 13.pdf
+Chinook,1819,2009,Washington,HGA 13.pdf
+Cluster,2370,2009,Washington,HGA 13.pdf
+Columbus/Tomahawk,2790,2009,Washington,HGA 13.pdf
+Galena,1852,2009,Washington,HGA 13.pdf
+Glacier,2093,2009,Washington,HGA 13.pdf
+Golding,826,2009,Washington,HGA 13.pdf
+Hallertau,,2009,Washington,HGA 13.pdf
+Millennium,2465,2009,Washington,HGA 13.pdf
+Mt. Hood,1570,2009,Washington,HGA 13.pdf
+Northern Brewer,753,2009,Washington,HGA 13.pdf
+Nugget,2060,2009,Washington,HGA 13.pdf
+Other,1567,2009,Washington,HGA 13.pdf
+Palisade YCR 4,2756,2009,Washington,HGA 13.pdf
+Simcoe YCR 14,2137,2009,Washington,HGA 13.pdf
+Sterling,,2009,Washington,HGA 13.pdf
+Summit,,2009,Washington,HGA 13.pdf
+Super Galena,3186,2009,Washington,HGA 13.pdf
+Vanguard,,2009,Washington,HGA 13.pdf
+Warrior YCR 5,2110,2009,Washington,HGA 13.pdf
+Willamette,1455,2009,Washington,HGA 13.pdf
+Zeus,3387,2009,Washington,HGA 13.pdf
+Ahtanum YCR 1,,2010,Washington,HGA 12.pdf
+Apollo,2778,2010,Washington,HGA 12.pdf
+Bravo,2566,2010,Washington,HGA 12.pdf
+Cascade,1905,2010,Washington,HGA 12.pdf
+Centennial,1791,2010,Washington,HGA 12.pdf
+Chelan,,2010,Washington,HGA 12.pdf
+Chinook,1963,2010,Washington,HGA 12.pdf
+Citra HBC 394,1930,2010,Washington,HGA 12.pdf
+Cluster,2060,2010,Washington,HGA 12.pdf
+Columbus/Tomahawk,2350,2010,Washington,HGA 12.pdf
+Galena,1810,2010,Washington,HGA 12.pdf
+Glacier,1943,2010,Washington,HGA 12.pdf
+Golding,,2010,Washington,HGA 12.pdf
+Hallertau,,2010,Washington,HGA 12.pdf
+Millennium,2185,2010,Washington,HGA 12.pdf
+Mt. Hood,1211,2010,Washington,HGA 12.pdf
+Northern Brewer,1270,2010,Washington,HGA 12.pdf
+Nugget,1808,2010,Washington,HGA 12.pdf
+Other,1968,2010,Washington,HGA 12.pdf
+Palisade YCR 4,2431,2010,Washington,HGA 12.pdf
+Simcoe YCR 14,1698,2010,Washington,HGA 12.pdf
+Sterling,,2010,Washington,HGA 12.pdf
+Summit,,2010,Washington,HGA 12.pdf
+Super Galena,2622,2010,Washington,HGA 12.pdf
+Vanguard,,2010,Washington,HGA 12.pdf
+Warrior YCR 5,1778,2010,Washington,HGA 12.pdf
+Willamette,1350,2010,Washington,HGA 12.pdf
+Zeus,2678,2010,Washington,HGA 12.pdf
+Ahtanum YCR 1,,2011,Washington,HGA 11.pdf
+Apollo,2758,2011,Washington,HGA 11.pdf
+Bravo,2609,2011,Washington,HGA 11.pdf
+Cascade,1955,2011,Washington,HGA 11.pdf
+Centennial,1403,2011,Washington,HGA 11.pdf
+Chelan,,2011,Washington,HGA 11.pdf
+Chinook,1718,2011,Washington,HGA 11.pdf
+Citra HBC 394,1812,2011,Washington,HGA 11.pdf
+Cluster,2019,2011,Washington,HGA 11.pdf
+Columbus/Tomahawk,2519,2011,Washington,HGA 11.pdf
+Galena,1821,2011,Washington,HGA 11.pdf
+Glacier,2182,2011,Washington,HGA 11.pdf
+Golding,,2011,Washington,HGA 11.pdf
+Hallertau,,2011,Washington,HGA 11.pdf
+Millennium,2562,2011,Washington,HGA 11.pdf
+Mt. Hood,838,2011,Washington,HGA 11.pdf
+Northern Brewer,1698,2011,Washington,HGA 11.pdf
+Nugget,1969,2011,Washington,HGA 11.pdf
+Other,,2011,Washington,HGA 11.pdf
+Palisade YCR 4,2562,2011,Washington,HGA 11.pdf
+Simcoe YCR 14,1779,2011,Washington,HGA 11.pdf
+Summit,,2011,Washington,HGA 11.pdf
+Super Galena,3041,2011,Washington,HGA 11.pdf
+Vanguard,,2011,Washington,HGA 11.pdf
+Warrior YCR 5,2061,2011,Washington,HGA 11.pdf
+Willamette,1510,2011,Washington,HGA 11.pdf
+Zeus,2572,2011,Washington,HGA 11.pdf
+Ahtanum YCR 1,1489,2012,Washington,HGA 10.pdf
+Apollo,2655,2012,Washington,HGA 10.pdf
+Bravo,2647,2012,Washington,HGA 10.pdf
+Cascade,1854,2012,Washington,HGA 10.pdf
+Centennial,1354,2012,Washington,HGA 10.pdf
+Chelan,,2012,Washington,HGA 10.pdf
+Chinook,1699,2012,Washington,HGA 10.pdf
+Citra HBC 394,1342,2012,Washington,HGA 10.pdf
+Cluster,1965,2012,Washington,HGA 10.pdf
+Columbus/Tomahawk,2280,2012,Washington,HGA 10.pdf
+Crystal,1184,2012,Washington,HGA 10.pdf
+Galena,1742,2012,Washington,HGA 10.pdf
+Glacier,1461,2012,Washington,HGA 10.pdf
+Golding,,2012,Washington,HGA 10.pdf
+Millennium,2017,2012,Washington,HGA 10.pdf
+Mt. Hood,1264,2012,Washington,HGA 10.pdf
+Northern Brewer,1443,2012,Washington,HGA 10.pdf
+Nugget,1679,2012,Washington,HGA 10.pdf
+Other,1455,2012,Washington,HGA 10.pdf
+Palisade YCR 4,2356,2012,Washington,HGA 10.pdf
+Simcoe YCR 14,1679,2012,Washington,HGA 10.pdf
+Summit,2084,2012,Washington,HGA 10.pdf
+Super Galena,2645,2012,Washington,HGA 10.pdf
+Tettnanger,1003,2012,Washington,HGA 10.pdf
+Vanguard,1280,2012,Washington,HGA 10.pdf
+Warrior YCR 5,1968,2012,Washington,HGA 10.pdf
+Willamette,1359,2012,Washington,HGA 10.pdf
+Zeus,2390,2012,Washington,HGA 10.pdf
+Ahtanum YCR 1,1647,2013,Washington,HGA 9.pdf
+Apollo,2993,2013,Washington,HGA 9.pdf
+Bravo,3076,2013,Washington,HGA 9.pdf
+Cascade,1723,2013,Washington,HGA 9.pdf
+Centennial,1554,2013,Washington,HGA 9.pdf
+Chinook,1987,2013,Washington,HGA 9.pdf
+Citra HBC 394,1405,2013,Washington,HGA 9.pdf
+Cluster,1948,2013,Washington,HGA 9.pdf
+Columbus/Tomahawk,2571,2013,Washington,HGA 9.pdf
+Crystal,1286,2013,Washington,HGA 9.pdf
+El Dorado,1761,2013,Washington,HGA 9.pdf
+Experimental,1562,2013,Washington,HGA 9.pdf
+Galena,1969,2013,Washington,HGA 9.pdf
+Glacier,1258,2013,Washington,HGA 9.pdf
+Golding,1010,2013,Washington,HGA 9.pdf
+Millennium,2266,2013,Washington,HGA 9.pdf
+Mosaic HBC 369,1709,2013,Washington,HGA 9.pdf
+Mt. Hood,1161,2013,Washington,HGA 9.pdf
+Northern Brewer,1256,2013,Washington,HGA 9.pdf
+Nugget,1931,2013,Washington,HGA 9.pdf
+Other,1697,2013,Washington,HGA 9.pdf
+Palisade YCR 4,2790,2013,Washington,HGA 9.pdf
+Simcoe YCR 14,1682,2013,Washington,HGA 9.pdf
+Summit,1873,2013,Washington,HGA 9.pdf
+Super Galena,2812,2013,Washington,HGA 9.pdf
+Tettnanger,755,2013,Washington,HGA 9.pdf
+Vanguard,1349,2013,Washington,HGA 9.pdf
+Warrior YCR 5,2169,2013,Washington,HGA 9.pdf
+Willamette,1240,2013,Washington,HGA 9.pdf
+Zeus,2940,2013,Washington,HGA 9.pdf
+Ahtanum YCR 1,1680,2014,Washington,HGA 6.pdf
+Apollo,2649,2014,Washington,HGA 6.pdf
+Azacca ADHA-483,1704,2014,Washington,HGA 6.pdf
+Bravo,2768,2014,Washington,HGA 6.pdf
+Cascade,1824,2014,Washington,HGA 6.pdf
+Centennial,1347,2014,Washington,HGA 6.pdf
+Chinook,1815,2014,Washington,HGA 6.pdf
+Citra HBC 394,1570,2014,Washington,HGA 6.pdf
+Cluster,1825,2014,Washington,HGA 6.pdf
+Columbus/Tomahawk,2629,2014,Washington,HGA 6.pdf
+Crystal,1366,2014,Washington,HGA 6.pdf
+El Dorado,2206,2014,Washington,HGA 6.pdf
+Experimental,1625,2014,Washington,HGA 6.pdf
+Galena,1801,2014,Washington,HGA 6.pdf
+Glacier,1202,2014,Washington,HGA 6.pdf
+Golding,772,2014,Washington,HGA 6.pdf
+Jarrylo ADHA-881,1548,2014,Washington,HGA 6.pdf
+Millennium,1996,2014,Washington,HGA 6.pdf
+Mosaic HBC 369,2225,2014,Washington,HGA 6.pdf
+Mt. Hood,1333,2014,Washington,HGA 6.pdf
+Northern Brewer,1244,2014,Washington,HGA 6.pdf
+Nugget,1538,2014,Washington,HGA 6.pdf
+Other Varieties,1418,2014,Washington,HGA 6.pdf
+Palisade YCR 4,2469,2014,Washington,HGA 6.pdf
+Simcoe YCR 14,1542,2014,Washington,HGA 6.pdf
+Summit,2105,2014,Washington,HGA 6.pdf
+Super Galena,2562,2014,Washington,HGA 6.pdf
+Tettnanger,,2014,Washington,HGA 6.pdf
+Vanguard,1455,2014,Washington,HGA 6.pdf
+Warrior YCR 5,1821,2014,Washington,HGA 6.pdf
+Willamette,1130,2014,Washington,HGA 6.pdf
+Zeus,2811,2014,Washington,HGA 6.pdf
+Ahtanum YCR 1,1557,2015,Washington,HGA 5.pdf
+Apollo,2738,2015,Washington,HGA 5.pdf
+Azacca ADHA-483,1872,2015,Washington,HGA 5.pdf
+Bravo,2824,2015,Washington,HGA 5.pdf
+Cascade,1936,2015,Washington,HGA 5.pdf
+Centennial,1145,2015,Washington,HGA 5.pdf
+Chinook,1793,2015,Washington,HGA 5.pdf
+Citra HBC 394,1541,2015,Washington,HGA 5.pdf
+Cluster,1705,2015,Washington,HGA 5.pdf
+Columbus/Tomahawk,2524,2015,Washington,HGA 5.pdf
+Comet,1780,2015,Washington,HGA 5.pdf
+Crystal,1183,2015,Washington,HGA 5.pdf
+El Dorado,2155,2015,Washington,HGA 5.pdf
+Experimental,1545,2015,Washington,HGA 5.pdf
+Galena,1968,2015,Washington,HGA 5.pdf
+Glacier,996,2015,Washington,HGA 5.pdf
+Golding,854,2015,Washington,HGA 5.pdf
+Jarrylo ADHA-881,1541,2015,Washington,HGA 5.pdf
+Magnum,1255,2015,Washington,HGA 5.pdf
+Millennium,,2015,Washington,HGA 5.pdf
+Mosaic HBC 369,2036,2015,Washington,HGA 5.pdf
+Mt. Hood,1069,2015,Washington,HGA 5.pdf
+Northern Brewer,991,2015,Washington,HGA 5.pdf
+Nugget,1927,2015,Washington,HGA 5.pdf
+Other Varieties,1603,2015,Washington,HGA 5.pdf
+Palisade YCR 4,1950,2015,Washington,HGA 5.pdf
+Simcoe YCR 14,1540,2015,Washington,HGA 5.pdf
+Summit,1969,2015,Washington,HGA 5.pdf
+Super Galena,2729,2015,Washington,HGA 5.pdf
+Tettnanger,,2015,Washington,HGA 5.pdf
+Vanguard,1223,2015,Washington,HGA 5.pdf
+Warrior YCR 5,,2015,Washington,HGA 5.pdf
+Willamette,1007,2015,Washington,HGA 5.pdf
+Zeus,2819,2015,Washington,HGA 5.pdf
+Ahtanum YCR 1,1012,2016,Washington,HGA 76.pdf
+Apollo,2225,2016,Washington,HGA 76.pdf
+Azacca ADHA-483,1870,2016,Washington,HGA 76.pdf
+Bravo,2671,2016,Washington,HGA 76.pdf
+Cascade,1727,2016,Washington,HGA 76.pdf
+Centennial,1355,2016,Washington,HGA 76.pdf
+Chinook,1420,2016,Washington,HGA 76.pdf
+Citra HBC 394,1543,2016,Washington,HGA 76.pdf
+Cluster,1700,2016,Washington,HGA 76.pdf
+Columbus/Tomahawk,1969,2016,Washington,HGA 76.pdf
+Comet,949,2016,Washington,HGA 76.pdf
+Crystal,1475,2016,Washington,HGA 76.pdf
+El Dorado,1904,2016,Washington,HGA 76.pdf
+Experimental,1592,2016,Washington,HGA 76.pdf
+Galena,1692,2016,Washington,HGA 76.pdf
+Glacier,1168,2016,Washington,HGA 76.pdf
+Golding,,2016,Washington,HGA 76.pdf
+Jarrylo ADHA-881,1408,2016,Washington,HGA 76.pdf
+Magnum,,2016,Washington,HGA 76.pdf
+Millennium,,2016,Washington,HGA 76.pdf
+Mosaic HBC 369,2326,2016,Washington,HGA 76.pdf
+Mt. Hood,1075,2016,Washington,HGA 76.pdf
+Northern Brewer,,2016,Washington,HGA 76.pdf
+Nugget,1774,2016,Washington,HGA 76.pdf
+Other Varieties,1662,2016,Washington,HGA 76.pdf
+Palisade YCR 4,2228,2016,Washington,HGA 76.pdf
+Simcoe YCR 14,1673,2016,Washington,HGA 76.pdf
+Summit,1648,2016,Washington,HGA 76.pdf
+Super Galena,2501,2016,Washington,HGA 76.pdf
+Tettnanger,,2016,Washington,HGA 76.pdf
+Vanguard,,2016,Washington,HGA 76.pdf
+Warrior YCR 5,,2016,Washington,HGA 76.pdf
+Willamette,1277,2016,Washington,HGA 76.pdf
+Zeus,2469,2016,Washington,HGA 76.pdf
+Ahtanum YCR 1,1052,2017,Washington,HGA 105.pdf
+Amarillo VGXP01,1687,2017,Washington,HGA 105.pdf
+Apollo,2729,2017,Washington,HGA 105.pdf
+Azacca ADHA-483,2463,2017,Washington,HGA 105.pdf
+Bravo,2671,2017,Washington,HGA 105.pdf
+Cascade,2124,2017,Washington,HGA 105.pdf
+Centennial,1703,2017,Washington,HGA 105.pdf
+Chinook,1784,2017,Washington,HGA 105.pdf
+Citra HBC 394,1748,2017,Washington,HGA 105.pdf
+Cluster,1937,2017,Washington,HGA 105.pdf
+Columbus/Tomahawk,2646,2017,Washington,HGA 105.pdf
+Comet,1855,2017,Washington,HGA 105.pdf
+Crystal,2063,2017,Washington,HGA 105.pdf
+Ekuanot HBC 366,2740,2017,Washington,HGA 105.pdf
+El Dorado,1946,2017,Washington,HGA 105.pdf
+Eureka!,2244,2017,Washington,HGA 105.pdf
+Experimental,1901,2017,Washington,HGA 105.pdf
+Galena,2134,2017,Washington,HGA 105.pdf
+Glacier,,2017,Washington,HGA 105.pdf
+Golding,,2017,Washington,HGA 105.pdf
+Jarrylo ADHA-881,,2017,Washington,HGA 105.pdf
+Loral HBC 291,2295,2017,Washington,HGA 105.pdf
+Magnum,,2017,Washington,HGA 105.pdf
+Millennium,,2017,Washington,HGA 105.pdf
+Mosaic HBC 369,2439,2017,Washington,HGA 105.pdf
+Mt. Hood,1043,2017,Washington,HGA 105.pdf
+Northern Brewer,,2017,Washington,HGA 105.pdf
+Nugget,1950,2017,Washington,HGA 105.pdf
+Other Varieties,1746,2017,Washington,HGA 105.pdf
+Palisade YCR 4,2209,2017,Washington,HGA 105.pdf
+Simcoe YCR 14,1792,2017,Washington,HGA 105.pdf
+Summit,2067,2017,Washington,HGA 105.pdf
+Super Galena,2647,2017,Washington,HGA 105.pdf
+Tahoma,1752,2017,Washington,HGA 105.pdf
+Tettnanger,1202,2017,Washington,HGA 105.pdf
+Vanguard,,2017,Washington,HGA 105.pdf
+Warrior YCR 5,,2017,Washington,HGA 105.pdf
+Willamette,1446,2017,Washington,HGA 105.pdf
+Zeus,3088,2017,Washington,HGA 105.pdf
+Ahtanum YCR 1,2730,2018,Washington,HGA 168.pdf
+Amarillo VGXP01,1868,2018,Washington,HGA 168.pdf
+Apollo,2848,2018,Washington,HGA 168.pdf
+Azacca ADHA-483,2491,2018,Washington,HGA 168.pdf
+Bravo,2671,2018,Washington,HGA 168.pdf
+Cascade,1972,2018,Washington,HGA 168.pdf
+Cashmere,1519,2018,Washington,HGA 168.pdf
+Centennial,1364,2018,Washington,HGA 168.pdf
+Chinook,1875,2018,Washington,HGA 168.pdf
+Citra HBC 394,1611,2018,Washington,HGA 168.pdf
+Cluster,1813,2018,Washington,HGA 168.pdf
+Columbus/Tomahawk,2482,2018,Washington,HGA 168.pdf
+Comet,1750,2018,Washington,HGA 168.pdf
+Crystal,2357,2018,Washington,HGA 168.pdf
+Ekuanot HBC 366,2583,2018,Washington,HGA 168.pdf
+El Dorado,1880,2018,Washington,HGA 168.pdf
+Eureka!,2954,2018,Washington,HGA 168.pdf
+Experimental,1889,2018,Washington,HGA 168.pdf
+Galena,2149,2018,Washington,HGA 168.pdf
+Glacier,,2018,Washington,HGA 168.pdf
+Golding,,2018,Washington,HGA 168.pdf
+Jarrylo ADHA-881,,2018,Washington,HGA 168.pdf
+Loral HBC 291,2349,2018,Washington,HGA 168.pdf
+Magnum,,2018,Washington,HGA 168.pdf
+Millennium,,2018,Washington,HGA 168.pdf
+Mosaic HBC 369,2351,2018,Washington,HGA 168.pdf
+Mt. Hood,1454,2018,Washington,HGA 168.pdf
+Mt. Rainier,1899,2018,Washington,HGA 168.pdf
+Northern Brewer,,2018,Washington,HGA 168.pdf
+Nugget,1498,2018,Washington,HGA 168.pdf
+Other Varieties,1896,2018,Washington,HGA 168.pdf
+Pahto HBC 682,2087,2018,Washington,HGA 168.pdf
+Palisade YCR 4,2441,2018,Washington,HGA 168.pdf
+Pekko ADHA-871,1889,2018,Washington,HGA 168.pdf
+Simcoe YCR 14,1642,2018,Washington,HGA 168.pdf
+Sorachi Ace,1042,2018,Washington,HGA 168.pdf
+Summit,1826,2018,Washington,HGA 168.pdf
+Super Galena,3133,2018,Washington,HGA 168.pdf
+Tahoma,2147,2018,Washington,HGA 168.pdf
+Tettnanger,,2018,Washington,HGA 168.pdf
+Vanguard,,2018,Washington,HGA 168.pdf
+Warrior YCR 5,,2018,Washington,HGA 168.pdf
+Willamette,1348,2018,Washington,HGA 168.pdf
+Zeus,2619,2018,Washington,HGA 168.pdf
+Ahtanum YCR 1,1960,2019,Washington,HGA 273.pdf
+Amarillo VGXP01,1946,2019,Washington,HGA 273.pdf
+Apollo,2735,2019,Washington,HGA 273.pdf
+Azacca ADHA-483,2441,2019,Washington,HGA 273.pdf
+Bravo,3216,2019,Washington,HGA 273.pdf
+Cascade,1920,2019,Washington,HGA 273.pdf
+Cashmere,1699,2019,Washington,HGA 273.pdf
+Centennial,1820,2019,Washington,HGA 273.pdf
+Chinook,1942,2019,Washington,HGA 273.pdf
+Citra HBC 394,1424,2019,Washington,HGA 273.pdf
+Cluster,1815,2019,Washington,HGA 273.pdf
+Columbus/Tomahawk/Zeus,2584,2019,Washington,HGA 273.pdf
+Comet,1311,2019,Washington,HGA 273.pdf
+Crystal,1989,2019,Washington,HGA 273.pdf
+Ekuanot HBC 366,2483,2019,Washington,HGA 273.pdf
+El Dorado,2032,2019,Washington,HGA 273.pdf
+Eureka!,3188,2019,Washington,HGA 273.pdf
+Experimental,2251,2019,Washington,HGA 273.pdf
+Galena,2045,2019,Washington,HGA 273.pdf
+Glacier,,2019,Washington,HGA 273.pdf
+Golding,,2019,Washington,HGA 273.pdf
+Hallertau Magnum,,2019,Washington,HGA 273.pdf
+Idaho 7,1544,2019,Washington,HGA 273.pdf
+Jarrylo ADHA-881,,2019,Washington,HGA 273.pdf
+Loral HBC 291,2515,2019,Washington,HGA 273.pdf
+Mosaic HBC 369,2054,2019,Washington,HGA 273.pdf
+Mt. Hood,1037,2019,Washington,HGA 273.pdf
+Mt. Rainier,2149,2019,Washington,HGA 273.pdf
+Northern Brewer,,2019,Washington,HGA 273.pdf
+Nugget,2313,2019,Washington,HGA 273.pdf
+Other Varieties,1888,2019,Washington,HGA 273.pdf
+Pahto HBC 682,2398,2019,Washington,HGA 273.pdf
+Palisade YCR 4,2520,2019,Washington,HGA 273.pdf
+Pekko ADHA-871,,2019,Washington,HGA 273.pdf
+Sabro HBC 438,1612,2019,Washington,HGA 273.pdf
+Simcoe YCR 14,1788,2019,Washington,HGA 273.pdf
+Sorachi Ace,,2019,Washington,HGA 273.pdf
+Summit,1816,2019,Washington,HGA 273.pdf
+Super Galena,2871,2019,Washington,HGA 273.pdf
+Tahoma,1958,2019,Washington,HGA 273.pdf
+Tettnanger,,2019,Washington,HGA 273.pdf
+Vanguard,,2019,Washington,HGA 273.pdf
+Willamette,1596,2019,Washington,HGA 273.pdf
+Zeus,2620,2019,Washington,HGA 273.pdf
+Ahtanum YCR 1,2134,2020,Washington,HGA 346.pdf
+Amarillo VGXP01,1649,2020,Washington,HGA 346.pdf
+Apollo,2248,2020,Washington,HGA 346.pdf
+Azacca ADHA-483,1527,2020,Washington,HGA 346.pdf
+Bravo,2308,2020,Washington,HGA 346.pdf
+Cascade,1551,2020,Washington,HGA 346.pdf
+Cashmere,1514,2020,Washington,HGA 346.pdf
+Centennial,1640,2020,Washington,HGA 346.pdf
+Chinook,1665,2020,Washington,HGA 346.pdf
+Citra HBC 394,1526,2020,Washington,HGA 346.pdf
+Cluster,2065,2020,Washington,HGA 346.pdf
+Columbus/Tomahawk/Zeus,2176,2020,Washington,HGA 346.pdf
+Comet,872,2020,Washington,HGA 346.pdf
+Crystal,,2020,Washington,HGA 346.pdf
+Ekuanot HBC 366,2158,2020,Washington,HGA 346.pdf
+El Dorado,1516,2020,Washington,HGA 346.pdf
+Eureka!,2332,2020,Washington,HGA 346.pdf
+Experimental,1207,2020,Washington,HGA 346.pdf
+Galena,1838,2020,Washington,HGA 346.pdf
+Glacier,,2020,Washington,HGA 346.pdf
+Idaho 7,1736,2020,Washington,HGA 346.pdf
+Jarrylo ADHA-881,1428,2020,Washington,HGA 346.pdf
+Loral HBC 291,1874,2020,Washington,HGA 346.pdf
+Mosaic HBC 369,1998,2020,Washington,HGA 346.pdf
+Mt. Hood,1139,2020,Washington,HGA 346.pdf
+Mt. Rainier,1586,2020,Washington,HGA 346.pdf
+Nugget,,2020,Washington,HGA 346.pdf
+Other Varieties,1737,2020,Washington,HGA 346.pdf
+Pahto HBC 682,2019,2020,Washington,HGA 346.pdf
+Palisade YCR 4,2114,2020,Washington,HGA 346.pdf
+Pekko ADHA-871,1239,2020,Washington,HGA 346.pdf
+Sabro HBC 438,1886,2020,Washington,HGA 346.pdf
+Simcoe YCR 14,1643,2020,Washington,HGA 346.pdf
+Sorachi Ace,,2020,Washington,HGA 346.pdf
+Summit,1096,2020,Washington,HGA 346.pdf
+Super Galena,2636,2020,Washington,HGA 346.pdf
+Tahoma,1588,2020,Washington,HGA 346.pdf
+Tettnanger,,2020,Washington,HGA 346.pdf
+Warrior YCR 5,1669,2020,Washington,HGA 346.pdf
+Willamette,1458,2020,Washington,HGA 346.pdf
+Zeus,,2020,Washington,HGA 346.pdf
+Ahtanum YCR 1,2211,2021,Washington,HGA 405.pdf
+Amarillo VGXP01,1659,2021,Washington,HGA 405.pdf
+Apollo,2949,2021,Washington,HGA 405.pdf
+Azacca ADHA-483,1909,2021,Washington,HGA 405.pdf
+Bravo,2759,2021,Washington,HGA 405.pdf
+Calypso,2930,2021,Washington,HGA 405.pdf
+Cascade,1585,2021,Washington,HGA 405.pdf
+Cashmere,1395,2021,Washington,HGA 405.pdf
+Centennial,1585,2021,Washington,HGA 405.pdf
+Chinook,1851,2021,Washington,HGA 405.pdf
+Citra HBC 394,1580,2021,Washington,HGA 405.pdf
+Cluster,2016,2021,Washington,HGA 405.pdf
+Columbus/Tomahawk/Zeus,2656,2021,Washington,HGA 405.pdf
+Comet,1632,2021,Washington,HGA 405.pdf
+Crystal,,2021,Washington,HGA 405.pdf
+Ekuanot HBC 366,2608,2021,Washington,HGA 405.pdf
+El Dorado,1876,2021,Washington,HGA 405.pdf
+Eureka!,3022,2021,Washington,HGA 405.pdf
+Experimental,1713,2021,Washington,HGA 405.pdf
+Galena,,2021,Washington,HGA 405.pdf
+Idaho 7,3197,2021,Washington,HGA 405.pdf
+Jarrylo ADHA-881,,2021,Washington,HGA 405.pdf
+Loral HBC 291,2088,2021,Washington,HGA 405.pdf
+Mosaic HBC 369,2129,2021,Washington,HGA 405.pdf
+Mt. Hood,1139,2021,Washington,HGA 405.pdf
+Mt. Rainier,,2021,Washington,HGA 405.pdf
+Nugget,,2021,Washington,HGA 405.pdf
+Other Varieties,1934,2021,Washington,HGA 405.pdf
+Pahto HBC 682,2463,2021,Washington,HGA 405.pdf
+Palisade YCR 4,1866,2021,Washington,HGA 405.pdf
+Pekko ADHA-871,2072,2021,Washington,HGA 405.pdf
+Sabro HBC 438,1886,2021,Washington,HGA 405.pdf
+Simcoe YCR 14,1646,2021,Washington,HGA 405.pdf
+Sorachi Ace,,2021,Washington,HGA 405.pdf
+Summit,1351,2021,Washington,HGA 405.pdf
+Super Galena,2849,2021,Washington,HGA 405.pdf
+Tahoma,1055,2021,Washington,HGA 405.pdf
+Tettnanger,,2021,Washington,HGA 405.pdf
+Warrior YCR 5,2240,2021,Washington,HGA 405.pdf
+Willamette,,2021,Washington,HGA 405.pdf
+Zeus,,2021,Washington,HGA 405.pdf
+Ahtanum YCR 1,2032,2022,Washington,HGA 435.pdf
+Amarillo VGXP01,1486,2022,Washington,HGA 435.pdf
+Apollo,2483,2022,Washington,HGA 435.pdf
+Azacca ADHA-483,1559,2022,Washington,HGA 435.pdf
+Bravo,2161,2022,Washington,HGA 435.pdf
+Calypso,,2022,Washington,HGA 435.pdf
+Cascade,1477,2022,Washington,HGA 435.pdf
+Cashmere,1521,2022,Washington,HGA 435.pdf
+Centennial,1464,2022,Washington,HGA 435.pdf
+Chinook,1335,2022,Washington,HGA 435.pdf
+Citra HBC 394,1365,2022,Washington,HGA 435.pdf
+Cluster,1505,2022,Washington,HGA 435.pdf
+Columbus/Tomahawk/Zeus,2256,2022,Washington,HGA 435.pdf
+Comet,1299,2022,Washington,HGA 435.pdf
+Crystal,,2022,Washington,HGA 435.pdf
+Ekuanot HBC 366,2153,2022,Washington,HGA 435.pdf
+El Dorado,1685,2022,Washington,HGA 435.pdf
+Eureka!,2205,2022,Washington,HGA 435.pdf
+Experimental,1717,2022,Washington,HGA 435.pdf
+Galena,,2022,Washington,HGA 435.pdf
+Jarrylo ADHA-881,,2022,Washington,HGA 435.pdf
+Loral HBC 291,1843,2022,Washington,HGA 435.pdf
+Mosaic HBC 369,1963,2022,Washington,HGA 435.pdf
+Mt. Hood,573,2022,Washington,HGA 435.pdf
+Mt. Rainier,1563,2022,Washington,HGA 435.pdf
+Nugget,,2022,Washington,HGA 435.pdf
+Other Varieties,1577,2022,Washington,HGA 435.pdf
+Pahto HBC 682,2132,2022,Washington,HGA 435.pdf
+Palisade YCR 4,1842,2022,Washington,HGA 435.pdf
+Pekko ADHA-871,1882,2022,Washington,HGA 435.pdf
+Sabro HBC 438,2052,2022,Washington,HGA 435.pdf
+Simcoe YCR 14,1380,2022,Washington,HGA 435.pdf
+Sorachi Ace,,2022,Washington,HGA 435.pdf
+Summit,,2022,Washington,HGA 435.pdf
+Super Galena,2838,2022,Washington,HGA 435.pdf
+Tahoma,1310,2022,Washington,HGA 435.pdf
+Talus HBC 692,1703,2022,Washington,HGA 435.pdf
+Warrior YCR 5,1610,2022,Washington,HGA 435.pdf
+Willamette,991,2022,Washington,HGA 435.pdf
+Zappa,839,2022,Washington,HGA 435.pdf
+Zeus,,2022,Washington,HGA 435.pdf

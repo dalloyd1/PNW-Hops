@@ -1,4 +1,4 @@
-County,State,state_code,state_name,county_code,FIPS
+County,state,state_code,State,county_code,FIPS
 Polk,OR,41,Oregon,053,41053
 Marion,OR,41,Oregon,047,41047
 Yakima,WA,53,Washington,077,53077
