@@ -1,0 +1,123 @@
+State,Variety,start,end,obs,yrs,longest_run,longest_missing,complete
+Idaho,Chinook,2000,2022,11,23,10,12,FALSE
+Idaho,Cluster,2000,2018,3,19,2,16,FALSE
+Idaho,Galena,2000,2019,4,20,2,16,FALSE
+Idaho,Mt. Hood,2000,2001,2,2,2,0,FALSE
+Idaho,Nugget,2000,2001,2,2,2,0,FALSE
+Idaho,Other Varieties,2000,2022,12,23,10,11,FALSE
+Idaho,Willamette,2000,2022,6,23,2,15,FALSE
+Idaho,Apollo,2013,2021,7,9,6,2,FALSE
+Idaho,Bravo,2013,2021,7,9,6,2,FALSE
+Idaho,Cascade,2013,2022,10,10,10,0,FALSE
+Idaho,Centennial,2013,2017,3,5,2,2,FALSE
+Idaho,Citra HBC 394,2013,2022,10,10,10,0,FALSE
+Idaho,El Dorado,2013,2022,10,10,10,0,FALSE
+Idaho,Experimental,2013,2017,5,5,5,0,FALSE
+Idaho,Super Galena,2013,2021,6,9,4,2,FALSE
+Idaho,Zeus,2013,2019,7,7,7,0,FALSE
+Idaho,Crystal,2014,2019,5,6,4,1,FALSE
+Idaho,Simcoe YCR 14,2014,2022,9,9,9,0,FALSE
+Idaho,Calypso,2015,2021,6,7,5,1,FALSE
+Idaho,Mosaic HBC 369,2015,2022,8,8,8,0,FALSE
+Idaho,Amarillo VGXP01,2017,2022,6,6,6,0,FALSE
+Idaho,Eureka!,2018,2022,4,5,2,1,FALSE
+Idaho,Columbus/Tomahawk/Zeus,2019,2022,4,4,4,0,FALSE
+Idaho,Comet,2019,2022,4,4,4,0,FALSE
+Idaho,Saaz,2019,2022,3,4,2,1,FALSE
+Idaho,Cashmere,2020,2022,3,3,3,0,FALSE
+Idaho,Hallertau,2020,2022,3,3,3,0,FALSE
+Idaho,Idaho 7,2020,2021,2,2,2,0,FALSE
+Idaho,Northern Brewer,2020,2021,2,2,2,0,FALSE
+Idaho,Triumph,2020,2022,3,3,3,0,FALSE
+Idaho,Mt. Rainier,2021,2022,2,2,2,0,FALSE
+Oregon,Fuggle,2000,2019,7,20,5,12,FALSE
+Oregon,Golding,2000,2021,15,22,6,3,FALSE
+Oregon,Mt. Hood,2000,2022,23,23,23,0,TRUE
+Oregon,Nugget,2000,2022,23,23,23,0,TRUE
+Oregon,Other Varieties,2000,2022,17,23,10,6,FALSE
+Oregon,Perle,2000,2018,10,19,5,6,FALSE
+Oregon,Willamette,2000,2022,23,23,23,0,TRUE
+Oregon,Millennium,2001,2009,8,9,6,1,FALSE
+Oregon,Sterling,2001,2022,21,22,11,1,FALSE
+Oregon,Cascade,2002,2022,18,21,15,2,FALSE
+Oregon,Liberty,2002,2021,6,20,2,8,FALSE
+Oregon,Glacier,2003,2005,3,3,3,0,FALSE
+Oregon,Other,2007,2012,6,6,6,0,FALSE
+Oregon,Magnum,2011,2018,8,8,8,0,FALSE
+Oregon,Super Galena,2011,2020,9,10,5,1,FALSE
+Oregon,Tettnanger,2011,2018,6,8,4,2,FALSE
+Oregon,Centennial,2012,2022,11,11,11,0,FALSE
+Oregon,Experimental,2013,2013,1,1,1,0,FALSE
+Oregon,Chinook,2015,2022,8,8,8,0,FALSE
+Oregon,Citra HBC 394,2015,2022,8,8,8,0,FALSE
+Oregon,Crystal,2015,2022,7,8,5,1,FALSE
+Oregon,Simcoe YCR 14,2015,2022,8,8,8,0,FALSE
+Oregon,Mosaic HBC 369,2017,2022,5,6,4,1,FALSE
+Oregon,Amarillo VGXP01,2019,2022,4,4,4,0,FALSE
+Oregon,Strata OR 91331,2019,2022,4,4,4,0,FALSE
+Oregon,Sabro HBC 438,2020,2022,3,3,3,0,FALSE
+Oregon,Eureka!,2021,2021,1,1,1,0,FALSE
+Oregon,Mt. Rainier,2022,2022,1,1,1,0,FALSE
+Oregon,Talus HBC 692,2022,2022,1,1,1,0,FALSE
+Washington,Alpha,2000,2001,2,2,2,0,FALSE
+Washington,Aroma,2000,2001,2,2,2,0,FALSE
+Washington,Cascade,2000,2022,23,23,23,0,TRUE
+Washington,Chinook,2000,2022,23,23,23,0,TRUE
+Washington,Cluster,2000,2022,23,23,23,0,TRUE
+Washington,Columbus/Tomahawk,2000,2018,19,19,19,0,FALSE
+Washington,Galena,2000,2020,21,21,21,0,FALSE
+Washington,Golding,2000,2015,13,16,10,3,FALSE
+Washington,High Alpha,2000,2001,2,2,2,0,FALSE
+Washington,Horizon,2000,2003,4,4,4,0,FALSE
+Washington,Magnum,2000,2015,3,16,2,13,FALSE
+Washington,Mt. Hood,2000,2022,23,23,23,0,TRUE
+Washington,Nugget,2000,2019,20,20,20,0,FALSE
+Washington,Other,2000,2013,12,14,8,1,FALSE
+Washington,Perle,2000,2004,5,5,5,0,FALSE
+Washington,Willamette,2000,2022,22,23,21,1,FALSE
+Washington,Zeus,2000,2019,20,20,20,0,FALSE
+Washington,Chelan,2001,2009,9,9,9,0,FALSE
+Washington,Hallertau,2001,2007,7,7,7,0,FALSE
+Washington,Millennium,2001,2014,14,14,14,0,FALSE
+Washington,Tettnanger,2001,2017,5,17,2,9,FALSE
+Washington,Tillicum,2001,2003,3,3,3,0,FALSE
+Washington,Vanguard,2001,2015,6,15,4,5,FALSE
+Washington,Warrior YCR 5,2001,2022,17,22,14,5,FALSE
+Washington,Other Alpha,2002,2002,1,1,1,0,FALSE
+Washington,Other Aroma,2002,2002,1,1,1,0,FALSE
+Washington,Northern Brewer,2003,2015,9,13,7,4,FALSE
+Washington,Ahtanum YCR 1,2005,2022,14,18,11,4,FALSE
+Washington,Centennial,2005,2022,16,18,15,2,FALSE
+Washington,Glacier,2005,2016,12,12,12,0,FALSE
+Washington,Palisade YCR 4,2005,2022,18,18,18,0,FALSE
+Washington,Sterling,2005,2006,2,2,2,0,FALSE
+Washington,Summit,2006,2021,12,16,10,4,FALSE
+Washington,Simcoe YCR 14,2008,2022,15,15,15,0,FALSE
+Washington,Super Galena,2008,2022,15,15,15,0,FALSE
+Washington,Apollo,2010,2022,13,13,13,0,FALSE
+Washington,Bravo,2010,2022,13,13,13,0,FALSE
+Washington,Citra HBC 394,2010,2022,13,13,13,0,FALSE
+Washington,Crystal,2012,2019,8,8,8,0,FALSE
+Washington,El Dorado,2013,2022,10,10,10,0,FALSE
+Washington,Experimental,2013,2022,10,10,10,0,FALSE
+Washington,Mosaic HBC 369,2013,2022,10,10,10,0,FALSE
+Washington,Azacca ADHA-483,2014,2022,9,9,9,0,FALSE
+Washington,Jarrylo ADHA-881,2014,2020,4,7,3,3,FALSE
+Washington,Other Varieties,2014,2022,9,9,9,0,FALSE
+Washington,Comet,2015,2022,8,8,8,0,FALSE
+Washington,Amarillo VGXP01,2017,2022,6,6,6,0,FALSE
+Washington,Ekuanot HBC 366,2017,2022,6,6,6,0,FALSE
+Washington,Eureka!,2017,2022,6,6,6,0,FALSE
+Washington,Loral HBC 291,2017,2022,6,6,6,0,FALSE
+Washington,Tahoma,2017,2022,6,6,6,0,FALSE
+Washington,Cashmere,2018,2022,5,5,5,0,FALSE
+Washington,Mt. Rainier,2018,2022,4,5,3,1,FALSE
+Washington,Pahto HBC 682,2018,2022,5,5,5,0,FALSE
+Washington,Pekko ADHA-871,2018,2022,4,5,3,1,FALSE
+Washington,Sorachi Ace,2018,2018,1,1,1,0,FALSE
+Washington,Columbus/Tomahawk/Zeus,2019,2022,4,4,4,0,FALSE
+Washington,Idaho 7,2019,2021,3,3,3,0,FALSE
+Washington,Sabro HBC 438,2019,2022,4,4,4,0,FALSE
+Washington,Calypso,2021,2021,1,1,1,0,FALSE
+Washington,Talus HBC 692,2022,2022,1,1,1,0,FALSE
+Washington,Zappa,2022,2022,1,1,1,0,FALSE
