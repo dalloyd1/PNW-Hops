@@ -521,7 +521,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 9.956 sec elapsed
+    ## 9.833 sec elapsed
 
 ``` r
 # there we go
