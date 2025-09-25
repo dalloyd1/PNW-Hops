@@ -2,7 +2,7 @@ HGA data for Analysis of Hops Yield
 ================
 Don A. Lloyd
 
-Updated 29 August, 2025
+Updated 25 September, 2025
 
 <a name="top"></a> Keywords: hops, yields, data extraction, data
 cleansing, data validation, regex, outlier analysis
@@ -11,13 +11,23 @@ cleansing, data validation, regex, outlier analysis
 [cleaning](#data-cleaning) hop yields from HGA reports
 
 [Validating the yield data with
-NASS](#validating-the-yield-data-with-nass)
+NASS](#validating-the-hga-yield-data-with-nass) including [internal
+checks](#validate-nass-internal-reporting)
+
+<!-- [GO TO WORK IN PROGRESS](#in-progress-data-checks) -->
+
+[Finalizing the yield dataset](#finalizing-the-yield-dataset)
+
+<!-- outlier tests, continuity checks -->
 
 [Preliminary analysis of hops
-yields](#preliminary-analysis-of-hop-yield-series) and some
-[challenges](#challenges-with-yield-data)
+yields](#preliminary-analysis-of-hop-yield-series) including
+[outliers](#outliers) and series [continuity](#continuity)
 
-[Summary](#summary)
+Write the [final yields](#final-yields)
+<!-- and demonstrate basic [stationarity tests](#stationarity-tests) of the series -->
+
+[Summary](#summary) and some [challenges](#challenges-with-yield-data)
 
 [Session info](#session-info-and-notes)
 
@@ -32,8 +42,9 @@ require(pdftools)
 require(ggplot2)
 require(tseries)
 require(data.table) # fwrite
+require(lubridate) # today
 require(keyring)
-require(rnassqs) # API for validation against NASS data
+require(rnassqs) # NASS API
 ```
 
 ``` r
@@ -235,16 +246,24 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.272 sec elapsed
+    ## 4.944 sec elapsed
 
 ``` r
-years <- unlist(lapply(listtbl, function(x) x$year))
-listtbl <- setNames(listtbl, years)
+hga_years <- unlist(lapply(listtbl, function(x) x$year))
+listtbl <- setNames(listtbl, hga_years)
 
 # save the years of yield reporting to correctly bound
 # climate and air data sets later on
-fwrite(data.frame(years = sort(years)), file = here("HGA_years.csv"))
+# fwrite(data.frame(years = sort(years)), file = here("HGA_years.csv"))
 ```
+
+The main disadvantage of compiling the first reported yield for each
+variety or aggregate is that we can overlook subsequent revisions to the
+reporting. Inspection of consecutive reports shows that yields can be
+revised later, usually in the next year. Many yields that are later
+corrected may be preliminary estimates.
+
+[Back to top](#top)
 
 ### Data cleaning
 
@@ -256,15 +275,17 @@ For naming conventions see <https://www.hopslist.com/hops/>
 
 Abbreviations for some of the major hop breeders:
 
+- YCR = Yakima Chief Ranches, consortium of family hop farms, Yakima, WA
 - HBC = Hop Breeding Company, a joint venture of YCR and Haas
 - VGX = Virgil Gamache Farms, Toppenish, WA
-- YCR = Yakima Chief Ranches, consortium of family hop farms, Yakima, WA
 - ADHA = Association for the Development of Hop Agronomy (www.adha.us)
 
-*Some variety names are trademarked.*
+*Some variety names are trademarked.* I have attempted to capture the
+trademark status while parsing the HGA reports.
 
 ``` r
 # process each table, clean and parse variety names
+# I do attempt to preserve TM and R notations...
 hga_yield <- 
   lapply(listtbl, function(x) x$tbl) %>% 
   bind_rows() %>%
@@ -283,15 +304,18 @@ hga_yield <-
          ,Variety = gsub("([[:alpha:]]+)[[:space:]]+([[:lower:]]+.*)", "\\1\\2", Variety)
          # drop subscripts from total and aggregate lines
          ,Variety = gsub("(Total|Other [A-Za-z]+)[ ]*[12]$", "\\1", Variety)
-         # standardize variety names
+         # drop -er from Hallertauer, see NASS labels
+         # ,Variety = gsub("Hallertauer", "Hallertau", Variety)
+         ,Variety = gsub("Calyp so", "Calypso", Variety) # unusual space
+         # standardize variety names to correct some inconsistencies 
+         # but also make them more consistent with NASS during validation
          ,Variety = case_when(
            grepl("YCR[ ]*4|Palisade", Variety) ~ "Palisade YCR 4"
            ,grepl("YCR[ ]*5|Warrior", Variety) ~ "Warrior YCR 5"
            ,grepl("Super[ ]*Galena", Variety) ~ "Super Galena"
            ,grepl("Talus|692", Variety) ~ "Talus HBC 692"
            ,grepl("Summit", Variety) ~ "Summit"
-           ,grepl("Ahtanum|YCR 1$", Variety) ~ "Ahtanum YCR 1" 
-           #,grepl("Ahtanum|YCR 1[^[:digit:]]?", Variety) ~ "Ahtanum YCR 1" # under test
+           ,grepl("Ahtanum|YCR 1$", Variety) ~ "Ahtanum YCR 1"
            ,grepl("ADHA-483|Azacca", Variety) ~ "Azacca ADHA-483"
            ,grepl("ADHA-881|Jarrylo", Variety) ~ "Jarrylo ADHA-881"
            ,grepl("Pekko|ADHA-871", Variety) ~ "Pekko ADHA-871"
@@ -299,11 +323,16 @@ hga_yield <-
            ,grepl("Tettnang", Variety) ~ "Tettnanger"
            ,grepl("Loral|HBC 291", Variety) ~ "Loral HBC 291"
            ,grepl("Simcoe|YCR 14", Variety) ~ "Simcoe YCR 14"
-           ,grepl("Hallertauer", Variety) ~ "Hallertau"
-           ,grepl("Calyp so", Variety) ~ "Calypso" # unusual space...
+           # Hallertau Magnum was reported as Magnum from 2012-2018
+           # but review of HGA yield tables show their equivalence
+           # n.b. Hallertau Magnum and Hallertauer are reported as distinct varieties
+           #,grepl("Magnum", Variety) ~ "Hallertau Magnum"
            ,TRUE ~ Variety
-         )
+         ) 
   )
+
+fwrite(hga_yield, here("hga_yield.csv"))
+
 # hga_yield table retains "Other" varieties and totals
 (hga_varieties <- 
     hga_yield %>%
@@ -327,7 +356,7 @@ hga_yield <-
     ## [23] "Eureka!"                 "Experimental"           
     ## [25] "Fuggle"                  "Galena"                 
     ## [27] "Glacier"                 "Golding"                
-    ## [29] "Hallertau"               "Hallertau Magnum"       
+    ## [29] "Hallertau Magnum"        "Hallertauer"            
     ## [31] "High Alpha"              "Horizon"                
     ## [33] "Idaho 7"                 "Jarrylo ADHA-881"       
     ## [35] "Liberty"                 "Loral HBC 291"          
@@ -352,229 +381,30 @@ hga_yield <-
     ## [73] "Warrior YCR 5"           "Willamette"             
     ## [75] "Zappa"                   "Zeus"
 
-[Back to top](#top)
+Get our bearings for what typical yield values (lb/acre) we should
+expect. I am leaving in the aggregations for state and region with
+individual varieties to get a ballpark figure over the entire reporting
+period. Yields of 1500-2000 lb/acre are typical.
 
-## Validating the yield data with NASS
-
-To validate, we can retrieve hops yields from the National Agriculture
-Statistics Server (NASS) via its API.
-
-``` r
-key_get("NASS") %>%
-  nassqs_auth()
-
-hops_nass <- nassqs(
-  source_desc = "SURVEY"
-  ,sector_desc = "CROPS"
-  ,commodity_desc = "HOPS"
-  ,year__GE = min(years) # 20250826 updated API
-  ,reference_period_desc = "YEAR"
-  # ,unit_desc = "ACRES"
-  ,progress_bar = FALSE
-)
-
-fwrite(hops_nass, file = "hops_nass_data.csv")
-
-# annual yields by state per NASS
-(state_errors <- 
-  hops_nass %>%
-  tibble() %>%
-  filter(statisticcat_desc == "YIELD"
-         ,class_desc == "ALL CLASSES"
-         ,agg_level_desc == "STATE"
-         #,year >= 2000
-         ) %>%
-         # clean comma delimited values and "no reporting" marker
-  transmute(Yield = ifelse(grepl("\\(D\\)", Value), NA, gsub(",", "", Value))
-         ,Yield = as.numeric(Yield)
-         ,Year= as.numeric(year)
-         ,State = paste("Total", str_to_title(state_name))
-         ) %>%
-  left_join(hga_yield, by = c("Year", "State"="Variety"),
-            suffix = c("_HGA", "_NASS")) %>%
-  select(State, Year, starts_with("Yield"), Source) %>%
-  arrange(Year, State) %>%
-  mutate(frac_err = Yield_HGA /Yield_NASS -1)
-)
-```
-
-    ## # A tibble: 78 × 6
-    ##    State             Year Yield_HGA Yield_NASS Source     frac_err
-    ##    <chr>            <dbl>     <dbl>      <dbl> <chr>         <dbl>
-    ##  1 Total Idaho       2000      1484       1484 HGA 22.pdf        0
-    ##  2 Total Oregon      2000      1785       1785 HGA 22.pdf        0
-    ##  3 Total Washington  2000      1937       1937 HGA 22.pdf        0
-    ##  4 Total Idaho       2001      1329       1329 HGA 21.pdf        0
-    ##  5 Total Oregon      2001      1875       1875 HGA 21.pdf        0
-    ##  6 Total Washington  2001      1928       1928 HGA 21.pdf        0
-    ##  7 Total Idaho       2002      1624       1624 HGA 20.pdf        0
-    ##  8 Total Oregon      2002      1692       1692 HGA 20.pdf        0
-    ##  9 Total Washington  2002      2133       2133 HGA 20.pdf        0
-    ## 10 Total Idaho       2003      1536       1536 HGA 19.pdf        0
-    ## # ℹ 68 more rows
+We should also note that we have over 200 missing yields transcribed
+from the HGA reports. These are anonymized values to protect the privacy
+of growers that are cultivating unique varieties within their state.
 
 ``` r
-# class_desc is variety
-nass_simple <- 
-  hops_nass %>%
-  tibble %>%
-  mutate(Year = as.numeric(year)) %>%
-  filter(statisticcat_desc == "YIELD"
-         ,class_desc != "ALL CLASSES"
-         ,agg_level_desc == "STATE"
-         #,year >= 2000
-         ) %>%
-  select(class_desc, Value, Year, state_name) %>%
-  mutate(Yield = ifelse(grepl("\\(D\\)", Value), NA, gsub(",", "", Value))
-         ,Yield = as.numeric(Yield)
-         ,Variety = gsub(",| TM| R[^[:upper:]]| R$", "", class_desc)
-         ,Variety = case_when(
-           Variety == "MILLENIUM" ~ "MILLENNIUM" # fix persistent NASS typo
-           ,grepl("MITTEL", Variety) ~ "HALLERTAU"
-           ,grepl("HBC 682", Variety) ~ "PAHTO HBC 682" # NASS doesn't use Pahto name
-           ,grepl("C/T/Z", Variety) ~ "COLUMBUS/TOMAHAWK" # HGA still use C/T label (16 June 24)
-           ,grepl("SABROHBC 438", Variety) ~ "SABRO HBC 438" # typo (16 June 24)
-           ,TRUE ~ Variety
-         )
-         ,State = str_to_title(state_name)
-         # matching on our standardized varietal names
-         ,Match = match(Variety, toupper(hga_varieties))
-  ) %>%
-  select(Variety, Yield, Year, State, Match) %>%
-  arrange(Year, State)
-
-# these are varieties tracked by NASS but not matched with HGA varieties.
-# Some may fall into the HGA "other" or "experimental" categories as a catchall
-# for new varieties are not yet established across multiple growers
-nass_simple %>%
-  filter(is.na(Match)) %>%
-  pull(Variety) %>% 
-  unique
+y <- hga_yield$Yield
+summary(y)
 ```
 
-    ##  [1] "HALLERTAUER MAGNUM" "BULLION"            "DELTA"             
-    ##  [4] "MERIDIAN"           "STRATAOR91331"      "BITTER GOLD"       
-    ##  [7] "LEMONDROP"          "LOTUS"              "SULTANA"           
-    ## [10] "IDAHO GEM"          "ELANI YQH 1320"     "HELIOS HS15619"    
-    ## [13] "ALTUS"              "MCKENZIE C 148"
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##     365    1468    1772    1798    2072    3387     273
 
 ``` r
-hga_errors <- 
-  left_join(
-    select(hga_yield, Variety, Year, State, Yield, Source) %>%
-      mutate(Match = toupper(Variety))
-    ,select(nass_simple, Variety, Year, State, Yield)
-    ,by = c("Match"="Variety", "Year", "State"),
-    suffix = c("_HGA", "_NASS")) %>%
-  filter(!is.na(Yield_NASS)) %>%
-  select(State, Variety, Year, starts_with("Yield"), Source, -Match) %>%
-  mutate(frac_err = Yield_HGA /Yield_NASS -1) %>%
-  arrange(Year, State, Variety)
-
-# years of NASS reporting that overlap with HGA
-# (we don't have NASS reporting by variety before 2013...)
-group_by(hga_errors, State) %>% 
-  summarise(Start = min(Year), End = max(Year))
+hist(y)
 ```
 
-    ## # A tibble: 3 × 3
-    ##   State      Start   End
-    ##   <chr>      <dbl> <dbl>
-    ## 1 Idaho       2013  2022
-    ## 2 Oregon      2013  2022
-    ## 3 Washington  2013  2022
+![](Hops_Data_HGA_files/figure-gfm/hga_yield_basics-1.png)<!-- -->
 
-Discrepancies between NASS and HGA are infrequent, and some are likely
-rounding errors in yield computations (\< 1%.) We will keep the HGA
-assignment for these:
-
-- Chinook, OR, 2015
-- El Dorado, WA, 2015
-
-The most common source of larger discrepancies are found in 2013, the
-first NASS reporting year. Its possible that NASS reporting in 2013 has
-transcription errors from a new import process that were mostly
-corrected in later reporting. This may be worth investigating further,
-but for now I will retain the HGA values with the option of including
-NASS as an alternative value for sensitivity testing later on.
-
-``` r
-filter(state_errors, frac_err >0)
-```
-
-    ## # A tibble: 6 × 6
-    ##   State             Year Yield_HGA Yield_NASS Source      frac_err
-    ##   <chr>            <dbl>     <dbl>      <dbl> <chr>          <dbl>
-    ## 1 Total Washington  2005      1878       1871 HGA 17.pdf  0.00374 
-    ## 2 Total Idaho       2012      1841       1745 HGA 10.pdf  0.0550  
-    ## 3 Total Idaho       2017      1974       1968 HGA 105.pdf 0.00305 
-    ## 4 Total Oregon      2017      1518       1517 HGA 105.pdf 0.000659
-    ## 5 Total Washington  2021      1932       1900 HGA 405.pdf 0.0168  
-    ## 6 Total Oregon      2022      1729       1728 HGA 435.pdf 0.000579
-
-``` r
-filter(hga_errors, frac_err >0)
-```
-
-    ## # A tibble: 8 × 7
-    ##   State      Variety          Year Yield_HGA Yield_NASS Source      frac_err
-    ##   <chr>      <chr>           <dbl>     <dbl>      <dbl> <chr>          <dbl>
-    ## 1 Idaho      Bravo            2013      2635       2430 HGA 9.pdf   0.0844  
-    ## 2 Idaho      Super Galena     2013      2287       2201 HGA 9.pdf   0.0391  
-    ## 3 Oregon     Super Galena     2013      2557       1852 HGA 9.pdf   0.381   
-    ## 4 Washington Apollo           2013      2993       2926 HGA 9.pdf   0.0229  
-    ## 5 Washington Bravo            2013      3076       2860 HGA 9.pdf   0.0755  
-    ## 6 Oregon     Chinook          2015      1861       1860 HGA 5.pdf   0.000538
-    ## 7 Washington El Dorado        2015      2155       2154 HGA 5.pdf   0.000464
-    ## 8 Idaho      Amarillo VGXP01  2019      1613       1560 HGA 273.pdf 0.0340
-
-I found that investigating discrepancies with NASS was very instructive
-for troubleshooting pdf processing errors, and surfaced some issues with
-the 2013 reporting. Here I am creating from NASS a dataframe of rows
-missing from HGA.
-
-``` r
-# fill in the HGA 2012 report missing WA total yield row from NASS
-(missing_from_hga <- 
-  hops_nass %>%
-  tibble %>%
-  mutate(Year = as.numeric(year)) %>%
-  filter(statisticcat_desc == "YIELD"
-         ,agg_level_desc == "STATE"
-         ,class_desc == "ALL CLASSES" # i.e. total state yield
-         ,state_name == "WASHINGTON"
-         ,Year == 2012) %>%
-  select(Variety = class_desc, Yield = Value, Year, State = state_name) %>%
-  mutate(isTotal = TRUE
-         ,Variety = "Total Washington"
-         ,State = str_to_title(State)
-  ) %>%
-  # fill in the National yield for same year from NASS
-  add_row(
-    hops_nass %>%
-      tibble %>%
-      mutate(Year = as.numeric(year)) %>%
-      filter(statisticcat_desc == "YIELD"
-             ,agg_level_desc == "NATIONAL"
-             ,class_desc == "ALL CLASSES" # i.e. total state yield
-             ,Year == 2012) %>%
-      select(Variety = class_desc, Yield = Value, Year, State = state_name) %>%
-      mutate(Variety = "Total United States"
-             ,State = "United States"
-      )
-  ) %>%
-  mutate(isTotal = TRUE
-         ,Yield = as.numeric(gsub(",", "", Yield))
-         ,Source = "NASS"
-  )
-)
-```
-
-    ## # A tibble: 2 × 6
-    ##   Variety             Yield  Year State         isTotal Source
-    ##   <chr>               <dbl> <dbl> <chr>         <lgl>   <chr> 
-    ## 1 Total Washington     2047  2012 Washington    TRUE    NASS  
-    ## 2 Total United States  1985  2012 United States TRUE    NASS
+UPDATE
 
 The missing national and WA aggregate yields from 2012 are truly missing
 from the HGA data, not merely skipped in our processing. Add the
@@ -582,277 +412,543 @@ records, label their source, and illustrate the results. We then subset
 and save the yield tables into state and regional summaries, and
 varietal yields by state.
 
+[Back to top](#top)
+
+## Validating the HGA yield data with NASS
+
+To validate, we can retrieve hops yields from the National Agriculture
+Statistics Server (NASS). This pulls all hops data that will overlap the
+our HGA reporting years, up to the current year. Since hops are
+harvested once per year, statistics reported for the current year are
+usually incomplete before December.
+
+The data returned includes yields (lbs/acre), harvested acres, and
+production in pounds. The data also includes production measured in
+dollars and many categorical factors that are not immediately relevant
+to this analysis.
+
 ``` r
-yield <- add_row(hga_yield, missing_from_hga)
+key_get("NASS") %>%
+  nassqs_auth()
 
-# we have two sets of dependent variables: yield by state and
-# yield by variety and state
-pnw_yields <- filter(yield, isTotal, grepl("Pacific|United", Variety)) %>%
-  select(-starts_with("is"), -Variety) %>%
-  mutate(State = "Pacific Northwest") %>% # standardize region name
-  arrange(Year)
+# n.b. can't yet select on prodn_practice_desc
+nass_all <- nassqs(
+  source_desc = "SURVEY"
+  ,sector_desc = "CROPS"
+  ,commodity_desc = "HOPS"
+  ,year__GE = min(hga_years) # 20250826 updated API
+  # adding a second constraint on year doesn't seem to work
+  #,year__LT = year(today()) 
+  ,reference_period_desc = "YEAR"
+  ,progress_bar = FALSE
+) %>%
+  # exclude current year, assume its reporting is incomplete
+  # yields and other data are not usually finalized until December
+  filter(as.numeric(year) < year(today()))
 
-state_yields <- filter(yield, isTotal, !grepl("Pacific|United", Variety)) %>%
-  select(-starts_with("is"), -Variety) %>%
-  arrange(State, Year)
-
-state_yields %>%
-  ggplot(aes(x=Year, y=Yield, color=State)) +
-  geom_line(linewidth = 1) +
-  labs(title="Hops Yields by State") +
-  geom_smooth(method = "loess") +
-  facet_wrap(~ State)
+fwrite(nass_all, file = "nass_all_data.csv")
 ```
 
-    ## `geom_smooth()` using formula = 'y ~ x'
+### Validate NASS internal reporting
 
-![](Hops_Data_HGA_files/figure-gfm/HGA_Validation_3_Correct_Yields-1.png)<!-- -->
+We can start by testing whether the NASS yields are internally
+consistent with the corresponding production and acreage values. After
+isolating production and area in the correct units, we can calculate the
+yields from their ratio and look for discrepancies with the reported
+yields.
 
 ``` r
-var_yields <- filter(yield, !isTotal) %>%
-  select(-starts_with("is")) %>%
-  arrange(State, Year, Variety)
-head(var_yields, n=20)
+nass_internal_validation <-
+  nass_all %>%
+  # prodn_practice_desc now tracks ORGANIC as a subset of production
+  filter(prodn_practice_desc != "ORGANIC") %>% # we want totals regardless of production practice
+  filter((statisticcat_desc == "YIELD" & unit_desc == "LB / ACRE") | 
+           (statisticcat_desc == "PRODUCTION" & unit_desc == "LB") |
+           (statisticcat_desc == "AREA HARVESTED" & unit_desc == "ACRES")
+  ) %>%
+  pivot_wider(id_cols = c("state_name", "class_desc", "year"), 
+              names_from = "statisticcat_desc", values_from = "Value") %>%
+  filter(!is.na(YIELD)) %>%
+  mutate(`YLD CALC` = round(PRODUCTION /`AREA HARVESTED`, 0)
+         ,ERR = `YLD CALC` -YIELD
+         ,PERC_ERR = ERR /YIELD *100)
+
+# we will ignore rounding errors of +/- 1 lb/acre
+filter(nass_internal_validation, abs(ERR) >1) %>%
+  rename(ACRES = `AREA HARVESTED`) %>%
+  arrange(desc(abs(ERR)))
 ```
 
-    ## # A tibble: 20 × 5
-    ##    Variety         Yield  Year State Source    
-    ##    <chr>           <dbl> <dbl> <chr> <chr>     
-    ##  1 Chinook          2000  2000 Idaho HGA 22.pdf
-    ##  2 Cluster          1943  2000 Idaho HGA 22.pdf
-    ##  3 Galena           1815  2000 Idaho HGA 22.pdf
-    ##  4 Horizon            NA  2000 Idaho HGA 22.pdf
-    ##  5 Mt. Hood         2000  2000 Idaho HGA 22.pdf
-    ##  6 Nugget           2000  2000 Idaho HGA 22.pdf
-    ##  7 Other Varieties  1100  2000 Idaho HGA 22.pdf
-    ##  8 Willamette       1534  2000 Idaho HGA 22.pdf
-    ##  9 Zeus               NA  2000 Idaho HGA 22.pdf
-    ## 10 Cluster          1553  2001 Idaho HGA 21.pdf
-    ## 11 Galena           1492  2001 Idaho HGA 21.pdf
-    ## 12 Horizon            NA  2001 Idaho HGA 21.pdf
-    ## 13 Mt. Hood         1200  2001 Idaho HGA 21.pdf
-    ## 14 Nugget           1500  2001 Idaho HGA 21.pdf
-    ## 15 Other Varieties  1111  2001 Idaho HGA 21.pdf
-    ## 16 Willamette       1077  2001 Idaho HGA 21.pdf
-    ## 17 Zeus               NA  2001 Idaho HGA 21.pdf
-    ## 18 Chinook            NA  2002 Idaho HGA 20.pdf
-    ## 19 Cluster            NA  2002 Idaho HGA 20.pdf
-    ## 20 Galena             NA  2002 Idaho HGA 20.pdf
+    ## # A tibble: 5 × 9
+    ##   state_name class_desc   year  ACRES PRODUCTION YIELD `YLD CALC`   ERR PERC_ERR
+    ##   <chr>      <chr>        <chr> <dbl>      <dbl> <dbl>      <dbl> <dbl>    <dbl>
+    ## 1 OREGON     OTHER VARIE… 2021    604      1075.  1780          2 -1778 -99.9   
+    ## 2 IDAHO      OTHER VARIE… 2021    850      1466.  1725          2 -1723 -99.9   
+    ## 3 OREGON     OTHER VARIE… 2022    586       935.  1595          2 -1593 -99.9   
+    ## 4 IDAHO      ELANI TM YQ… 2023      8      9300   1158       1162     4   0.345 
+    ## 5 IDAHO      ELANI TM YQ… 2024      8     21400   2673       2675     2   0.0748
+
+There are two very minor errors (\< 1%) that we will ignore by
+preferring the reported yield over the calculation. The other errors are
+quite large and difficult to diagnose for the “OTHER VARIETIES” label.
+The errors are most likely a consequence of the aggregation or
+incomplete reporting of harvested acres. Whatever the source, the
+calculated yields are obvious departures from the ranges we might expect
+from our summary of HGA data, and we will use the reported yields for
+each discrepant case.
 
 ``` r
-fwrite(pnw_yields, file = "hops_pnw_yields.csv")
-fwrite(state_yields, file = "hops_state_yields.csv")
-fwrite(var_yields, file = "hops_variety_yields.csv")
+# annual yields by state per NASS
+# class_desc distinguishes yields are aggregated over variety by region
+# class_desc == "ALL CLASSES" are state/PNW/US totals
+# class_desc != "ALL CLASSES" are varietal yields
+
+nass_yield <- 
+  nass_all %>%
+  tibble %>%
+  mutate(Year = as.numeric(year)) %>%
+  filter(statisticcat_desc == "YIELD"
+         #,class_desc != "ALL CLASSES"
+         ,prodn_practice_desc != "ORGANIC"
+  ) %>%
+  select(class_desc, Value, Year, state_name) %>%
+  mutate(Yield = ifelse(grepl("\\(D\\)", Value), NA, gsub(",", "", Value))
+         ,Yield = as.numeric(Yield)
+         ,Variety = gsub(",| TM| R[^[:upper:]]| R$", "", class_desc)
+         ,Variety = case_when(
+           Variety == "MILLENIUM" ~ "MILLENNIUM" # fix persistent NASS typo
+           ,grepl("HBC 682", Variety) ~ "PAHTO HBC 682" # NASS doesn't use Pahto name
+           # ,grepl("C/T/Z", Variety) ~ "COLUMBUS/TOMAHAWK" # HGA still use C/T label (16 June 24) -- will reconcile this below
+           ,grepl("SABROHBC 438", Variety) ~ "SABRO HBC 438" # typo (16 June 24)
+           # next line formerly known as X-331 from an OR exp. hop field
+           ,grepl("STRATAOR91331", Variety) ~ "STRATA OR 91331" # (5 Sep 25 expand collapsed text)
+           ,TRUE ~ Variety
+         )
+         ,State = str_to_title(state_name)
+  ) %>%
+  select(Variety, Yield, Year, State) %>% 
+  arrange(Year, State)
+
+(nass_varieties <- 
+    nass_yield %>%
+    pull(Variety) %>%
+    sort %>%
+    unique
+)
+```
+
+    ##  [1] "AHTANUM YCR 1"            "ALL CLASSES"             
+    ##  [3] "ALTUS"                    "AMARILLO VGXP01"         
+    ##  [5] "APOLLO"                   "AZACCA ADHA-483"         
+    ##  [7] "BITTER GOLD"              "BRAVO"                   
+    ##  [9] "BULLION"                  "C/T/Z"                   
+    ## [11] "CALYPSO"                  "CASCADE"                 
+    ## [13] "CASHMERE"                 "CENTENNIAL"              
+    ## [15] "CHINOOK"                  "CITRA HBC 394"           
+    ## [17] "CLUSTER"                  "COMET"                   
+    ## [19] "CRYSTAL"                  "DELTA"                   
+    ## [21] "EKUANOT HBC 366"          "EL DORADO"               
+    ## [23] "ELANI YQH 1320"           "EUREKA!"                 
+    ## [25] "EXPERIMENTAL"             "FUGGLE"                  
+    ## [27] "GALENA"                   "GLACIER"                 
+    ## [29] "GOLDING"                  "HALLERTAUER MAGNUM"      
+    ## [31] "HALLERTAUER MITTELFRUHER" "HELIOS HS15619"          
+    ## [33] "HORIZON"                  "IDAHO 7"                 
+    ## [35] "IDAHO GEM"                "JARRYLO ADHA-881"        
+    ## [37] "LEMONDROP"                "LIBERTY"                 
+    ## [39] "LORAL HBC 291"            "LOTUS"                   
+    ## [41] "MCKENZIE C 148"           "MERIDIAN"                
+    ## [43] "MILLENNIUM"               "MOSAIC HBC 369"          
+    ## [45] "MT. HOOD"                 "MT. RAINIER"             
+    ## [47] "NORTHERN BREWER"          "NUGGET"                  
+    ## [49] "OTHER VARIETIES"          "PAHTO HBC 682"           
+    ## [51] "PALISADE YCR 4"           "PEKKO ADHA-871"          
+    ## [53] "PERLE"                    "SAAZ"                    
+    ## [55] "SABRO HBC 438"            "SIMCOE YCR 14"           
+    ## [57] "SORACHI ACE"              "STERLING"                
+    ## [59] "STRATA OR 91331"          "SULTANA"                 
+    ## [61] "SUMMIT"                   "SUPER GALENA"            
+    ## [63] "TAHOMA"                   "TALUS HBC 692"           
+    ## [65] "TETTNANGER"               "TRIUMPH"                 
+    ## [67] "VANGUARD"                 "WARRIOR YCR 5"           
+    ## [69] "WILLAMETTE"               "ZAPPA"                   
+    ## [71] "ZEUS"
+
+``` r
+fwrite(nass_yield, file = "nass_yield.csv")
+```
+
+[Back to top](#top)
+
+## Finalizing the yield dataset
+
+We have already standardized variety names *within* each data set, but
+before combining data we should examine mismatched labels across the two
+data sets. As an aside, I found that investigating discrepancies between
+HGA and NASS was very instructive for troubleshooting pdf processing
+errors, and surfaced some curious issues with the 2013 reporting.
+
+``` r
+var_hga <- pull(hga_yield, Variety) %>% unique %>% toupper # %>% sort
+var_nass <- pull(nass_yield, Variety) %>% unique # %>% sort
+
+# varieties in NASS not found in HGA
+setdiff(var_nass, var_hga) %>% sort
+```
+
+    ##  [1] "ALL CLASSES"              "ALTUS"                   
+    ##  [3] "BITTER GOLD"              "BULLION"                 
+    ##  [5] "C/T/Z"                    "DELTA"                   
+    ##  [7] "ELANI YQH 1320"           "HALLERTAUER MAGNUM"      
+    ##  [9] "HALLERTAUER MITTELFRUHER" "HELIOS HS15619"          
+    ## [11] "IDAHO GEM"                "LEMONDROP"               
+    ## [13] "LOTUS"                    "MCKENZIE C 148"          
+    ## [15] "MERIDIAN"                 "SULTANA"
+
+``` r
+# varieties in HGA not found in NASS
+setdiff(var_hga, var_nass) %>% sort
+```
+
+    ##  [1] "ALPHA"                   "AROMA"                  
+    ##  [3] "CHELAN"                  "COLUMBUS/TOMAHAWK"      
+    ##  [5] "COLUMBUS/TOMAHAWK/ZEUS"  "EROICA"                 
+    ##  [7] "HALLERTAU MAGNUM"        "HALLERTAUER"            
+    ##  [9] "HIGH ALPHA"              "MAGNUM"                 
+    ## [11] "OLYMPIC"                 "OTHER"                  
+    ## [13] "OTHER ALPHA"             "OTHER AROMA"            
+    ## [15] "SANTIAM"                 "TILLICUM"               
+    ## [17] "TOTAL IDAHO"             "TOTAL OREGON"           
+    ## [19] "TOTAL PACIFIC NORTHWEST" "TOTAL UNITED STATES"    
+    ## [21] "TOTAL WASHINGTON"
+
+Start by examining the Hallertauer varieties. Let’s try matching yields
+across the two data sets to look for equivalence among different labels.
+
+``` r
+inner_join(hga_yield %>%
+             select(-starts_with("is"), -Source) %>%
+             filter(grepl("Hallertau|Magnum", Variety), !is.na(Yield))
+           ,nass_yield %>%
+             filter(grepl("HALLERTAU", Variety), !is.na(Yield))
+           ,by = c("Year", "State", "Yield"), suffix = c("_HGA", "_NASS")
+           )
+```
+
+    ## # A tibble: 10 × 5
+    ##    Variety_HGA Yield  Year State      Variety_NASS            
+    ##    <chr>       <dbl> <dbl> <chr>      <chr>                   
+    ##  1 Magnum       1714  2017 Oregon     HALLERTAUER MAGNUM      
+    ##  2 Magnum       1284  2018 Oregon     HALLERTAUER MAGNUM      
+    ##  3 Hallertauer   614  2020 Idaho      HALLERTAUER MITTELFRUHER
+    ##  4 Hallertauer  1272  2021 Idaho      HALLERTAUER MITTELFRUHER
+    ##  5 Hallertauer  1649  2022 Idaho      HALLERTAUER MITTELFRUHER
+    ##  6 Magnum       1572  2015 Oregon     HALLERTAUER MAGNUM      
+    ##  7 Magnum       1255  2015 Washington HALLERTAUER MAGNUM      
+    ##  8 Magnum       1077  2014 Oregon     HALLERTAUER MAGNUM      
+    ##  9 Magnum       1493  2016 Oregon     HALLERTAUER MAGNUM      
+    ## 10 Magnum       1406  2013 Oregon     HALLERTAUER MAGNUM
+
+Now we can address three labeling issues before combining the yields.
+
+- NASS assigns state and region aggregate values to “ALL CLASSES”, which
+  I will re-label to match HGA aggregates.
+
+- HGA spell out Columbus/Tomahawk/Zeus while NASS uses the abbreviation
+  C/T/Z. I choose to spell out the names to make it little easier to
+  compare with other Columbus/Tomahawk and Zeus varieties.
+
+- NASS use the label HALLERTAUER MITTELFRUHER where HGA just uses
+  Hallertauer. And while we already cleaned up the HGA labels for
+  Magnum, we see that NASS uses HALLERTAUER instead of HALLERTAU for
+  that variety. We can most clearly see the equivalence through matching
+  the yields for each. I am going to defer to the NASS choices for both.
+
+I’ll apply these corrections to the NASS data during the merge. Then,
+having standardized variety names across the data sets, we can examine
+the combined yield data sets. We have to expect other and experimental
+descriptors to be inconsistent over time as varieties in those
+categories change. We will keep state and region totals for separate
+analysis. Among groupings of variety, state, and year we can:
+
+1.  retain HGA where both NASS and HGA yields agree (e.g. \< 1%)
+2.  analyze the discrepancy where both yields are reported but disagree
+3.  retain the single value where only one source reports the yield
+4.  report tuples that don’t report a yield in either data set
+
+``` r
+tmp_yields <- 
+  bind_rows(
+    nass_yield %>%
+      mutate(Source = "NASS"
+             ,State = ifelse(grepl("Us", State), "United States", State)
+             ,Variety = ifelse(Variety == "ALL CLASSES",
+                               paste("TOTAL", toupper(State)),
+                               Variety)
+      )
+      ,hga_yield %>%
+      mutate(#Variety = case_when(
+        # grepl("Magnum", Variety) ~ "Hallertau Magnum"
+        # ,TRUE ~ Variety),
+        Variety = toupper(Variety)
+        ,Source = "HGA"
+      ) %>%
+      select(-starts_with("is"))
+  ) %>%
+  # ALPHA and AROMA are not varieties but generic attributes like OTHER
+  # remove all generically labeled varieties
+  filter(!grepl("ALPHA|AROMA|OTHER|EXPERIMENTAL", Variety)) %>%
+  # NASS prefers the abbreviation, HGA spells out each name
+  # there is no overlap between labels so we can standardize on either
+  # I spell out the names to make it easier to compare with other
+  # Columbus/Tomahawk and Zeus.
+  mutate(Variety = ifelse(grepl("C/T/Z", Variety), "COLUMBUS/TOMAHAWK/ZEUS", Variety)
+         ,Variety = gsub("HALLERTAU MAGNUM", "HALLERTAUER MAGNUM", Variety)
+         ,Variety = gsub("HALLERTAUER$", "HALLERTAUER MITTELFRUHER", Variety)
+         ) %>%
+  # replace PNW total references with US
+  mutate(Variety = gsub("PACIFIC NORTHWEST", "UNITED STATES", Variety)
+         ,State = gsub("Pacific Northwest", "United States", State))
+  # we haven't bothered to drop NA yields yet because pivoting to find
+  # discrepancies will force NA for yields missing from either data set
+  # use an anti-join to remove them from the data set
+
+# look for discrepancies in yield reports
+(yield_errors <- pivot_wider(tmp_yields, id_cols = c(Variety, State, Year),
+                  names_from = Source, values_from = Yield) %>%
+  mutate(ERR = HGA -NASS 
+         ,PERC_ERR = round(ERR /HGA *100, 3)) %>%
+  # filter(abs(ERR) >1) %>%
+  filter(!is.na(PERC_ERR)) %>% #, abs(PERC_ERR) >0) %>%
+  # keep NASS for 
+  mutate(Drop = ifelse(abs(PERC_ERR) >0, "HGA", "NASS")) %>%
+    arrange(desc(abs(PERC_ERR)))
+)
+```
+
+    ## # A tibble: 657 × 8
+    ##    Variety       State       Year  NASS   HGA   ERR PERC_ERR Drop 
+    ##    <chr>         <chr>      <dbl> <dbl> <dbl> <dbl>    <dbl> <chr>
+    ##  1 AHTANUM YCR 1 Washington  2019  2820  1960  -860   -43.9  HGA  
+    ##  2 SUPER GALENA  Oregon      2013  1852  2557   705    27.6  HGA  
+    ##  3 BRAVO         Washington  2018  3258  2671  -587   -22.0  HGA  
+    ##  4 SABRO HBC 438 Washington  2021  2207  1886  -321   -17.0  HGA  
+    ##  5 BRAVO         Washington  2017  2973  2671  -302   -11.3  HGA  
+    ##  6 APOLLO        Idaho       2013  2230  2054  -176    -8.57 HGA  
+    ##  7 BRAVO         Idaho       2013  2430  2635   205     7.78 HGA  
+    ##  8 TOTAL OREGON  Oregon      2012  1746  1885   139     7.37 HGA  
+    ##  9 BRAVO         Washington  2013  2860  3076   216     7.02 HGA  
+    ## 10 TOTAL IDAHO   Idaho       2012  1841  1745   -96    -5.50 HGA  
+    ## # ℹ 647 more rows
+
+``` r
+fwrite(yield_errors, here("yield_errors.csv"))
+
+yield_errors %>%
+  mutate(abs_perc = abs(PERC_ERR),
+         mag_err = case_when(
+           abs_perc >1 ~ ">1%",
+           abs_perc >0 ~ "<1%",
+           TRUE ~ "IDENT")
+  ) %>%
+  pull(mag_err) %>%
+  table
+```
+
+    ## .
+    ##   <1%   >1% IDENT 
+    ##    16    19   622
+
+``` r
+yield_errors %>%
+  filter(abs(PERC_ERR) >0) %>%
+  pivot_longer(cols = c(PERC_ERR, Year)) %>%
+  ggplot(aes(x=value, group=name)) +
+  geom_histogram(binwidth = 1) +
+  facet_wrap(~ name, scales="free_x")
+```
+
+![](Hops_Data_HGA_files/figure-gfm/hop_yields-1.png)<!-- -->
+
+Most discrepancies are apparantly caused by revisions to HGA reporting.
+In those cases, the revised yields are already captured by NASS, which
+can be confirmed by comparing NASS to subsequent HGA reports.
+
+The most common source of larger discrepancies are found in 2013, the
+first NASS reporting year. Its possible that NASS reporting in 2013 has
+transcription errors from a new import process that were corrected in
+later reporting. This may be worth investigating further, but for now I
+will retain the NASS values.
+
+``` r
+# create the knockout list
+ko <- select(yield_errors, -NASS, -HGA, -ERR, Source=Drop)
+
+hop_yields <- anti_join(tmp_yields, ko) %>%
+  arrange(Variety, State, Year) %>%
+  # finally drop missing yields
+  filter(!is.na(Yield)) %>%
+  # reassert the full HGA source filename for traceability
+  left_join(.,
+            hga_yield %>%
+              filter(!is.na(Yield)) %>%
+              select(, -starts_with("is"), -Yield) %>%
+              mutate(Variety = toupper(Variety)
+                     ,Detail = Source
+                     ,Source = "HGA"
+                     ,Variety = gsub("PACIFIC NORTHWEST", "UNITED STATES", Variety)
+              )
+  ) %>%
+  mutate(Source = ifelse(!is.na(Detail), Detail, Source)) %>%
+  select(-Detail) %>%
+  arrange(State, Variety, Year)
+```
+
+    ## Joining with `by = join_by(Variety, Year, State, Source)`
+    ## Joining with `by = join_by(Variety, Year, State, Source)`
+
+``` r
+# defer saving hops_yields until after outlier tests and 
+# splitting by variety categories
 ```
 
 [Back to top](#top)
 
 ## Preliminary analysis of hop yield series
 
+### Outliers
+
+Let’s test for outliers using a very simple interquartile measure.
+
 ``` r
-pnw_yields %>%
-  ggplot(aes(x=Year, y=Yield)) +
-  geom_line() +
-  geom_smooth(method = "loess")
+hops_outlier_test <-
+  left_join(hop_yields,
+            hop_yields %>%
+              group_by(State, Variety) %>%
+              summarize(q1 = quantile(Yield, p = 0.25)
+                        ,q3 = quantile(Yield, p = 0.75)
+                        ,iqr = q3-q1
+                        ,t1 = q1 - 1.5*iqr
+                        ,t3 = q3 + 1.5*iqr
+              )
+  ) %>% 
+  # n.b. Group assignments will be used to name data sets later
+  mutate(Group = ifelse(grepl("TOTAL", Variety), ifelse(State == "United States", "US", "State"), "Var")
+         ,outlier = (Yield < t1) | (Yield > t3)
+  )
 ```
 
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](Hops_Data_HGA_files/figure-gfm/Prelim_Analysis_pnw-1.png)<!-- -->
-
-Test the regional yield series for stationarity.
+    ## `summarise()` has grouped output by 'State'. You can override using the
+    ## `.groups` argument.
+    ## Joining with `by = join_by(Variety, State)`
 
 ``` r
-# unit root and stationarity tests on yields
-yield_delta <- diff(pnw_yields$Yield)
-
-# alpha <- 0.05
-# Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test for stationarity
-# H0: is stationary; Alt: is not stationary
-( kpss <- kpss.test(pnw_yields$Yield) )
+n_out <- nrow(filter(hops_outlier_test, outlier))
+cat(sprintf("%d outliers from IQR (%.1f%%)\n", n_out, n_out/nrow(hops_outlier_test) *100))
 ```
 
-    ## Warning in kpss.test(pnw_yields$Yield): p-value greater than printed p-value
-
-    ## 
-    ##  KPSS Test for Level Stationarity
-    ## 
-    ## data:  pnw_yields$Yield
-    ## KPSS Level = 0.2034, Truncation lag parameter = 2, p-value = 0.1
+    ## 56 outliers from IQR (4.7%)
 
 ``` r
-# (kpss.rejectH0 <- kpss$p.value < alpha)
+fwrite(hops_outlier_test, file = "hops_outlier_test.csv")
 
-# Augmented Dickey-Fuller unit-root test
-# H0: has unit root; Alt: series has root off the unit circle
-# Alt hypothesis is usually equiv. to stationarity or trend stationarity
-( adf <- adf.test(pnw_yields$Yield, alternative = "stationary", k=1) )
-```
+tot_yields <- select(hops_outlier_test, -q1, -q3, -iqr, -t1, -t3) %>%
+  arrange(Variety, State, Year) 
 
-    ## 
-    ##  Augmented Dickey-Fuller Test
-    ## 
-    ## data:  pnw_yields$Yield
-    ## Dickey-Fuller = -1.7924, Lag order = 1, p-value = 0.6515
-    ## alternative hypothesis: stationary
-
-``` r
-# (adf.rejectH0 <- adf$p.value < alpha)
-```
-
-PNW yield is not a stationary series. Let’s test for outliers. Here and
-elsewhere, I’ll use very simple interquartile tests to identify
-outliers. The only differences among later IQR tests from the template
-shown here will be grouping data by state and or variety, and the
-completeness of series.
-
-``` r
-# add a unique observation index
-pnw_yields <- mutate(pnw_yields, obs = row_number())
-
-pnw_outlier_check <- 
-  pnw_yields %>%
-  mutate(State = "PNW"
-         ,q1 = quantile(Yield, p = 0.25)
-         ,q3 = quantile(Yield, p = 0.75)
-         ,iqr = q3-q1
-         ,t1 = q1 - 1.5*iqr
-         ,t3 = q3 + 1.5*iqr
-  )  %>% 
-  mutate(outlier = (Yield < t1) | (Yield > t3))
-
-print(outliers <- filter(pnw_outlier_check, outlier) %>%
-        arrange(Year)
-)
-```
-
-    ## # A tibble: 2 × 11
-    ##   Yield  Year State Source       obs    q1    q3   iqr    t1    t3 outlier
-    ##   <dbl> <dbl> <chr> <chr>      <int> <dbl> <dbl> <dbl> <dbl> <dbl> <lgl>  
-    ## 1  2383  2009 PNW   HGA 13.pdf    10 1864.  1983  118. 1687. 2161. TRUE   
-    ## 2  2175  2011 PNW   HGA 11.pdf    12 1864.  1983  118. 1687. 2161. TRUE
-
-``` r
-# keep them and assign dummies
-pnw_yields_ready <- pnw_yields %>%
-  mutate(Outlier = ifelse(obs %in% outliers$obs, paste0("Obs_", obs), 0)) %>%
-  mutate(Dummy = ifelse(is.na(Outlier), 0, 1)) %>%
-  pivot_wider(names_from="Outlier", values_from="Dummy") %>%
-  mutate(across(starts_with("Obs_"), function(x) replace_na(x, 0))) %>%
-  rename(Outlier = `0`) %>%
-  mutate(Outlier = ifelse(is.na(Outlier), TRUE, FALSE))
-
-left_join(state_yields, rename(pnw_yields, Region=State)
-          ,by = "Year"
-          ,suffix = c("", ".pnw")
-          ) %>%
-  select(-starts_with("Source")) %>%
-  mutate(Region = "PNW") %>%
-  ggplot(aes(x = Year, y=Yield, color = State)) +
+tot_yields %>%
+  filter(grepl("TOTAL", Variety), State != "United States") %>%
+  ggplot(aes(x=Year, y=Yield, color=State)) +
   geom_line(linewidth = 0.8) +
-  geom_line(aes(x = Year, y = Yield.pnw), col = "black", linetype = "dashed") +
+  geom_point(data = filter(tot_yields, grepl("TOTAL", Variety), State != "United States", outlier),
+             aes(x=Year, y=Yield), size = 2.2, show.legend = F) +
+  geom_line(data = filter(tot_yields, State == "United States"),
+            aes(x=Year, y=Yield), col = "black", linetype = "dashed") +
   theme(legend.position="bottom")
 ```
 
-![](Hops_Data_HGA_files/figure-gfm/pnw_outliers-1.png)<!-- -->
+![](Hops_Data_HGA_files/figure-gfm/outlier_test-1.png)<!-- -->
 
-The regional yield series is quite short, and varietal series are even
-shorter. We don’t see convincing evidence for stationarity, so
-Box-Jenkins models are not a viable starting point. The two outliers
-shown above are likely difficult to model regardless of method, and I’ve
-used dummy variables to isolate them later if necessary.
+The full regional yield series is quite short, and most varietal series
+are even shorter. The two outliers shown above will likely be difficult
+to model regardless of method.
 
 The PNW total yield (dashed line) follows the inflections of the
 Washington yields most closely of the three states. This just means the
 regional yield is weighted primarily by the larger Washington acreage
 committed to hops.
 
-### State outliers
+### Continuity tests
 
 ``` r
-state_yields <- mutate(state_yields, obs = row_number())
-
-state_outlier_check <- 
-  state_yields %>%
-  arrange(State, Year) %>%
-  mutate(q1 = quantile(Yield, p = 0.25)
-         ,q3 = quantile(Yield, p = 0.75)
-         ,iqr = q3-q1
-         ,t1 = q1 - 1.5*iqr
-         ,t3 = q3 + 1.5*iqr
-         ,.by = "State"
-  )  %>% # one summary row per State
-  mutate(outlier = (Yield < t1) | (Yield > t3))
-
-print(outliers <- filter(state_outlier_check, outlier))
-```
-
-    ## # A tibble: 3 × 11
-    ##   Yield  Year State      Source        obs    q1    q3   iqr    t1    t3 outlier
-    ##   <dbl> <dbl> <chr>      <chr>       <int> <dbl> <dbl> <dbl> <dbl> <dbl> <lgl>  
-    ## 1  2408  2011 Idaho      HGA 11.pdf     12 1618. 1922.   303 1164  2376  TRUE   
-    ## 2  2533  2009 Washington HGA 13.pdf     56 1914  2065    151 1688. 2292. TRUE   
-    ## 3  1679  2022 Washington HGA 435.pdf    69 1914  2065    151 1688. 2292. TRUE
-
-``` r
-state_yields_ready <- state_yields %>%
-  mutate(Outlier = ifelse(obs %in% outliers$obs, paste0("Obs_", obs), 0)) %>%
-  mutate(Dummy = ifelse(is.na(Outlier), 0, 1)) %>%
-  pivot_wider(names_from="Outlier", values_from="Dummy") %>%
-  mutate(across(starts_with("Obs_"), function(x) replace_na(x, 0))) %>%
-  rename(Outlier = `0`) %>%
-  mutate(Outlier = ifelse(is.na(Outlier), TRUE, FALSE))
-```
-
-### Varietial preliminaries
-
-There is a lot of variation among the run of yield data by variety.
-Privacy practices prevent individual growers from being identified by
-their cultivation of a unique variety. New varieties are reported by
-name only after they have successfully distinguished themselves in one
-of the undifferentiated categories, like experimental or “other
-varieties”.
-
-``` r
-annual_yield_runs <- function(yrs) {
+# this func. tests whether there are gaps in inclusively reported years
+# the test for completeness relative to entire suite of data is performed separately
+yield_runs <- function(yrs, debug = T) {
   # yrs the years with observed yields for a given state/variety subset
   inclusive <- seq(min(yrs), max(yrs), 1)
   obs <- length(yrs)
   longest_run <- length(inclusive)
   longest_missing <- 0
+  recent_end <- year(today()) -max(yrs) <2
+  recent <- obs *recent_end
   if (length(inclusive) -length(obs) >0) {
+    # convert the run of observation years into run of 0 (=not obs) and 1 (=obs)
     z <- rep(0, length(inclusive))
     z[match(yrs, inclusive)] <- 1
     run <- rle(z)
     ii <- which(run$values > 0)
     longest_run <- max(run$lengths[ii])
-    jj <- which(run$values == 0)
+    jj <- which(run$values < 1)
     if (length(jj) >0) longest_missing <- max(run$lengths[jj])
+    last_run <- length(run$values)
+    # using the fact we assigned 1 to obs to implement two indicator funcs
+    # so recent is an integer only if both the most recent years were observed 
+    # and the most recent obs are within the past 2 years
+    recent <- run$values[last_run] *run$lengths[last_run] *recent_end
   }
   tibble(start = min(yrs)
          ,end = max(yrs)
          ,obs = obs
          ,yrs = end -start +1
-         ,longest_run = longest_run
-         ,longest_missing = longest_missing
-         )
+         ,longest_run
+         ,longest_missing
+         ,recent
+  )
 }
 
-n_yr <- with(var_yields, max(Year) -min(Year) +1)
+# test for completeness of series outside the yield_runs function
+n_yr <- with(tot_yields, max(Year) -min(Year) +1)
 
-var_continuity <- 
-  var_yields %>%
-  filter(!is.na(Yield)) %>%
-  reframe(annual_yield_runs(Year), .by=c("State", "Variety")) %>%
+(hops_continuity_test <- 
+  tot_yields %>%
+  reframe(yield_runs(Year), .by=c("Variety", "State")) %>%
   mutate(complete = (obs == n_yr))
+)
+```
 
-fwrite(var_continuity, file = "hops_var_continuity.csv")
+    ## # A tibble: 120 × 10
+    ##    Variety      State start   end   obs   yrs longest_run longest_missing recent
+    ##    <chr>        <chr> <dbl> <dbl> <int> <dbl>       <int>           <dbl>  <dbl>
+    ##  1 AHTANUM YCR… Wash…  2005  2022    14    18          11               4      0
+    ##  2 AMARILLO VG… Idaho  2017  2024     8     8           8               0      8
+    ##  3 AMARILLO VG… Oreg…  2019  2024     6     6           6               0      6
+    ##  4 AMARILLO VG… Wash…  2017  2024     8     8           8               0      8
+    ##  5 APOLLO       Idaho  2013  2024     9    12           6               2      2
+    ##  6 APOLLO       Wash…  2010  2024    15    15          15               0     15
+    ##  7 AZACCA ADHA… Wash…  2014  2024    11    11          11               0     11
+    ##  8 BRAVO        Idaho  2013  2021     7     9           6               2      0
+    ##  9 BRAVO        Wash…  2010  2024    15    15          15               0     15
+    ## 10 CALYPSO      Idaho  2015  2021     6     7           5               1      0
+    ## # ℹ 110 more rows
+    ## # ℹ 1 more variable: complete <lgl>
 
-# select yields by year for complete obs
-var_continuity %>%
-  filter(complete) %>%
+``` r
+fwrite(hops_continuity_test, file = "hops_continuity_test.csv")
+
+# select yields by year for complete obs, ignoring aggregates
+hops_continuity_test %>%
+  filter(complete, !grepl("TOTAL", Variety)) %>%
   select(State, Variety) %>%
-  left_join(var_yields) %>%
+  left_join(tot_yields) %>%
   ggplot(aes(x = Year, y = Yield, color = Variety)) +
   geom_line() +
   facet_wrap(~State, ncol = 1)
@@ -860,84 +956,126 @@ var_continuity %>%
 
     ## Joining with `by = join_by(State, Variety)`
 
-![](Hops_Data_HGA_files/figure-gfm/prelim_analysis_varieties-1.png)<!-- -->
+![](Hops_Data_HGA_files/figure-gfm/continuity_test-1.png)<!-- -->
 
-The varieties shown in the plot are the best candidates for yield
-modeling but these remain very limited data sets. Mt. Hood is included,
-the only variety continuously harvested in more than one state, and
-which has higher yields in Oregon than in Washington.
+## Final yields
 
 ``` r
-# for this check, keep only varieties with complete reporting
-variety_outlier_check <- 
-  filter(var_continuity, complete) %>%
-  select(State, Variety) %>%
-  left_join(var_yields) %>%
-  arrange(Variety, State, Year) %>%
-  mutate(q1 = quantile(Yield, p = 0.25)
-         ,q3 = quantile(Yield, p = 0.75)
-         ,iqr = q3-q1
-         ,t1 = q1 - 1.5*iqr
-         ,t3 = q3 + 1.5*iqr
-         ,.by = c("State", "Variety")
-  )  %>% # one summary row per State & Variety
-  mutate(outlier = (Yield < t1) | (Yield > t3))
+keys <- group_by(tot_yields, Group) %>%
+  group_keys %>%
+  pull
+
+lapply(keys, function(gk) {
+  vn <- sprintf("hops_%s_yields", tolower(gk))
+  yd <- filter(tot_yields, Group == gk) %>% 
+    select(-Group)
+  fwrite(yd, file = here(paste0(vn, ".csv")))
+  assign(vn, value = yd, inherits = T)
+})
 ```
 
-    ## Joining with `by = join_by(State, Variety)`
+    ## [[1]]
+    ## # A tibble: 75 × 6
+    ##    Variety     Yield  Year State Source     outlier
+    ##    <chr>       <dbl> <dbl> <chr> <chr>      <lgl>  
+    ##  1 TOTAL IDAHO  1484  2000 Idaho HGA 22.pdf FALSE  
+    ##  2 TOTAL IDAHO  1329  2001 Idaho HGA 21.pdf FALSE  
+    ##  3 TOTAL IDAHO  1624  2002 Idaho HGA 20.pdf FALSE  
+    ##  4 TOTAL IDAHO  1536  2003 Idaho HGA 19.pdf FALSE  
+    ##  5 TOTAL IDAHO  1588  2004 Idaho HGA 18.pdf FALSE  
+    ##  6 TOTAL IDAHO  1640  2005 Idaho HGA 17.pdf FALSE  
+    ##  7 TOTAL IDAHO  1613  2006 Idaho HGA 16.pdf FALSE  
+    ##  8 TOTAL IDAHO  1417  2007 Idaho HGA 15.pdf FALSE  
+    ##  9 TOTAL IDAHO  1841  2008 Idaho HGA 14.pdf FALSE  
+    ## 10 TOTAL IDAHO  1943  2009 Idaho HGA 13.pdf FALSE  
+    ## # ℹ 65 more rows
+    ## 
+    ## [[2]]
+    ## # A tibble: 25 × 6
+    ##    Variety             Yield  Year State         Source     outlier
+    ##    <chr>               <dbl> <dbl> <chr>         <chr>      <lgl>  
+    ##  1 TOTAL UNITED STATES  1871  2000 United States HGA 22.pdf FALSE  
+    ##  2 TOTAL UNITED STATES  1861  2001 United States HGA 21.pdf FALSE  
+    ##  3 TOTAL UNITED STATES  1990  2002 United States HGA 20.pdf FALSE  
+    ##  4 TOTAL UNITED STATES  1903  2003 United States HGA 19.pdf FALSE  
+    ##  5 TOTAL UNITED STATES  1990  2004 United States HGA 18.pdf FALSE  
+    ##  6 TOTAL UNITED STATES  1796  2005 United States NASS       FALSE  
+    ##  7 TOTAL UNITED STATES  1964  2006 United States HGA 16.pdf FALSE  
+    ##  8 TOTAL UNITED STATES  1949  2007 United States HGA 15.pdf FALSE  
+    ##  9 TOTAL UNITED STATES  1971  2008 United States HGA 14.pdf FALSE  
+    ## 10 TOTAL UNITED STATES  2383  2009 United States HGA 13.pdf TRUE   
+    ## # ℹ 15 more rows
+    ## 
+    ## [[3]]
+    ## # A tibble: 1,084 × 6
+    ##    Variety       Yield  Year State      Source      outlier
+    ##    <chr>         <dbl> <dbl> <chr>      <chr>       <lgl>  
+    ##  1 AHTANUM YCR 1   758  2005 Washington HGA 17.pdf  FALSE  
+    ##  2 AHTANUM YCR 1  2110  2006 Washington HGA 16.pdf  FALSE  
+    ##  3 AHTANUM YCR 1  1964  2007 Washington HGA 15.pdf  FALSE  
+    ##  4 AHTANUM YCR 1  1489  2012 Washington HGA 10.pdf  FALSE  
+    ##  5 AHTANUM YCR 1  1647  2013 Washington HGA 9.pdf   FALSE  
+    ##  6 AHTANUM YCR 1  1680  2014 Washington HGA 6.pdf   FALSE  
+    ##  7 AHTANUM YCR 1  1557  2015 Washington HGA 5.pdf   FALSE  
+    ##  8 AHTANUM YCR 1  1012  2016 Washington HGA 76.pdf  FALSE  
+    ##  9 AHTANUM YCR 1  1052  2017 Washington HGA 105.pdf FALSE  
+    ## 10 AHTANUM YCR 1  2730  2018 Washington HGA 168.pdf FALSE  
+    ## # ℹ 1,074 more rows
+
+[Back to top](#top)
+
+<!-- ### Stationarity tests -->
+
+<!-- Test the regional yield series for stationarity. -->
+
+<!-- The total PNW yield is not a stationary series.  -->
+
+<!-- We don't see convincing evidence for stationarity in the yield series, so Box-Jenkins models are not a viable starting point.  -->
+
+<!-- ### State outliers -->
+
+<!-- OBSOLETE CODE -->
+
+<!-- ### Varietial preliminaries -->
+
+<!-- There is a lot of variation among the run of yield data by variety. -->
+
+<!-- Privacy practices prevent individual growers from being identified by their cultivation of a unique variety. New varieties are reported by name only after they have successfully distinguished themselves in one of the undifferentiated categories, like experimental or "other varieties".  -->
+
+<!-- The varieties shown in the plot are the best candidates for yield modeling but are also very limited data series Mt. Hood is included, the only variety continuously harvested in more than one state, and which has higher yields in Oregon than in Washington.  -->
+
+## Summary
+
+We now have multiple, short time-series to analyze at region and state
+levels. We also have more granular series by variety within Washington
+and Oregon, some of which are complete relative to state and region
+aggregates.
+
+- Most HGA series are more complete than those obtained through NASS and
+  are reasonably well validated for overlapping years in both sources.
+- Most yield series are much shorter than our handful of complete Oregon
+  and Washington varieties, limiting our options in what is already
+  expected to be a challenging analysis. Idaho has *no* completely
+  reported yield series for any variety since 2000.
+- Validation gives credibility to early sequences in the HGA series that
+  could not be tested against NASS.
+
+Examine the counts of yields by source and grouping.
 
 ``` r
-filter(variety_outlier_check, outlier)
+xtabs(~Group + Source, 
+      data = mutate(tot_yields, Source = gsub("^HGA.*", "HGA", Source)))
 ```
 
-    ## # A tibble: 7 × 11
-    ##   State      Variety    Yield  Year Source    q1    q3   iqr    t1    t3 outlier
-    ##   <chr>      <chr>      <dbl> <dbl> <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <lgl>  
-    ## 1 Washington Chinook     1420  2016 HGA 7… 1746. 1901   154. 1515. 2133. TRUE   
-    ## 2 Washington Chinook     1335  2022 HGA 4… 1746. 1901   154. 1515. 2133. TRUE   
-    ## 3 Washington Cluster     2370  2009 HGA 1… 1820  2032   212  1502  2350  TRUE   
-    ## 4 Oregon     Mt. Hood    2200  2006 HGA 1… 1456. 1700   244. 1091. 2065. TRUE   
-    ## 5 Washington Mt. Hood     573  2022 HGA 4… 1092  1324.  232.  743. 1673. TRUE   
-    ## 6 Oregon     Willamette  1226  2015 HGA 5… 1456  1567   111  1290. 1734. TRUE   
-    ## 7 Oregon     Willamette  1857  2020 HGA 3… 1456  1567   111  1290. 1734. TRUE
+    ##        Source
+    ## Group   HGA NASS
+    ##   State  55   20
+    ##   US     19    6
+    ##   Var   918  166
 
-``` r
-# can we find which varieties contribute to state outliers?
-tmp <- filter(state_yields_ready, Outlier) %>%
-  select(State, Year, Yield) %>%
-  left_join(var_yields, by = c("State", "Year"), suffix = c(".pnw", "")) %>%
-  filter(!is.na(Yield)) %>%
-  mutate(`Outlier` = paste(State, Year))
-
-filter(tmp, Yield > Yield.pnw)
-```
-
-    ## # A tibble: 21 × 7
-    ##    State       Year Yield.pnw Variety                Yield Source      Outlier  
-    ##    <chr>      <dbl>     <dbl> <chr>                  <dbl> <chr>       <chr>    
-    ##  1 Washington  2009      2533 Chelan                  2680 HGA 13.pdf  Washingt…
-    ##  2 Washington  2009      2533 Columbus/Tomahawk       2790 HGA 13.pdf  Washingt…
-    ##  3 Washington  2009      2533 Palisade YCR 4          2756 HGA 13.pdf  Washingt…
-    ##  4 Washington  2009      2533 Super Galena            3186 HGA 13.pdf  Washingt…
-    ##  5 Washington  2009      2533 Zeus                    3387 HGA 13.pdf  Washingt…
-    ##  6 Washington  2022      1679 Ahtanum YCR 1           2032 HGA 435.pdf Washingt…
-    ##  7 Washington  2022      1679 Apollo                  2483 HGA 435.pdf Washingt…
-    ##  8 Washington  2022      1679 Bravo                   2161 HGA 435.pdf Washingt…
-    ##  9 Washington  2022      1679 Columbus/Tomahawk/Zeus  2256 HGA 435.pdf Washingt…
-    ## 10 Washington  2022      1679 Ekuanot HBC 366         2153 HGA 435.pdf Washingt…
-    ## # ℹ 11 more rows
-
-``` r
-# none of our complete varieties contribute to the state-level yield outliers
-filter(tmp, Yield > Yield.pnw) %>%
-  left_join(select(var_continuity, State, Variety, complete)
-            , by = c("State", "Variety")) %>%
-  filter(complete)
-```
-
-    ## # A tibble: 0 × 8
-    ## # ℹ 8 variables: State <chr>, Year <dbl>, Yield.pnw <dbl>, Variety <chr>,
-    ## #   Yield <dbl>, Source <chr>, Outlier <chr>, complete <lgl>
+Even after accounting for revisions to HGA yield tabulations that we
+corrected with NASS, the majority of validated yields are produced from
+HGA statistical reports.
 
 ### Challenges with yield data
 
@@ -973,22 +1111,6 @@ modeling or other analysis.
     harvests, but should be kept in mind when reviewing yield analysis
     in the literature.
 
-## Summary
-
-We now have multiple, short time-series to analyze at region and state
-levels. We also have more granular series by variety within Washington
-and Oregon, some of which are complete relative to state and region
-aggregates.
-
-- Most of these series are more complete than those obtained through
-  NASS and are validated for years our sources overlap in reporting.
-- Most yield series are much shorter than our handful of complete Oregon
-  and Washington varieties, limiting our options in what is already
-  expected to be a challenging analysis. Idaho has *no* complete yield
-  series for any variety since 2000.
-- Validation gives credibility to early sequences in the HGA series that
-  could not be tested against NASS.
-
 [Back to top](#top)
 
 ## Session info and notes
@@ -1015,34 +1137,46 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] rnassqs_0.6.3     keyring_1.4.1     data.table_1.17.8 tseries_0.10-58  
-    ##  [5] ggplot2_3.5.2     pdftools_3.5.0    tibble_3.3.0      tidyr_1.3.1      
-    ##  [9] stringr_1.5.1     dplyr_1.1.4       tictoc_1.2.1      here_1.0.1       
+    ##  [1] rnassqs_0.6.3     keyring_1.4.1     lubridate_1.9.4   data.table_1.17.8
+    ##  [5] tseries_0.10-58   ggplot2_3.5.2     pdftools_3.5.0    tibble_3.3.0     
+    ##  [9] tidyr_1.3.1       stringr_1.5.1     dplyr_1.1.4       tictoc_1.2.1     
+    ## [13] here_1.0.1       
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] utf8_1.2.6         generics_0.1.4     stringi_1.8.7      lattice_0.22-6    
     ##  [5] digest_0.6.37      magrittr_2.0.3     evaluate_1.0.4     grid_4.4.3        
-    ##  [9] RColorBrewer_1.1-3 fastmap_1.2.0      Matrix_1.7-2       rprojroot_2.1.0   
-    ## [13] mgcv_1.9-1         httr_1.4.7         purrr_1.1.0        scales_1.4.0      
-    ## [17] cli_3.6.5          rlang_1.1.6        splines_4.4.3      withr_3.0.2       
-    ## [21] yaml_2.3.10        tools_4.4.3        curl_6.4.0         vctrs_0.6.5       
-    ## [25] R6_2.6.1           zoo_1.8-14         lifecycle_1.0.4    pkgconfig_2.0.3   
-    ## [29] pillar_1.11.0      gtable_0.3.6       glue_1.8.0         quantmod_0.4.28   
-    ## [33] Rcpp_1.1.0         xfun_0.52          tidyselect_1.2.1   rstudioapi_0.17.1 
-    ## [37] knitr_1.50         farver_2.1.2       nlme_3.1-167       htmltools_0.5.8.1 
-    ## [41] labeling_0.4.3     rmarkdown_2.29     xts_0.14.1         qpdf_1.4.1        
-    ## [45] compiler_4.4.3     quadprog_1.5-8     TTR_0.24.4         askpass_1.2.1
+    ##  [9] timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.0   
+    ## [13] httr_1.4.7         purrr_1.1.0        scales_1.4.0       cli_3.6.5         
+    ## [17] rlang_1.1.6        withr_3.0.2        yaml_2.3.10        tools_4.4.3       
+    ## [21] curl_6.4.0         vctrs_0.6.5        R6_2.6.1           zoo_1.8-14        
+    ## [25] lifecycle_1.0.4    pkgconfig_2.0.3    pillar_1.11.0      gtable_0.3.6      
+    ## [29] glue_1.8.0         quantmod_0.4.28    Rcpp_1.1.0         xfun_0.52         
+    ## [33] tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50         farver_2.1.2      
+    ## [37] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.29     xts_0.14.1        
+    ## [41] qpdf_1.4.1         compiler_4.4.3     quadprog_1.5-8     TTR_0.24.4        
+    ## [45] askpass_1.2.1
+
+### Updates
+
+- Sept 2025, major rewrite of scripting.
+
+  - Added verification of NASS yields
+
+  - Rewrote large portions of the scripting to automate error management
+    and integration of HGA and NASS data. Eliminated manual replacement
+    of missing HGA yields with error analysis and filtering with
+    anti-join.
+
+  - Labeling discrepancies with the Hallertauer varieties within HGA
+    reporting and across the combined data sets are resolved.
+
+  - Generalized the outlier analysis by region and variety, but
+    eliminated the creation of dummy variables for each outlier.
 
 ### To Do
 
-Harvest amounts and acreage are reported in other tables in HGA reports
-or NASS data sets, but for this analysis I am not verifying the yield
-amounts. Because yield is a ratio of amount harvested to unit area,
-yields aggregated by state cannot be used to verify PNW regionwide
-yield.
+Nothing planned.
 
-Write up comments on the unusually large discrepancies between HGA and
-NASS for some 2013 HGA reporting, and include an alternative yield
-series that replaces discrepant HGA values for NASS.
+<!-- Write up comments on the unusually large discrepancies between HGA and NASS for some 2013 HGA reporting, and include an alternative yield series that replaces discrepant HGA values for NASS. -->
 
 <!-- how is yield defined, by amount harvested (good or bad), sellable amount harvested, or something else? -->
