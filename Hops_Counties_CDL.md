@@ -2,7 +2,7 @@ Hops Counties from Cropland Data Layer
 ================
 Don A. Lloyd
 
-Updated 26 August, 2025
+Updated 16 October, 2025
 
 ``` r
 require(dplyr)
@@ -43,10 +43,13 @@ rasters](#process-rasters-for-primary-hops-growing-counties)
 ``` r
 DIR_TIF <- "~/Dropbox/Data/CDL/"
 FORCE_DL_TEST_TIF = TRUE
+FORCE_RASTER_READ = FALSE
 # archival processed data
 FN_CDL_STATS <- here("cdl_stats.csv")
 FN_COUNTY_STATS = here("cdl_pnw_county_stats.csv")
-FN_HOP_PTS = here("cdl_hops_points_by_year.Rdata")
+FN_HOP_PTS_RDATA = here("cdl_hops_points_by_year.Rdata")
+FN_HOP_DSCT_PTS_RDATA = here("cdl_hops_distinct_points")
+
 FN_HOP_PTS_GPKG = here("cdl_hops_points_by_year.gpkg")
 # I like hops but you can try other crops in this analysis
 CROP_LIST <- "Hops" # use c() here to vector multiple crops
@@ -67,6 +70,7 @@ state_boundaries <- tigris::states(progress_bar = FALSE)
 
 ``` r
 set.seed(250804)
+tic()
 ```
 
 ### Testing CropScape Data Layer formats
@@ -94,7 +98,7 @@ testRast <- GetCDLData(
   year = TEST_YEAR,
   type = 'f',
   format = "raster",
-  # crs = "+init=epsg:4326", # this is for input aoi but really ignored
+  # crs = "+init=epsg:4326", # allowed for input aoi but really ignored
   tol_time = 20,
   save_path = FN_TEST_TIF,
   readr = TRUE
@@ -265,35 +269,34 @@ cdl_hops_stats <-
   filter(Category %in% CROP_LIST) %>%
   group_by(FIPS) %>%
   summarise(MIN_AC = min(Acreage)
-            ,MEAN_AC = mean(Acreage)
+            ,MEAN_AC = round(mean(Acreage), 1)
             ,MAX_AC = max(Acreage)
             # simple linear growth rate
-            ,MEAN_GR = coef(lm(Acreage ~ Year))['Year']
+            ,MEAN_GR = round(mean(coef(lm(Acreage ~ Year))['Year']), 1)
   ) %>%
   left_join(counties_by_state, by = "FIPS") %>%
   arrange(desc(MAX_AC))
-  # arrange(desc(MEAN_AC))
 head(cdl_hops_stats, n=15)
 ```
 
     ## # A tibble: 15 × 10
     ##    FIPS  MIN_AC MEAN_AC MAX_AC MEAN_GR state state_code state_name county_code
     ##    <chr>  <dbl>   <dbl>  <dbl>   <dbl> <chr> <chr>      <chr>      <chr>      
-    ##  1 53077 1440.  31708   50164. 2353.   WA    53         Washington 077        
-    ##  2 41047 1820.   5271.   8008.  271.   OR    41         Oregon     047        
-    ##  3 16027  737    3883.   7564.  417.   ID    16         Idaho      027        
-    ##  4 53005  146.   4546.   7435.  343.   WA    53         Washington 005        
-    ##  5 41045   14.7   437.   3426.  -24.0  OR    41         Oregon     045        
-    ##  6 41053   76.1   920.   1753.   80.5  OR    41         Oregon     053        
-    ##  7 53025    5.4   317.   1694    49.3  WA    53         Washington 025        
-    ##  8 41005   43.6   407.    785.   19.7  OR    41         Oregon     005        
-    ##  9 41071   26.7   290.    743.   25.9  OR    41         Oregon     071        
-    ## 10 53021    0.4    71.3   732.   14.5  WA    53         Washington 021        
-    ## 11 41043    2.7   143.    566.    6.20 OR    41         Oregon     043        
-    ## 12 41067   29.6   280.    559.   10.7  OR    41         Oregon     067        
-    ## 13 53071    0.2    51.6   397.   -4.01 WA    53         Washington 071        
-    ## 14 16073   19.6   153.    373.   12.2  ID    16         Idaho      073        
-    ## 15 16075    3.9   102.    332.    1.83 ID    16         Idaho      075        
+    ##  1 53077 1440.  31708   50164.  2353.  WA    53         Washington 077        
+    ##  2 41047 1820.   5271.   8008.   270.  OR    41         Oregon     047        
+    ##  3 16027  737    3883.   7564.   417   ID    16         Idaho      027        
+    ##  4 53005  146.   4546.   7435.   343.  WA    53         Washington 005        
+    ##  5 41045   14.7   437.   3426.   -24   OR    41         Oregon     045        
+    ##  6 41053   76.1   920    1753.    80.5 OR    41         Oregon     053        
+    ##  7 53025    5.4   317.   1694     49.3 WA    53         Washington 025        
+    ##  8 41005   43.6   407.    785.    19.7 OR    41         Oregon     005        
+    ##  9 41071   26.7   290.    743.    25.9 OR    41         Oregon     071        
+    ## 10 53021    0.4    71.3   732.    14.5 WA    53         Washington 021        
+    ## 11 41043    2.7   143.    566.     6.2 OR    41         Oregon     043        
+    ## 12 41067   29.6   280.    559.    10.7 OR    41         Oregon     067        
+    ## 13 53071    0.2    51.6   397.    -4   WA    53         Washington 071        
+    ## 14 16073   19.6   153.    373.    12.2 ID    16         Idaho      073        
+    ## 15 16075    3.9   102.    332.     1.8 ID    16         Idaho      075        
     ## # ℹ 1 more variable: county <chr>
 
 ``` r
@@ -318,7 +321,7 @@ county_stats %>%
 ![](Hops_Counties_CDL_files/figure-gfm/comprehensive_state_stats-1.png)<!-- -->
 
 Can you spot Yakima County from this plot alone? The acreage for Yakima
-County, FIPS = 54077, is variable but the growth trend is unmistakeable.
+County, FIPS = 53077, is variable but the growth trend is unmistakeable.
 There are also some irregularities in the Marion County, FIPS = 41047,
 hops series with abrupt directional changes in 2013 and 2015. Let’s look
 for anomalies in the underlying county raster data.
@@ -521,7 +524,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 9.833 sec elapsed
+    ## 10.255 sec elapsed
 
 ``` r
 # there we go
@@ -575,11 +578,11 @@ if (NEW_CDL_FILES) {
 # hops points by year for the required counties exists, just read
 # the existing file and move on...
 
-NEW_RASTERS <- !file.exists(FN_HOP_PTS) & NEW_CDL_FILES
+NEW_RASTERS <- !file.exists(FN_HOP_PTS_RDATA) & NEW_CDL_FILES
 
-if (!NEW_RASTERS) {
+if (!NEW_RASTERS | FORCE_RASTER_READ) {
   cat("restoring saved hops point data\n")
-  cdl_hops_points_by_year <- readRDS(FN_HOP_PTS)
+  cdl_hops_points_by_year <- readRDS(FN_HOP_PTS_RDATA)
 } else {
 
   tic()
@@ -611,8 +614,17 @@ if (!NEW_RASTERS) {
   
   cdl_hops_points_by_year <- 
     bind_rows(cdl_hops_point_list)
+
+  # too time consuming
+  # cdl_hops_distinct_points <-
+  #   distinct(cdl_hops_points_by_year, geometry)
+
+  cdl_hops_distinct_points <-
+    Reduce(cdl_hops_point_list, function(x) distinct(x, geometry))
   
-  saveRDS(cdl_hops_points_by_year, FN_HOP_PTS)
+  saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
+  saveRDS(cdl_hops_distinct_points, FN_HOP_DSCT_PTS_RDATA)
+
   file.remove(FN_HOP_PTS_GPKG)
 }
 ```
@@ -627,9 +639,9 @@ if (!NEW_RASTERS) {
 
 We’ve processed all the data using the mismatched raster coordinates
 with no problems. For the volume of data, transforming coordinates early
-adds computing time unnecessarily. Here, we have already filtered the
-data to isolate the landuse value of interest into a list of dataframes,
-and transform them directly to a simple feature using the correct CRS.
+adds unnecessary computing time. Here, we have already filtered the data
+to isolate the landuse value of interest into a list of dataframes, and
+transform them directly to a simple feature using the correct CRS.
 <a id="epsg-fix"></a>
 
 ``` r
@@ -655,8 +667,11 @@ We can also illustrate the variation in hops landuse assignments in the
 CDL methodology over time.
 
 ``` r
-hops_geo = left_join(cdl_hops_counties, county_boundaries
-                     , by=c("FIPS"="GEOID")) %>%
+hops_geo <-
+  left_join(
+    cdl_hops_counties
+    ,county_boundaries
+    ,by=c("FIPS"="GEOID")) %>%
   st_as_sf()
 
 hops_points <- 
@@ -748,29 +763,34 @@ acreage_val <- left_join(
   suffix = c("_nass", "_cdl")
 ) %>%
   mutate(Acreage_err = Acreage_cdl - Acreage_nass, # diff relative to NASS as reference
-         Acreage_frac = Acreage_err /Acreage_nass)
+         Acreage_perc_err = Acreage_err /Acreage_nass *100)
+```
 
-# there is one wild outlier in Oregon... recall 2013 was one of two 
-# instances of bad statistics derived from land use assignments filling
-# the Marion county bounding box. Maybe this problem is more widespread
-# for Oregon in 2013? But the other year, 2015, remained in bounds for
-# the error we see for other states and other years. Not investigating
-# that further right now...
-filter(acreage_val, abs(Acreage_frac) >1)
+There is one wild outlier in Oregon. Recall 2013 was one of two
+instances of bad statistics derived from land use assignments filling
+the Marion county bounding box. Maybe this problem is or was more
+widespread for Oregon in 2013. But errors for the other “unmasked
+Marion” year, 2015, were comparable to those we see elsewhere in the
+data. I won’t investigate the issue further in this document.
+
+``` r
+(filter(acreage_val, abs(Acreage_perc_err) >100) )
 ```
 
     ##   state_fips_code year Acreage_nass Category Acreage_cdl Acreage_err
     ## 1              41 2013         4835     Hops     29553.6     24718.6
-    ##   Acreage_frac
-    ## 1      5.11243
+    ##   Acreage_perc_err
+    ## 1          511.243
+
+The remaining validation errors are less extreme.
 
 ``` r
-# but the remainder of the pct error has this distribution
-filter(acreage_val, abs(Acreage_frac) <=1) %>%
-  with(., hist(Acreage_frac, xlim = c(-1,1)))
+# the remainder of the pct error has this distribution
+filter(acreage_val, abs(Acreage_perc_err) <=100) %>%
+  with(., hist(Acreage_perc_err, xlim = c(-100,100)))
 ```
 
-![](Hops_Counties_CDL_files/figure-gfm/validate_with_nass_census-1.png)<!-- -->
+![](Hops_Counties_CDL_files/figure-gfm/valdn_okay-1.png)<!-- -->
 
 We can’t verify the CDL assignments this way, since the absolute errors
 are so large. It is possible though that, for the purpose of identifying
@@ -855,11 +875,11 @@ prior_census <- max(census_yrs[-which.max(census_yrs)])
     ##    FIPS  MEAN_AC MAX_AC MEAN_GR  rank state county   
     ##    <chr>   <dbl>  <dbl>   <dbl> <int> <chr> <chr>    
     ##  1 53077 31708   50164.  2353.      1 WA    Yakima   
-    ##  2 41047  5271.   8008.   271.      2 OR    Marion   
-    ##  3 16027  3883.   7564.   417.      3 ID    Canyon   
+    ##  2 41047  5271.   8008.   270.      2 OR    Marion   
+    ##  3 16027  3883.   7564.   417       3 ID    Canyon   
     ##  4 53005  4546.   7435.   343.      4 WA    Benton   
-    ##  5 41045   437.   3426.   -24.0     5 OR    Malheur  
-    ##  6 41053   920.   1753.    80.5     6 OR    Polk     
+    ##  5 41045   437.   3426.   -24       5 OR    Malheur  
+    ##  6 41053   920    1753.    80.5     6 OR    Polk     
     ##  7 53025   317.   1694     49.3     7 WA    Grant    
     ##  8 41005   407.    785.    19.7     8 OR    Clackamas
     ##  9 41071   290.    743.    25.9     9 OR    Yamhill  
@@ -874,22 +894,22 @@ filter(all_ranked, !is.na(rank_NASS) | rank_CDL <10)
 ```
 
     ## # A tibble: 14 × 10
-    ##    FIPS  MEAN_AC_CDL MAX_AC_CDL    MEAN_GR rank_CDL state county    rank_NASS
-    ##    <chr>       <dbl>      <dbl>      <dbl>    <int> <chr> <chr>         <int>
-    ##  1 53077   31708        50164.  2353.             1 WA    Yakima            1
-    ##  2 41047    5271.        8008.   271.             2 OR    Marion            2
-    ##  3 16027    3883.        7564.   417.             3 ID    Canyon           NA
-    ##  4 53005    4546.        7435.   343.             4 WA    Benton            5
-    ##  5 41045     437.        3426.   -24.0            5 OR    Malheur          NA
-    ##  6 41053     920.        1753.    80.5            6 OR    Polk             NA
-    ##  7 53025     317.        1694     49.3            7 WA    Grant            NA
-    ##  8 41005     407.         785.    19.7            8 OR    Clackamas        NA
-    ##  9 41071     290.         743.    25.9            9 OR    Yamhill          NA
-    ## 10 41003      71.3        204.     2.85          18 OR    Benton            7
-    ## 11 41033       8.17        30      0.742         34 OR    Josephine         4
-    ## 12 53065       4.19        12.7    0.397         42 WA    Stevens           6
-    ## 13 41029       1.02         2.7    0.00263       64 OR    Jackson           3
-    ## 14 41017       0.525        1.1   -0.0420        79 OR    Deschutes         8
+    ##    FIPS  MEAN_AC_CDL MAX_AC_CDL MEAN_GR rank_CDL state county    rank_NASS
+    ##    <chr>       <dbl>      <dbl>   <dbl>    <int> <chr> <chr>         <int>
+    ##  1 53077     31708      50164.   2353.         1 WA    Yakima            1
+    ##  2 41047      5271.      8008.    270.         2 OR    Marion            2
+    ##  3 16027      3883.      7564.    417          3 ID    Canyon           NA
+    ##  4 53005      4546.      7435.    343.         4 WA    Benton            5
+    ##  5 41045       437.      3426.    -24          5 OR    Malheur          NA
+    ##  6 41053       920       1753.     80.5        6 OR    Polk             NA
+    ##  7 53025       317.      1694      49.3        7 WA    Grant            NA
+    ##  8 41005       407.       785.     19.7        8 OR    Clackamas        NA
+    ##  9 41071       290.       743.     25.9        9 OR    Yamhill          NA
+    ## 10 41003        71.3      204.      2.8       18 OR    Benton            7
+    ## 11 41033         8.2       30       0.7       34 OR    Josephine         4
+    ## 12 53065         4.2       12.7     0.4       42 WA    Stevens           6
+    ## 13 41029         1          2.7     0         64 OR    Jackson           3
+    ## 14 41017         0.5        1.1     0         79 OR    Deschutes         8
     ## # ℹ 2 more variables: MEAN_AC_NASS <dbl>, MAX_AC_NASS <dbl>
 
 Comparing rankings among the two data sets, the most convincing overlap
@@ -909,6 +929,8 @@ state, excepting corroboration of Canyon County, ID with NASS. After
 excluding negative growth rate, `MEAN_GR`, we might be willing to
 consider lower ranked counties as well.
 
+Here is our final list:
+
 ``` r
 (dplyr::select(cdl_hops_counties, -ends_with("_code")))
 ```
@@ -917,11 +939,17 @@ consider lower ranked counties as well.
     ##   FIPS  MIN_AC MEAN_AC MAX_AC MEAN_GR state state_name county       
     ##   <chr>  <dbl>   <dbl>  <dbl>   <dbl> <chr> <chr>      <chr>        
     ## 1 53077 1440.   31708  50164.  2353.  WA    Washington Yakima County
-    ## 2 41047 1820.    5271.  8008.   271.  OR    Oregon     Marion County
-    ## 3 16027  737     3883.  7564.   417.  ID    Idaho      Canyon County
+    ## 2 41047 1820.    5271.  8008.   270.  OR    Oregon     Marion County
+    ## 3 16027  737     3883.  7564.   417   ID    Idaho      Canyon County
     ## 4 53005  146.    4546.  7435.   343.  WA    Washington Benton County
-    ## 5 41053   76.1    920.  1753.    80.5 OR    Oregon     Polk County  
+    ## 5 41053   76.1    920   1753.    80.5 OR    Oregon     Polk County  
     ## 6 53025    5.4    317.  1694     49.3 WA    Washington Grant County
+
+``` r
+toc()
+```
+
+    ## 121.894 sec elapsed
 
 ### Session info and notes
 
@@ -989,8 +1017,8 @@ rasters
 
 Extend the NASS validation attempt to look for trends in errors by state
 over time. The current analysis aggregates the distribution of errors
-over all years and states, but we can test whether discrepancies are
-declining (or growing) over time.
+over all years and states, but we can also test whether discrepancies
+are declining (or growing) over time.
 
 <!-- Replace `nass_county_test` with a NASS census call, with all its problems -->
 
