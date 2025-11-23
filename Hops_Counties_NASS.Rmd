@@ -1,0 +1,282 @@
+---
+title: "Hops Counties from NASS"
+author: "Don A. Lloyd\n"
+date: "Updated `r format(Sys.time(), '%d %B, %Y')`"
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- 1 June 25 new Rmd for creation of hops_counties data -->
+
+```{r HC_Setup, echo=TRUE, warning=FALSE, message=FALSE}
+require(keyring)
+require(rnassqs) # API
+require(dplyr)
+require(tidyr) # pivot_wider
+require(here)
+```
+<a id="top"></a>
+[Obtain NASS census data](#obtain-nass-census-data)
+
+[Verify census data](#verify-census-with-nass-survey-data)
+
+### Overview
+
+This exercise is part of a larger data project to analyze hop yields in the PNW, and how hops production over time might be related climatic and air quality measures. Ideally, we would want to work with environmental measurements where hops are grown. Meteorological and air quality data are collected and reported by widely dispersed samplers, often with well known positions but rarely collocated with hops fields.
+
+Crop yields can be affected by environmental factors regardless of how far away they were produce. For example wildfire smoke might negatively impact the quality and quantity of a harvest, whether the smoke originated nearby or hundreds of miles away. Understanding where hops are grown and where environmental measurements are taken will help us decide later how to combine the data for modeling. While the locations of environmental samplers are well documented, there are many other obstacles to producing a dataset for modeling or other analysis. Hop yields are reported by NASS surveys only at state level not county. Even with county-level reporting, we would still not know where within the county to look for the nearest environmental samplers.
+
+This write-up develops the first steps toward understanding the strengths and weaknesses of USDA NASS data sources.
+
+### Obtain NASS census data
+
+NASS quick stats provide access to two sources of agricultural data. We'll start by pulling the NASS census data at county level for PNW to find which counties have the largest acreage devoted to hops.
+
+```{r get_nass_census}
+key_get("NASS") %>%
+  nassqs_auth()
+
+nass_census_hops <- nassqs(
+  agg_level_desc = "COUNTY"
+  ,source_desc = "CENSUS"
+  ,state_alpha = c("OR","WA","ID")
+  ,commodity_desc = "HOPS"
+  ,progress_bar = FALSE
+)
+
+# these counties are represented among the census
+nass_census_hops %>%
+  distinct(state_name, county_name)
+```
+
+The list of counties reported by NASS is not exhaustive for PNW, so we might guess that hops are commercially cultivated at some level in each of these counties. Let's check what acreage is reported.
+
+```{r panel_census}
+# consider the two most recent census years for highlighting counties that produce hops
+census_yrs <- pull(nass_census_hops, year) %>% unique
+earliest_census <- min(census_yrs)
+latest_census <- max(census_yrs)
+prior_census <- max(census_yrs[-which.max(census_yrs)])
+
+(census_hops_counties <- 
+    filter(nass_census_hops, 
+           statisticcat_desc == "AREA HARVESTED",
+           unit_desc == "ACRES",
+           short_desc == "HOPS - ACRES HARVESTED",
+           domain_desc == "TOTAL") %>%
+    mutate(Value = as.numeric(Value)) %>%
+    dplyr::select(state_name, county_name, year, Value) %>% 
+    arrange(state_name, county_name, year) %>%
+    pivot_wider(id_cols = c(state_name, county_name), names_from = year,
+                values_from = Value) %>%
+    # NA are unreported values, not just a rounded zero
+    ungroup %>%
+    arrange(desc(!!sym(latest_census)), desc(!!sym(prior_census)))
+)
+```
+
+No suprise that we find Yakima and Marion counties reporting large acreage. Benton County (WA) is unusual for its inconsistent data collection since 2012. But most counties have no reporting whatsoever. Single operators within a county are intentionally excluded from NASS reporting to protect their anonymity, but this is an unlikely explanation for counties with significant agricultural land use. In many cases, individual operators or even state agricultural deparments may simple not participate in the census. Most notably, Idaho apparently declines to report _any_ harvest acres, and cannot be ranked among its peers. We know apart from these data that much of Idaho's hops are grown in Canyon County, but will have to look elsewhere to substantiate that information quantitatively.
+
+```{r eval=FALSE, include=FALSE}
+(hops_counties_50 <- 
+   filter(nass_census_hops, 
+          statisticcat_desc == "AREA HARVESTED",
+          unit_desc == "ACRES",
+          short_desc == "HOPS - ACRES HARVESTED",
+          domain_desc == "TOTAL") %>%
+   filter(is.finite(Value)) %>%
+   mutate(fips = paste0(state_fips_code, county_code)) %>%
+   group_by(state_name, county_name, fips) %>%
+   summarise(Acres50 = median(Value),
+             maxAcres = max(Value)) %>%
+   filter(maxAcres > Acres50) %>%
+   arrange(desc(maxAcres))
+)
+
+# use FIPS to avoid ambiguity among county names in diff. states
+nass_census_hops %>%
+  mutate(fips = paste0(state_fips_code, county_code)) %>%
+  filter(fips %in% hops_counties_50$fips) %>%
+  select(county_name, state_alpha, state_name, state_fips_code, county_code) %>%
+  distinct() %>%
+    mutate(fips = paste0(state_fips_code, county_code))
+```
+
+Back to [top](#top)
+
+### Verify census with NASS survey data
+
+Are the census data consistent with the annual survey reporting? The availability of county data varies by crop. Unfortunately, we can only pull hops survey data at state level, but we can compare state survey acreage to the county acreage reported with census data.
+
+```{r validate_census}
+nass_survey_hops <- nassqs(
+  source_desc = "SURVEY"
+  ,class_desc = "ALL CLASSES"
+  ,agg_level_desc = "STATE"
+  ,sector_desc = "CROPS"
+  ,commodity_desc = "HOPS"
+  ,statisticcat_desc = "AREA HARVESTED"
+  ,year__GE = earliest_census
+  ,reference_period_desc = "YEAR"
+  ,unit_desc = "ACRES"
+  ,progress_bar = FALSE
+)
+
+# survey results for ACRES HARVESTED
+nass_survey_hops %>%
+  filter(year %in% nass_census_hops$year) %>%
+  arrange(year) %>%
+  pivot_wider(id_cols = "state_name", names_from = "year", values_from = "Value")
+
+# summarize census data we pulled earlier for comparison
+census_hops_counties %>%
+  group_by(state_name) %>%
+  summarise(across(where(is.numeric), function(x) sum(x, na.rm=T)))
+```
+
+Aside from an incongruous reporting gap for Oregon and the previously mentioned omission of Idaho, both datasets show the same orders of magnitude in reported acreage, with respective values sometimes within a few percent. While census data allow us to identify some important hop growing counties, they are not reported frequently or completely enough for analysis of harvested acres much less yields.
+
+Here is our final ranked list of hops producing counties, with FIPS. We now have good candidate counties in Oregon and Washington to consider further, but none yet for Idaho.
+
+```{r census_hops_counties}
+(nass_hops_counties <-
+   census_hops_counties %>%
+   pivot_longer(cols = where(is.numeric), names_to = "year", values_to = "acres", values_drop_na = T) %>%
+   group_by(state_name, county_name) %>%
+   # reminder acres = ACRES HARVESTED
+   summarise(acres_mean = mean(acres)
+             ,acres_max = max(acres)
+             ,acres_50 = median(acres)
+             ,.groups = "keep") %>%
+   ungroup %>%
+   arrange(desc(acres_mean)) %>%
+   # assign the fips code to remaining counties
+   left_join(nass_census_hops %>%
+               mutate(fips = paste0(state_fips_code, county_code)) %>%
+               select(state_name, county_name, fips) %>%
+               distinct
+   )
+)
+
+write.csv(nass_hops_counties, here("nass_hops_counties.csv"))
+```
+
+```{r hops_counties_manual, eval=FALSE, include=FALSE}
+# hops_counties <- read.table(
+#   text = "county,state
+# Polk,OR
+# Marion,OR
+# Yakima,WA
+# Benton,WA
+# Canyon,ID
+# Boundary,ID
+# Owyhee,ID
+# Twin Falls,ID"
+#   ,header = TRUE, sep = ",", stringsAsFactors = FALSE
+# ) %>%
+#   left_join(mutate(fips_codes, county = sub(" County", "", county)), by = c("state", "county")) %>%
+#   rename(State=state_name, County=county) %>%
+#   mutate(FIPS = paste0(state_code, county_code))
+
+hops_counties <- tribble(~ county, ~state
+                         ,"Polk", "OR"
+                         ,"Marion", "OR"
+                         ,"Yakima", "WA"
+                         ,"Benton", "WA"
+                         ,"Canyon", "ID"
+                         ,"Boundary", "ID"
+                         ,"Owyhee", "ID"
+                         ,"Twin Falls", "ID"
+) %>%
+  left_join(mutate(fips_codes, county = sub(" County", "", county)), by = c("state", "county")) %>%
+  rename(State=state_name, County=county) %>%
+  mutate(FIPS = paste0(state_code, county_code))
+
+write.csv(hops_counties, here("hops_counties.csv"))
+```
+
+<!-- IDAHO for year of 2023. Canyon contains the most growers. -->
+<!-- https://agri.idaho.gov/main/hop-growers-in-idaho/ -->
+
+<!-- OREGON -->
+<!-- only Marion and Polk counties in Oregon grow commercially -->
+<!-- https://www.oregonencyclopedia.org/articles/hop_industry/ -->
+
+<!-- other OR counties in Willamette Valley include: -->
+<!-- Douglas, Lane, Linn, Benton, Yamhill, and Washington -->
+
+<!-- ### Assumptions and Limitations -->
+
+<!-- Counties included in this analysis were identified from state agricultural  -->
+<!-- websites.  -->
+<!-- _I have not yet found data about acreage or production by county over time._ This analysis assumes that the selected counties have continuously produced hops throughout the analysis period. This may overestimate the county level climate and air-quality variability if those counties' hops production have changed over time (transition to or from hops production from other crops, farmland lost to other development, etc.) -->
+
+<!-- ### NCEI Global Summary of the Year (GSOY) -->
+
+<!-- We can use geographic information from `tigris` to determine boundaries for each hops growing county from our list. -->
+
+Back to [top](#top)
+
+
+```{r hops_stations_1, eval=FALSE, include=FALSE}
+# get county geometries
+counties_geo <- counties(progress_bar = FALSE,
+                         refresh = FALSE,
+                         keep_zipped_shapefile = TRUE)
+
+# and filter on our PNW commercial hops counties
+hops_geo <- filter(counties_geo, GEOID %in% hops_counties_major$fips)
+
+states_geo <- states(progress_bar = FALSE,
+                         refresh = FALSE,
+                         keep_zipped_shapefile = TRUE)
+
+tm_shape(hops_geo) +
+  tm_borders() +
+  tm_text('NAME') +
+  tm_shape(states_geo) +
+  tm_borders()
+```
+
+```{r testing_nass_census, eval=FALSE, include=FALSE}
+
+nass_census_hops %>%
+  distinct(state_name, statisticcat_desc, short_desc, unit_desc, domain_desc) %>%
+  filter(unit_desc == "ACRES") %>% # sensible units
+  dplyr::select(-statisticcat_desc) # remainder are all AREA HARVESTED
+
+(tmp <-
+  nass_census_hops %>%
+  mutate(rn = row_number()) %>%
+  filter(unit_desc == "ACRES") %>% # sensibile units
+  filter(state_name == "IDAHO") %>%
+  group_by(state_name, short_desc, unit_desc, domain_desc)
+)
+tmp_keys <- group_keys(tmp)
+key_names <- apply(tmp_keys, 1, function(x) paste(x, collapse=", "))
+
+(out <- setNames(group_split(tmp) %>%
+  lapply(., function(x) {
+    x %>%
+      arrange(year) %>%
+    pivot_wider(id_cols = county_name, names_from = year,
+                values_from = Value)
+  }),
+  key_names)
+)
+
+# for WA and OR:
+# `AREA HARVESTED, HOPS - ACRES HARVESTED, ACRES, TOTAL`
+# or
+# `AREA HARVESTED, HOPS, IRRIGATED - ACRES HARVESTED, ACRES, TOTAL`
+
+# for ID:
+# `AREA HARVESTED, HOPS - OPERATIONS WITH AREA HARVESTED, OPERATIONS, TOTAL`
+# or
+# `AREA HARVESTED, HOPS, IRRIGATED - OPERATIONS WITH AREA HARVESTED, OPERATIONS, TOTAL`
+```
+
+```{r session}
+sessionInfo()
+```

@@ -2,7 +2,7 @@ Hops Counties from NASS
 ================
 Don A. Lloyd
 
-Updated 24 August, 2025
+Updated 23 November, 2025
 
 <!-- 1 June 25 new Rmd for creation of hops_counties data -->
 
@@ -302,12 +302,12 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] here_1.0.1    tidyr_1.3.1   dplyr_1.1.4   rnassqs_0.6.3 keyring_1.4.1
+    ## [1] here_1.0.2    tidyr_1.3.1   dplyr_1.1.4   rnassqs_0.6.3 keyring_1.4.1
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.5         knitr_1.50       
     ##  [5] rlang_1.1.6       xfun_0.52         purrr_1.1.0       generics_0.1.4   
-    ##  [9] glue_1.8.0        rprojroot_2.1.0   htmltools_0.5.8.1 rmarkdown_2.29   
+    ##  [9] glue_1.8.0        rprojroot_2.1.0   htmltools_0.5.8.1 rmarkdown_2.30   
     ## [13] evaluate_1.0.4    tibble_3.3.0      fastmap_1.2.0     yaml_2.3.10      
     ## [17] lifecycle_1.0.4   compiler_4.4.3    pkgconfig_2.0.3   rstudioapi_0.17.1
     ## [21] digest_0.6.37     R6_2.6.1          utf8_1.2.6        tidyselect_1.2.1 
