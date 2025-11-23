@@ -419,7 +419,7 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
   toc()
   
   cdl_hops_points_by_year <- 
-    bind_rows(cdl_hops_point_list) 
+    bind_rows(cdl_hops_point_list)
 
   # too time consuming
   # cdl_hops_distinct_points <-
