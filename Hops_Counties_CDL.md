@@ -524,7 +524,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 9.561 sec elapsed
+    ## 15.326 sec elapsed
 
 ``` r
 # there we go
@@ -631,13 +631,9 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
 
     ## masking fips 41047 for 2013
     ## masking fips 41047 for 2015
-    ## 144.305 sec elapsed
+    ## 147.456 sec elapsed
 
-    ## Warning in file.remove(FN_HOP_PTS_GPKG): cannot remove file
-    ## '/Users/dlloyd/Dropbox/Projects/PNW-Hops/cdl_hops_points_by_year.gpkg', reason
-    ## 'No such file or directory'
-
-    ## [1] FALSE
+    ## [1] TRUE
 
 ``` r
 # avoid the temptation to use projectRaster, transforms the Layer_1 values
@@ -956,7 +952,7 @@ Here is our final list:
 toc()
 ```
 
-    ## 300.172 sec elapsed
+    ## 314.13 sec elapsed
 
 ### Session info and notes
 
