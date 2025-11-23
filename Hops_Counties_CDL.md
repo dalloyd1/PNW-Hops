@@ -2,7 +2,7 @@ Hops Counties from Cropland Data Layer
 ================
 Don A. Lloyd
 
-Updated 16 October, 2025
+Updated 23 November, 2025
 
 ``` r
 require(dplyr)
@@ -48,7 +48,7 @@ FORCE_RASTER_READ = FALSE
 FN_CDL_STATS <- here("cdl_stats.csv")
 FN_COUNTY_STATS = here("cdl_pnw_county_stats.csv")
 FN_HOP_PTS_RDATA = here("cdl_hops_points_by_year.Rdata")
-FN_HOP_DSCT_PTS_RDATA = here("cdl_hops_distinct_points")
+# FN_HOP_DSCT_PTS_RDATA = here("cdl_hops_distinct_points")
 
 FN_HOP_PTS_GPKG = here("cdl_hops_points_by_year.gpkg")
 # I like hops but you can try other crops in this analysis
@@ -256,7 +256,7 @@ if (file.exists(FN_COUNTY_STATS)) {
 }
 ```
 
-    ## Reading /Users/dlloyd/Dropbox/Projects/Hops/cdl_pnw_county_stats.csv
+    ## Reading /Users/dlloyd/Dropbox/Projects/PNW-Hops/cdl_pnw_county_stats.csv
 
 ``` r
 # FIPS is int in county_stats if read from table
@@ -524,7 +524,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 10.255 sec elapsed
+    ## 9.561 sec elapsed
 
 ``` r
 # there we go
@@ -580,7 +580,7 @@ if (NEW_CDL_FILES) {
 
 NEW_RASTERS <- !file.exists(FN_HOP_PTS_RDATA) & NEW_CDL_FILES
 
-if (!NEW_RASTERS | FORCE_RASTER_READ) {
+if (NEW_RASTERS | FORCE_RASTER_READ) {
   cat("restoring saved hops point data\n")
   cdl_hops_points_by_year <- readRDS(FN_HOP_PTS_RDATA)
 } else {
@@ -619,17 +619,25 @@ if (!NEW_RASTERS | FORCE_RASTER_READ) {
   # cdl_hops_distinct_points <-
   #   distinct(cdl_hops_points_by_year, geometry)
 
-  cdl_hops_distinct_points <-
-    Reduce(cdl_hops_point_list, function(x) distinct(x, geometry))
-  
+  # cdl_hops_distinct_points <-
+  #   Reduce(cdl_hops_point_list, function(x) distinct(x, geometry))
+
   saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
-  saveRDS(cdl_hops_distinct_points, FN_HOP_DSCT_PTS_RDATA)
+  # saveRDS(cdl_hops_distinct_points, FN_HOP_DSCT_PTS_RDATA)
 
   file.remove(FN_HOP_PTS_GPKG)
 }
 ```
 
-    ## restoring saved hops point data
+    ## masking fips 41047 for 2013
+    ## masking fips 41047 for 2015
+    ## 144.305 sec elapsed
+
+    ## Warning in file.remove(FN_HOP_PTS_GPKG): cannot remove file
+    ## '/Users/dlloyd/Dropbox/Projects/PNW-Hops/cdl_hops_points_by_year.gpkg', reason
+    ## 'No such file or directory'
+
+    ## [1] FALSE
 
 ``` r
 # avoid the temptation to use projectRaster, transforms the Layer_1 values
@@ -658,9 +666,8 @@ st_write(cdl_hops_points_by_year, FN_HOP_PTS_GPKG,
          append = F, delete_dsn = F)
 ```
 
-    ## Deleting layer `cdl_hops_points_by_year' using driver `GPKG'
     ## Writing layer `cdl_hops_points_by_year' to data source 
-    ##   `/Users/dlloyd/Dropbox/Projects/Hops/cdl_hops_points_by_year.gpkg' using driver `GPKG'
+    ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/cdl_hops_points_by_year.gpkg' using driver `GPKG'
     ## Writing 3755883 features with 5 fields and geometry type Point.
 
 We can also illustrate the variation in hops landuse assignments in the
@@ -949,7 +956,7 @@ Here is our final list:
 toc()
 ```
 
-    ## 121.894 sec elapsed
+    ## 300.172 sec elapsed
 
 ### Session info and notes
 
@@ -976,36 +983,36 @@ sessionInfo()
     ## 
     ## other attached packages:
     ##  [1] rnassqs_0.6.3     data.table_1.17.8 tictoc_1.2.1      scales_1.4.0     
-    ##  [5] tigris_2.2.1      tmap_4.1          raster_3.6-32     sp_2.2-0         
-    ##  [9] terra_1.8-60      sf_1.0-21         CropScapeR_1.1.5  keyring_1.4.1    
-    ## [13] here_1.0.1        ggplot2_3.5.2     lubridate_1.9.4   tidyr_1.3.1      
+    ##  [5] tigris_2.2.1      tmap_4.2          raster_3.6-32     sp_2.2-0         
+    ##  [9] terra_1.8-70      sf_1.0-21         CropScapeR_1.1.5  keyring_1.4.1    
+    ## [13] here_1.0.2        ggplot2_4.0.0     lubridate_1.9.4   tidyr_1.3.1      
     ## [17] dplyr_1.1.4      
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] gtable_0.3.6            xfun_0.52               htmlwidgets_1.6.4      
-    ##  [4] lattice_0.22-6          leaflet.providers_2.0.0 vctrs_0.6.5            
-    ##  [7] tools_4.4.3             crosstalk_1.2.1         generics_0.1.4         
-    ## [10] curl_6.4.0              parallel_4.4.3          tibble_3.3.0           
-    ## [13] proxy_0.4-27            pkgconfig_2.0.3         KernSmooth_2.23-26     
-    ## [16] RColorBrewer_1.1-3      uuid_1.2-1              leaflet_2.2.2          
-    ## [19] lifecycle_1.0.4         stringr_1.5.1           compiler_4.4.3         
-    ## [22] farver_2.1.2            microbenchmark_1.5.0    codetools_0.2-20       
-    ## [25] leafsync_0.1.0          leaflegend_1.2.1        stars_0.6-8            
-    ## [28] htmltools_0.5.8.1       class_7.3-23            yaml_2.3.10            
-    ## [31] pillar_1.11.0           classInt_0.4-11         lwgeom_0.2-14          
-    ## [34] wk_0.9.4                abind_1.4-8             tidyselect_1.2.1       
-    ## [37] digest_0.6.37           stringi_1.8.7           purrr_1.1.0            
-    ## [40] labeling_0.4.3          rprojroot_2.1.0         fastmap_1.2.0          
-    ## [43] grid_4.4.3              colorspace_2.1-1        cli_3.6.5              
-    ## [46] logger_0.4.0            magrittr_2.0.3          maptiles_0.10.0        
-    ## [49] base64enc_0.1-3         utf8_1.2.6              XML_3.99-0.18          
-    ## [52] cols4all_0.8            leafem_0.2.4            e1071_1.7-16           
-    ## [55] withr_3.0.2             rappdirs_0.3.3          timechange_0.3.0       
-    ## [58] httr_1.4.7              rmarkdown_2.29          png_0.1-8              
-    ## [61] evaluate_1.0.4          knitr_1.50              tmaptools_3.3          
-    ## [64] s2_1.1.9                rlang_1.1.6             Rcpp_1.1.0             
-    ## [67] glue_1.8.0              DBI_1.2.3               rstudioapi_0.17.1      
-    ## [70] R6_2.6.1                spacesXYZ_1.6-0         units_0.8-7
+    ##  [1] tidyselect_1.2.1     farver_2.1.2         S7_0.2.0            
+    ##  [4] fastmap_1.2.0        leaflegend_1.2.1     leaflet_2.2.2       
+    ##  [7] XML_3.99-0.18        digest_0.6.37        timechange_0.3.0    
+    ## [10] lifecycle_1.0.4      magrittr_2.0.3       compiler_4.4.3      
+    ## [13] rlang_1.1.6          tools_4.4.3          utf8_1.2.6          
+    ## [16] yaml_2.3.10          knitr_1.50           labeling_0.4.3      
+    ## [19] htmlwidgets_1.6.4    classInt_0.4-11      curl_6.4.0          
+    ## [22] RColorBrewer_1.1-3   abind_1.4-8          KernSmooth_2.23-26  
+    ## [25] withr_3.0.2          purrr_1.1.0          leafsync_0.1.0      
+    ## [28] grid_4.4.3           cols4all_0.10        e1071_1.7-16        
+    ## [31] leafem_0.2.4         colorspace_2.1-1     spacesXYZ_1.6-0     
+    ## [34] cli_3.6.5            rmarkdown_2.30       generics_0.1.4      
+    ## [37] rstudioapi_0.17.1    httr_1.4.7           tmaptools_3.3       
+    ## [40] DBI_1.2.3            proxy_0.4-27         stringr_1.5.1       
+    ## [43] stars_0.6-8          parallel_4.4.3       s2_1.1.9            
+    ## [46] base64enc_0.1-3      vctrs_0.6.5          crosstalk_1.2.1     
+    ## [49] units_0.8-7          maptiles_0.10.0      glue_1.8.0          
+    ## [52] lwgeom_0.2-14        codetools_0.2-20     stringi_1.8.7       
+    ## [55] gtable_0.3.6         tibble_3.3.0         logger_0.4.0        
+    ## [58] pillar_1.11.0        rappdirs_0.3.3       htmltools_0.5.8.1   
+    ## [61] R6_2.6.1             wk_0.9.4             microbenchmark_1.5.0
+    ## [64] rprojroot_2.1.0      evaluate_1.0.4       lattice_0.22-6      
+    ## [67] png_0.1-8            class_7.3-23         Rcpp_1.1.0          
+    ## [70] uuid_1.2-1           xfun_0.52            pkgconfig_2.0.3
 
 #### TO DO
 
