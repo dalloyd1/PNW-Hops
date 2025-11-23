@@ -2,7 +2,7 @@ HGA data for Analysis of Hops Yield
 ================
 Don A. Lloyd
 
-Updated 25 September, 2025
+Updated 23 November, 2025
 
 <a name="top"></a> Keywords: hops, yields, data extraction, data
 cleansing, data validation, regex, outlier analysis
@@ -246,7 +246,7 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.944 sec elapsed
+    ## 4.424 sec elapsed
 
 ``` r
 hga_years <- unlist(lapply(listtbl, function(x) x$year))
@@ -882,7 +882,7 @@ committed to hops.
 ``` r
 # this func. tests whether there are gaps in inclusively reported years
 # the test for completeness relative to entire suite of data is performed separately
-yield_runs <- function(yrs, debug = T) {
+yield_runs <- function(yrs) {
   # yrs the years with observed yields for a given state/variety subset
   inclusive <- seq(min(yrs), max(yrs), 1)
   obs <- length(yrs)
@@ -1138,9 +1138,9 @@ sessionInfo()
     ## 
     ## other attached packages:
     ##  [1] rnassqs_0.6.3     keyring_1.4.1     lubridate_1.9.4   data.table_1.17.8
-    ##  [5] tseries_0.10-58   ggplot2_3.5.2     pdftools_3.5.0    tibble_3.3.0     
+    ##  [5] tseries_0.10-58   ggplot2_4.0.0     pdftools_3.6.0    tibble_3.3.0     
     ##  [9] tidyr_1.3.1       stringr_1.5.1     dplyr_1.1.4       tictoc_1.2.1     
-    ## [13] here_1.0.1       
+    ## [13] here_1.0.2       
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] utf8_1.2.6         generics_0.1.4     stringi_1.8.7      lattice_0.22-6    
@@ -1152,9 +1152,9 @@ sessionInfo()
     ## [25] lifecycle_1.0.4    pkgconfig_2.0.3    pillar_1.11.0      gtable_0.3.6      
     ## [29] glue_1.8.0         quantmod_0.4.28    Rcpp_1.1.0         xfun_0.52         
     ## [33] tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50         farver_2.1.2      
-    ## [37] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.29     xts_0.14.1        
-    ## [41] qpdf_1.4.1         compiler_4.4.3     quadprog_1.5-8     TTR_0.24.4        
-    ## [45] askpass_1.2.1
+    ## [37] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.30     xts_0.14.1        
+    ## [41] qpdf_1.4.1         compiler_4.4.3     S7_0.2.0           quadprog_1.5-8    
+    ## [45] TTR_0.24.4         askpass_1.2.1
 
 ### Updates
 
