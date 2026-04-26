@@ -305,7 +305,7 @@ We should also note that we have over 200 missing yields transcribed from the HG
 ```{r hga_yield_basics}
 y <- hga_yield$Yield
 summary(y)
-hist(y)
+ggplot(hga_yield, aes(Yield)) + geom_histogram(bins=20)
 ```
 
 UPDATE
@@ -456,19 +456,6 @@ having standardized variety names across the data sets, we can examine the combi
 2. analyze the discrepancy where both yields are reported but disagree
 3. retain the single value where only one source reports the yield
 4. report tuples that don't report a yield in either data set
-
-```{r precombined_data_tests, eval=FALSE, include=FALSE}
-# yr_hga <- pull(hga_yield, Year) %>% unique %>% sort
-# range(yr_hga, finite = T)
-# # any missing values on HGA year range?
-# any(min(yr_hga):max(yr_hga) -yr_hga >0)
-# 
-# yr_nass <- pull(nass_yield, Year) %>% unique %>% sort
-# range(yr_nass, finite = T)
-# # any missing values on NASS year range?
-# any(min(yr_nass):max(yr_nass) -yr_nass >0)
-# 
-```
 
 ```{r hop_yields}
 tmp_yields <- 
@@ -692,274 +679,7 @@ lapply(keys, function(gk) {
 })
 ```
 
-```{r HGA_Validation_2_Errors, eval=FALSE, include=FALSE}
-hga_errors <- 
-  left_join(
-    select(hga_yield, Variety, Year, State, Yield, Source) %>%
-      mutate(Match = toupper(Variety))
-    ,select(nass_yield, Variety, Year, State, Yield)
-    ,by = c("Match"="Variety", "Year", "State"),
-    suffix = c("_HGA", "_NASS")) %>%
-  filter(!is.na(Yield_NASS)) %>%
-  select(State, Variety, Year, starts_with("Yield"), Source, -Match) %>%
-  mutate(frac_err = Yield_HGA /Yield_NASS -1) %>%
-  arrange(Year, State, Variety)
-
-# years of NASS reporting that overlap with HGA
-# (we don't have NASS reporting by variety before 2013...)
-group_by(hga_errors, State) %>% 
-  summarise(Start = min(Year), End = max(Year))
-```
-
-```{r HGA_Discrepancies, eval=FALSE, include=FALSE}
-filter(state_errors, frac_err >0)
-
-filter(hga_errors, frac_err >0)
-```
-
-```{r missing_from_hga, eval=FALSE, include=FALSE}
-# fill in the HGA 2012 report missing WA total yield row from NASS
-(missing_from_hga <- 
-  nass_all %>%
-  tibble %>%
-  mutate(Year = as.numeric(year)) %>%
-  filter(statisticcat_desc == "YIELD"
-         ,agg_level_desc == "STATE"
-         ,class_desc == "ALL CLASSES" # i.e. total state yield
-         ,state_name == "WASHINGTON"
-         ,Year == 2012) %>%
-  select(Variety = class_desc, Yield = Value, Year, State = state_name) %>%
-  mutate(isTotal = TRUE
-         ,Variety = "Total Washington"
-         ,State = str_to_title(State)
-  ) %>%
-  # fill in the National yield for same year from NASS
-  add_row(
-    nass_all %>%
-      tibble %>%
-      mutate(Year = as.numeric(year)) %>%
-      filter(statisticcat_desc == "YIELD"
-             ,agg_level_desc == "NATIONAL"
-             ,class_desc == "ALL CLASSES" # i.e. total state yield
-             ,Year == 2012) %>%
-      select(Variety = class_desc, Yield = Value, Year, State = state_name) %>%
-      mutate(Variety = "Total United States"
-             ,State = "United States"
-      )
-  ) %>%
-  mutate(isTotal = TRUE
-         ,Yield = as.numeric(gsub(",", "", Yield))
-         ,Source = "NASS"
-  )
-)
-```
-
-```{r HGA_Validation_3_Correct_Yields, eval=FALSE, include=FALSE}
-yield <- add_row(hga_yield, missing_from_hga)
-
-# we have two sets of dependent variables: yield by state and
-# yield by variety and state
-pnw_yields <- filter(yield, isTotal, grepl("Pacific|United", Variety)) %>%
-  select(-starts_with("is"), -Variety) %>%
-  mutate(State = "Pacific Northwest") %>% # standardize region name
-  arrange(Year)
-
-state_yields <- filter(yield, isTotal, !grepl("Pacific|United", Variety)) %>%
-  select(-starts_with("is"), -Variety) %>%
-  arrange(State, Year)
-
-state_yields %>%
-  ggplot(aes(x=Year, y=Yield, color=State)) +
-  geom_line(linewidth = 1) +
-  labs(title="Hops Yields by State") +
-  geom_smooth(method = "loess") +
-  facet_wrap(~ State)
-
-var_yields <- filter(yield, !isTotal) %>%
-  select(-starts_with("is")) %>%
-  arrange(State, Year, Variety)
-head(var_yields, n=20)
-
-fwrite(pnw_yields, file = "hops_pnw_yields.csv")
-fwrite(state_yields, file = "hops_state_yields.csv")
-fwrite(var_yields, file = "hops_variety_yields.csv")
-```
-
 [Back to top](#top)
-
-```{r Prelim_Analysis_pnw, eval=FALSE, include=FALSE}
-hops_us_yields %>%
-  ggplot(aes(x=Year, y=Yield)) +
-  geom_line() +
-  geom_smooth(method = "loess")
-```
-
-<!-- ### Stationarity tests -->
-
-<!-- Test the regional yield series for stationarity. -->
-
-<!-- The total PNW yield is not a stationary series.  -->
-<!-- We don't see convincing evidence for stationarity in the yield series, so Box-Jenkins models are not a viable starting point.  -->
-
-```{r pnw_outliers, eval=FALSE, include=FALSE}
-# add a unique observation index
-pnw_yields <- mutate(pnw_yields, obs = row_number())
-
-pnw_outlier_check <- 
-  pnw_yields %>%
-  mutate(State = "PNW"
-         ,q1 = quantile(Yield, p = 0.25)
-         ,q3 = quantile(Yield, p = 0.75)
-         ,iqr = q3-q1
-         ,t1 = q1 - 1.5*iqr
-         ,t3 = q3 + 1.5*iqr
-  )  %>% 
-  mutate(outlier = (Yield < t1) | (Yield > t3))
-
-print(outliers <- filter(pnw_outlier_check, outlier) %>%
-        arrange(Year)
-)
-
-# keep them and assign dummies
-pnw_yields_ready <- pnw_yields %>%
-  mutate(Outlier = ifelse(obs %in% outliers$obs, paste0("Obs_", obs), 0)) %>%
-  mutate(Dummy = ifelse(is.na(Outlier), 0, 1)) %>%
-  pivot_wider(names_from="Outlier", values_from="Dummy") %>%
-  mutate(across(starts_with("Obs_"), function(x) replace_na(x, 0))) %>%
-  rename(Outlier = `0`) %>%
-  mutate(Outlier = ifelse(is.na(Outlier), TRUE, FALSE))
-
-left_join(state_yields, rename(pnw_yields, Region=State)
-          ,by = "Year"
-          ,suffix = c("", ".pnw")
-          ) %>%
-  select(-starts_with("Source")) %>%
-  mutate(Region = "PNW") %>%
-  ggplot(aes(x = Year, y=Yield, color = State)) +
-  geom_line(linewidth = 0.8) +
-  geom_line(aes(x = Year, y = Yield.pnw), col = "black", linetype = "dashed") +
-  theme(legend.position="bottom")
-```
-
-<!-- ### State outliers -->
-
-<!-- OBSOLETE CODE -->
-
-```{r prelim_analysis_states, eval=FALSE, include=FALSE}
-state_yields <- mutate(hops_state_yields, obs = row_number())
-
-state_outlier_check <- 
-  state_yields %>%
-  arrange(State, Year) %>%
-  mutate(q1 = quantile(Yield, p = 0.25)
-         ,q3 = quantile(Yield, p = 0.75)
-         ,iqr = q3-q1
-         ,t1 = q1 - 1.5*iqr
-         ,t3 = q3 + 1.5*iqr
-         ,.by = "State"
-  )  %>% # one summary row per State
-  mutate(outlier = (Yield < t1) | (Yield > t3))
-
-outliers <- filter(state_outlier_check, outlier)
-
-(state_yields_ready <- state_yields %>%
-  mutate(Outlier = ifelse(obs %in% outliers$obs, paste0("Obs_", obs), 0)) %>%
-  mutate(Dummy = ifelse(is.na(Outlier), 0, 1)) %>%
-  pivot_wider(names_from="Outlier", values_from="Dummy") %>%
-  mutate(across(starts_with("Obs_"), function(x) replace_na(x, 0))) %>%
-  rename(Outlier = `0`) %>%
-  mutate(Outlier = ifelse(is.na(Outlier), TRUE, FALSE))
-)
-```
-
-<!-- ### Varietial preliminaries -->
-
-<!-- There is a lot of variation among the run of yield data by variety. -->
-<!-- Privacy practices prevent individual growers from being identified by their cultivation of a unique variety. New varieties are reported by name only after they have successfully distinguished themselves in one of the undifferentiated categories, like experimental or "other varieties".  -->
-
-```{r prelim_analysis_varieties, eval=FALSE, include=FALSE}
-annual_yield_runs <- function(yrs) {
-  # yrs the years with observed yields for a given state/variety subset
-  inclusive <- seq(min(yrs), max(yrs), 1)
-  obs <- length(yrs)
-  longest_run <- length(inclusive)
-  longest_missing <- 0
-  if (length(inclusive) -length(obs) >0) {
-    z <- rep(0, length(inclusive))
-    z[match(yrs, inclusive)] <- 1
-    run <- rle(z)
-    ii <- which(run$values > 0)
-    longest_run <- max(run$lengths[ii])
-    jj <- which(run$values == 0)
-    if (length(jj) >0) longest_missing <- max(run$lengths[jj])
-  }
-  tibble(start = min(yrs)
-         ,end = max(yrs)
-         ,obs = obs
-         ,yrs = end -start +1
-         ,longest_run = longest_run
-         ,longest_missing = longest_missing
-         )
-}
-
-n_yr <- with(hops_var_yields, max(Year) -min(Year) +1)
-
-var_continuity <- 
-  hops_var_yields %>%
-  filter(!is.na(Yield)) %>%
-  reframe(annual_yield_runs(Year), .by=c("State", "Variety")) %>%
-  mutate(complete = (obs == n_yr))
-
-fwrite(var_continuity, file = "hops_var_continuity.csv")
-
-# select yields by year for complete obs
-var_continuity %>%
-  filter(complete) %>%
-  select(State, Variety) %>%
-  left_join(hops_var_yields) %>%
-  ggplot(aes(x = Year, y = Yield, color = Variety)) +
-  geom_line() +
-  facet_wrap(~State, ncol = 1)
-```
-
-<!-- The varieties shown in the plot are the best candidates for yield modeling but are also very limited data series Mt. Hood is included, the only variety continuously harvested in more than one state, and which has higher yields in Oregon than in Washington.  -->
-
-```{r eval=FALSE, include=FALSE}
-# for this check, keep only varieties with complete reporting
-variety_outlier_check <- 
-  filter(var_continuity, complete) %>%
-  select(State, Variety) %>%
-  left_join(hops_var_yields) %>%
-  arrange(Variety, State, Year) %>%
-  mutate(q1 = quantile(Yield, p = 0.25)
-         ,q3 = quantile(Yield, p = 0.75)
-         ,iqr = q3-q1
-         ,t1 = q1 - 1.5*iqr
-         ,t3 = q3 + 1.5*iqr
-         ,.by = c("State", "Variety")
-  )  %>% # one summary row per State & Variety
-  mutate(outlier = (Yield < t1) | (Yield > t3))
-
-filter(variety_outlier_check, outlier)
-
-# can we find which varieties contribute to state outliers?
-tmp <- filter(state_yields_ready, Outlier) %>%
-  select(State, Year, Yield) %>%
-  left_join(hops_var_yields, by = c("State", "Year"), suffix = c(".pnw", "")) %>%
-  filter(!is.na(Yield)) %>%
-  mutate(`Outlier` = paste(State, Year))
-
-filter(tmp, Yield > Yield.pnw)
-
-# none of our complete varieties contribute to the state-level yield outliers
-filter(tmp, Yield > Yield.pnw) %>%
-  left_join(select(var_continuity, State, Variety, complete)
-            , by = c("State", "Variety")) %>%
-  filter(complete)
-```
-
-```{r trend_over_time, eval=FALSE, include=FALSE}
-```
 
 ## Summary
 
@@ -982,11 +702,11 @@ Even after accounting for revisions to HGA yield tabulations that we corrected w
 
 For climatic and environmental analysis, For varietal analysis, hop yields can be more useful than acres harvested or tons produced. Unlike acreage, yield is a measure of areal density that, assuming efficient cultivation, removes demand or popularity of a variety from the analysis. But, hop yields are not always straightforward to interpret in modeling or other analysis.
 
-1. _There is a practical upper limit to the yield that is unknown from these data._ There is a limit to how many plants can be cultivated per acre from the space each plant needs to grow, and possibly the preferred spacing between plants to facilitate harvest. The number of cones produced per bine may vary naturally by hop variety.
+1. _There is a practical upper limit to the yield that remains unknown from these data._ There is a limit to how many plants can be cultivated per acre from the space each plant needs to grow, and possibly the preferred spacing between plants to facilitate harvest. The number of cones produced per bine may vary naturally by hop variety.
 
 2. _Efficiency of production is unknown._ Comparing yields across varieties or growing years assumes that their differences are due to natural variations, but independent of (unknowable to us) operational efficiency factors such as plant spacing, soil conditioning, or irrigation amounts. We have to assume for this analysis that each hop acre is cultivated as efficiently as any other regardless of variety or environment.
 
-3. _The definition of yield is uncertain._ Hop varieties are often selected for the particular alpha-acid content for brewing as a proportion of the gross weight of the harvest. So alpha yield will differ from gross yield by chemical compounds sensitive to variety and likely cultivation practices. Another question is whether yields are what was harvested or what is commercially viable. To understand environmental impacts, we might design different analyses for different yield targets. This won't affect analysis of gross harvests, but should be kept in mind when reviewing yield analysis in the literature.
+3. _The definition of yield requires clarification._ Hop varieties are often selected for the particular alpha-acid content for brewing as a proportion of the gross weight of the harvest. So alpha yield will differ from gross yield by chemical compounds sensitive to variety and likely cultivation practices. Another question is whether yields are what was harvested or what is commercially viable. To understand environmental impacts, we might design different analyses for different yield targets. This won't affect analysis of gross harvests, but should be kept in mind when reviewing yield analysis in the literature.
 
 [Back to top](#top)
 
@@ -997,6 +717,8 @@ sessionInfo()
 ```
 
 ### Updates
+
+* Apr 2026, maintenance on output paths, minor edits, and dropped remaining unevaluated portions of the script
 
 * Sept 2025, major rewrite of scripting.
 

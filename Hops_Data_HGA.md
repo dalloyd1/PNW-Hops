@@ -247,7 +247,7 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.243 sec elapsed
+    ## 4.298 sec elapsed
 
 ``` r
 hga_years <- unlist(lapply(listtbl, function(x) x$year))
@@ -400,8 +400,11 @@ summary(y)
     ##     365    1468    1772    1798    2072    3387     273
 
 ``` r
-hist(y)
+ggplot(hga_yield, aes(Yield)) + geom_histogram(bins=20)
 ```
+
+    ## Warning: Removed 273 rows containing non-finite outside the scale range
+    ## (`stat_bin()`).
 
 ![](Hops_Data_HGA_files/figure-gfm/hga_yield_basics-1.png)<!-- -->
 
@@ -1031,26 +1034,6 @@ lapply(keys, function(gk) {
 
 [Back to top](#top)
 
-<!-- ### Stationarity tests -->
-
-<!-- Test the regional yield series for stationarity. -->
-
-<!-- The total PNW yield is not a stationary series.  -->
-
-<!-- We don't see convincing evidence for stationarity in the yield series, so Box-Jenkins models are not a viable starting point.  -->
-
-<!-- ### State outliers -->
-
-<!-- OBSOLETE CODE -->
-
-<!-- ### Varietial preliminaries -->
-
-<!-- There is a lot of variation among the run of yield data by variety. -->
-
-<!-- Privacy practices prevent individual growers from being identified by their cultivation of a unique variety. New varieties are reported by name only after they have successfully distinguished themselves in one of the undifferentiated categories, like experimental or "other varieties".  -->
-
-<!-- The varieties shown in the plot are the best candidates for yield modeling but are also very limited data series Mt. Hood is included, the only variety continuously harvested in more than one state, and which has higher yields in Oregon than in Washington.  -->
-
 ## Summary
 
 We now have multiple, short time-series to analyze at region and state
@@ -1093,11 +1076,12 @@ cultivation, removes demand or popularity of a variety from the
 analysis. But, hop yields are not always straightforward to interpret in
 modeling or other analysis.
 
-1.  *There is a practical upper limit to the yield that is unknown from
-    these data.* There is a limit to how many plants can be cultivated
-    per acre from the space each plant needs to grow, and possibly the
-    preferred spacing between plants to facilitate harvest. The number
-    of cones produced per bine may vary naturally by hop variety.
+1.  *There is a practical upper limit to the yield that remains unknown
+    from these data.* There is a limit to how many plants can be
+    cultivated per acre from the space each plant needs to grow, and
+    possibly the preferred spacing between plants to facilitate harvest.
+    The number of cones produced per bine may vary naturally by hop
+    variety.
 
 2.  *Efficiency of production is unknown.* Comparing yields across
     varieties or growing years assumes that their differences are due to
@@ -1107,9 +1091,9 @@ modeling or other analysis.
     analysis that each hop acre is cultivated as efficiently as any
     other regardless of variety or environment.
 
-3.  *The definition of yield is uncertain.* Hop varieties are often
-    selected for the particular alpha-acid content for brewing as a
-    proportion of the gross weight of the harvest. So alpha yield will
+3.  *The definition of yield requires clarification.* Hop varieties are
+    often selected for the particular alpha-acid content for brewing as
+    a proportion of the gross weight of the harvest. So alpha yield will
     differ from gross yield by chemical compounds sensitive to variety
     and likely cultivation practices. Another question is whether yields
     are what was harvested or what is commercially viable. To understand
@@ -1165,6 +1149,9 @@ sessionInfo()
     ## [45] quadprog_1.5-8     TTR_0.24.4         askpass_1.2.1
 
 ### Updates
+
+- Apr 2026, maintenance on output paths, minor edits, and dropped
+  remaining unevaluated portions of the script
 
 - Sept 2025, major rewrite of scripting.
 

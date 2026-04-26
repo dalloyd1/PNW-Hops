@@ -1,13 +1,13 @@
 # data completeness tests
 require(dplyr)
 
-check_data_completeness <- function(md, na.thresh = 0) {
-  # find numeric variables that have more than `na.thresh` missing values
+check_data_completeness <- function(md, n.na = 0) {
+  # find numeric variables that have more than `n.na` missing values
   # defaults to zero, all rows for each variable must be finite
   navar <- 
     md %>%
     summarise(across(where(is.numeric), function(x) sum(is.na(x)))) %>%
-    select_if(function(x) x > na.thresh)
+    select_if(function(x) x > n.na)
   # isolate variable names that are missing and complete by this criterion
   missing <- names(navar)
   complete <- base::setdiff(names(md), missing)
@@ -17,7 +17,7 @@ check_data_completeness <- function(md, na.thresh = 0) {
     summarise(across(where(is.numeric), function(x) var(x))) %>%
     select_if(function(x) x == 0) %>%
     names
-  # final list of plausible variables for modeling under `na.thresh` criterion
+  # final list of plausible variables for modeling under `n.na` criterion
   okay <- base::setdiff(complete, zerovar)
   return(list(missing=missing, complete=complete, zerovar=zerovar, okay=okay))
 }
@@ -134,10 +134,10 @@ ma_window <- function(v, n_max, f = lead, na.rm = T) {
 #   return(ma)
 # }
 
-slope_window <- function(v, n = 3) {
+slope_window <- function(v, n = 3, verbose = F) {
   # returns a ts object of the slope of a vector of ordered values in
   # a data frame. slope is from a centered (default=3) window.
-  # n_vec must be an odd number to assign the derivative at each point.
+  # n_vec must be an odd integer to assign the derivative at each point.
   # for m an input tibble or dataframe, v the name of the column to apply
   # moving average to, id the name of the column that orders the vector v,
   # and n_vec the specific set or sequence of lead/lag values to take of
@@ -157,9 +157,25 @@ slope_window <- function(v, n = 3) {
   }
   if (n/2 == round(n/2)) stop("requires odd integer for n\n")
   cent_matrix <- centered_window(v, n)
-  # print(cent_matrix)
+  if (verbose) print(cent_matrix)
   x <- 1:n
+  n_part <- (n -1) /2 # already excluded even n
   s <- ts( apply(cent_matrix, 1, function(y) coef(lm(y ~ x))["x"]) )
   tsp(s) <- tsp(v)
+  out <- data.frame(
+    t=time(v) 
+    ,v
+    ,z=is.na(rowSums(cent_matrix))
+    ,m=as.numeric(s)) %>%
+    mutate(x = t-n_part, xend = t+n_part, y = v -m*n_part, yend = v +m*n_part)
+  if (verbose) print(out)
+  # t = original time index at which slope is evaluated
+  # v = data value at `t` i.e., y(t)
+  # z = TRUE for missing values in centered window
+  # m = slope from (y-yend) /(x-xend)
+  # x, xend = first and last x values for simple slope
+  # y, yend = first and last y values for simple slope
+  attr(s, "model") <- out
   return(s)
 }
+
