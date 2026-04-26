@@ -303,9 +303,8 @@ Get our bearings for what typical yield values (lb/acre) we should expect. I am 
 We should also note that we have over 200 missing yields transcribed from the HGA reports. These are anonymized values to protect the privacy of growers that are cultivating unique varieties within their state.
 
 ```{r hga_yield_basics}
-y <- hga_yield$Yield
-summary(y)
-ggplot(hga_yield, aes(Yield)) + geom_histogram(bins=20)
+summary(hga_yield$Yield)
+ggplot(hga_yield, aes(Yield)) + geom_histogram(bins=20, fill="forestgreen")
 ```
 
 UPDATE

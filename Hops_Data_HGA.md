@@ -247,7 +247,7 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.298 sec elapsed
+    ## 4.275 sec elapsed
 
 ``` r
 hga_years <- unlist(lapply(listtbl, function(x) x$year))
@@ -392,15 +392,14 @@ from the HGA reports. These are anonymized values to protect the privacy
 of growers that are cultivating unique varieties within their state.
 
 ``` r
-y <- hga_yield$Yield
-summary(y)
+summary(hga_yield$Yield)
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
     ##     365    1468    1772    1798    2072    3387     273
 
 ``` r
-ggplot(hga_yield, aes(Yield)) + geom_histogram(bins=20)
+ggplot(hga_yield, aes(Yield)) + geom_histogram(bins=20, fill="forestgreen")
 ```
 
     ## Warning: Removed 273 rows containing non-finite outside the scale range
