@@ -2,7 +2,7 @@ HGA data for Analysis of Hops Yield
 ================
 Don A. Lloyd
 
-Updated 23 November, 2025
+Updated 26 April, 2026
 
 <a name="top"></a> Keywords: hops, yields, data extraction, data
 cleansing, data validation, regex, outlier analysis
@@ -50,6 +50,7 @@ require(rnassqs) # NASS API
 ``` r
 HGA_VERBOSE = FALSE
 HGA_DATA_PATH = "~/Dropbox/Data/HGA"
+YIELD_SUBDIR = "yield"
 ```
 
 ## Extracting hop yields from HGA
@@ -246,7 +247,7 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.424 sec elapsed
+    ## 4.243 sec elapsed
 
 ``` r
 hga_years <- unlist(lapply(listtbl, function(x) x$year))
@@ -331,7 +332,7 @@ hga_yield <-
          ) 
   )
 
-fwrite(hga_yield, here("hga_yield.csv"))
+fwrite(hga_yield, here(YIELD_SUBDIR, "hga_yield.csv"))
 
 # hga_yield table retains "Other" varieties and totals
 (hga_varieties <- 
@@ -446,7 +447,7 @@ nass_all <- nassqs(
   # yields and other data are not usually finalized until December
   filter(as.numeric(year) < year(today()))
 
-fwrite(nass_all, file = "nass_all_data.csv")
+fwrite(nass_all, file = here(YIELD_SUBDIR, "nass_all_data.csv"))
 ```
 
 ### Validate NASS internal reporting
@@ -479,14 +480,15 @@ filter(nass_internal_validation, abs(ERR) >1) %>%
   arrange(desc(abs(ERR)))
 ```
 
-    ## # A tibble: 5 × 9
+    ## # A tibble: 6 × 9
     ##   state_name class_desc   year  ACRES PRODUCTION YIELD `YLD CALC`   ERR PERC_ERR
     ##   <chr>      <chr>        <chr> <dbl>      <dbl> <dbl>      <dbl> <dbl>    <dbl>
     ## 1 OREGON     OTHER VARIE… 2021    604      1075.  1780          2 -1778 -99.9   
     ## 2 IDAHO      OTHER VARIE… 2021    850      1466.  1725          2 -1723 -99.9   
     ## 3 OREGON     OTHER VARIE… 2022    586       935.  1595          2 -1593 -99.9   
-    ## 4 IDAHO      ELANI TM YQ… 2023      8      9300   1158       1162     4   0.345 
-    ## 5 IDAHO      ELANI TM YQ… 2024      8     21400   2673       2675     2   0.0748
+    ## 4 IDAHO      ELANI R YQH… 2025      8     21300   2657       2662     5   0.188 
+    ## 5 IDAHO      ELANI R YQH… 2023      8      9300   1158       1162     4   0.345 
+    ## 6 IDAHO      ELANI R YQH… 2024      8     21400   2673       2675     2   0.0748
 
 There are two very minor errors (\< 1%) that we will ignore by
 preferring the reported yield over the calculation. The other errors are
@@ -548,34 +550,34 @@ nass_yield <-
     ## [17] "CLUSTER"                  "COMET"                   
     ## [19] "CRYSTAL"                  "DELTA"                   
     ## [21] "EKUANOT HBC 366"          "EL DORADO"               
-    ## [23] "ELANI YQH 1320"           "EUREKA!"                 
+    ## [23] "ELANIYQH 1320"            "EUREKA!"                 
     ## [25] "EXPERIMENTAL"             "FUGGLE"                  
     ## [27] "GALENA"                   "GLACIER"                 
     ## [29] "GOLDING"                  "HALLERTAUER MAGNUM"      
     ## [31] "HALLERTAUER MITTELFRUHER" "HELIOS HS15619"          
     ## [33] "HORIZON"                  "IDAHO 7"                 
     ## [35] "IDAHO GEM"                "JARRYLO ADHA-881"        
-    ## [37] "LEMONDROP"                "LIBERTY"                 
-    ## [39] "LORAL HBC 291"            "LOTUS"                   
-    ## [41] "MCKENZIE C 148"           "MERIDIAN"                
-    ## [43] "MILLENNIUM"               "MOSAIC HBC 369"          
-    ## [45] "MT. HOOD"                 "MT. RAINIER"             
-    ## [47] "NORTHERN BREWER"          "NUGGET"                  
-    ## [49] "OTHER VARIETIES"          "PAHTO HBC 682"           
-    ## [51] "PALISADE YCR 4"           "PEKKO ADHA-871"          
-    ## [53] "PERLE"                    "SAAZ"                    
-    ## [55] "SABRO HBC 438"            "SIMCOE YCR 14"           
-    ## [57] "SORACHI ACE"              "STERLING"                
-    ## [59] "STRATA OR 91331"          "SULTANA"                 
-    ## [61] "SUMMIT"                   "SUPER GALENA"            
-    ## [63] "TAHOMA"                   "TALUS HBC 692"           
-    ## [65] "TETTNANGER"               "TRIUMPH"                 
-    ## [67] "VANGUARD"                 "WARRIOR YCR 5"           
-    ## [69] "WILLAMETTE"               "ZAPPA"                   
-    ## [71] "ZEUS"
+    ## [37] "KRUSH HBC 586"            "LEMONDROP"               
+    ## [39] "LIBERTY"                  "LORAL HBC 291"           
+    ## [41] "LOTUS"                    "MCKENZIE C 148"          
+    ## [43] "MERIDIAN"                 "MILLENNIUM"              
+    ## [45] "MOSAIC HBC 369"           "MT. HOOD"                
+    ## [47] "MT. RAINIER"              "NORTHERN BREWER"         
+    ## [49] "NUGGET"                   "OTHER VARIETIES"         
+    ## [51] "PAHTO HBC 682"            "PALISADE YCR 4"          
+    ## [53] "PEKKO ADHA-871"           "PERLE"                   
+    ## [55] "SAAZ"                     "SABRO HBC 438"           
+    ## [57] "SIMCOE YCR 14"            "SORACHI ACE"             
+    ## [59] "STERLING"                 "STRATA OR 91331"         
+    ## [61] "SULTANA"                  "SUMMIT"                  
+    ## [63] "SUPER GALENA"             "TAHOMA"                  
+    ## [65] "TALUS HBC 692"            "TETTNANGER"              
+    ## [67] "TRIUMPH"                  "VANGUARD"                
+    ## [69] "WARRIOR YCR 5"            "WILLAMETTE"              
+    ## [71] "ZAPPA"                    "ZEUS"
 
 ``` r
-fwrite(nass_yield, file = "nass_yield.csv")
+fwrite(nass_yield, file = here(YIELD_SUBDIR, "nass_yield.csv"))
 ```
 
 [Back to top](#top)
@@ -599,11 +601,12 @@ setdiff(var_nass, var_hga) %>% sort
     ##  [1] "ALL CLASSES"              "ALTUS"                   
     ##  [3] "BITTER GOLD"              "BULLION"                 
     ##  [5] "C/T/Z"                    "DELTA"                   
-    ##  [7] "ELANI YQH 1320"           "HALLERTAUER MAGNUM"      
+    ##  [7] "ELANIYQH 1320"            "HALLERTAUER MAGNUM"      
     ##  [9] "HALLERTAUER MITTELFRUHER" "HELIOS HS15619"          
-    ## [11] "IDAHO GEM"                "LEMONDROP"               
-    ## [13] "LOTUS"                    "MCKENZIE C 148"          
-    ## [15] "MERIDIAN"                 "SULTANA"
+    ## [11] "IDAHO GEM"                "KRUSH HBC 586"           
+    ## [13] "LEMONDROP"                "LOTUS"                   
+    ## [15] "MCKENZIE C 148"           "MERIDIAN"                
+    ## [17] "SULTANA"
 
 ``` r
 # varieties in HGA not found in NASS
@@ -742,7 +745,7 @@ tmp_yields <-
     ## # ℹ 647 more rows
 
 ``` r
-fwrite(yield_errors, here("yield_errors.csv"))
+fwrite(yield_errors, here(YIELD_SUBDIR, "yield_errors.csv"))
 
 yield_errors %>%
   mutate(abs_perc = abs(PERC_ERR),
@@ -838,19 +841,23 @@ hops_outlier_test <-
   )
 ```
 
-    ## `summarise()` has grouped output by 'State'. You can override using the
-    ## `.groups` argument.
+    ## `summarise()` has regrouped the output.
     ## Joining with `by = join_by(Variety, State)`
+    ## ℹ Summaries were computed grouped by State and Variety.
+    ## ℹ Output is grouped by State.
+    ## ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+    ## ℹ Use `summarise(.by = c(State, Variety))` for per-operation grouping
+    ##   (`?dplyr::dplyr_by`) instead.
 
 ``` r
 n_out <- nrow(filter(hops_outlier_test, outlier))
 cat(sprintf("%d outliers from IQR (%.1f%%)\n", n_out, n_out/nrow(hops_outlier_test) *100))
 ```
 
-    ## 56 outliers from IQR (4.7%)
+    ## 53 outliers from IQR (4.3%)
 
 ``` r
-fwrite(hops_outlier_test, file = "hops_outlier_test.csv")
+fwrite(hops_outlier_test, file = here(YIELD_SUBDIR, "hops_outlier_test.csv"))
 
 tot_yields <- select(hops_outlier_test, -q1, -q3, -iqr, -t1, -t3) %>%
   arrange(Variety, State, Year) 
@@ -925,24 +932,24 @@ n_yr <- with(tot_yields, max(Year) -min(Year) +1)
 )
 ```
 
-    ## # A tibble: 120 × 10
+    ## # A tibble: 121 × 10
     ##    Variety      State start   end   obs   yrs longest_run longest_missing recent
     ##    <chr>        <chr> <dbl> <dbl> <int> <dbl>       <int>           <dbl>  <dbl>
     ##  1 AHTANUM YCR… Wash…  2005  2022    14    18          11               4      0
-    ##  2 AMARILLO VG… Idaho  2017  2024     8     8           8               0      8
-    ##  3 AMARILLO VG… Oreg…  2019  2024     6     6           6               0      6
-    ##  4 AMARILLO VG… Wash…  2017  2024     8     8           8               0      8
-    ##  5 APOLLO       Idaho  2013  2024     9    12           6               2      2
-    ##  6 APOLLO       Wash…  2010  2024    15    15          15               0     15
-    ##  7 AZACCA ADHA… Wash…  2014  2024    11    11          11               0     11
+    ##  2 AMARILLO VG… Idaho  2017  2025     9     9           9               0      9
+    ##  3 AMARILLO VG… Oreg…  2019  2025     7     7           7               0      7
+    ##  4 AMARILLO VG… Wash…  2017  2025     9     9           9               0      9
+    ##  5 APOLLO       Idaho  2013  2024     9    12           6               2      0
+    ##  6 APOLLO       Wash…  2010  2025    16    16          16               0     16
+    ##  7 AZACCA ADHA… Wash…  2014  2024    11    11          11               0      0
     ##  8 BRAVO        Idaho  2013  2021     7     9           6               2      0
-    ##  9 BRAVO        Wash…  2010  2024    15    15          15               0     15
+    ##  9 BRAVO        Wash…  2010  2025    16    16          16               0     16
     ## 10 CALYPSO      Idaho  2015  2021     6     7           5               1      0
-    ## # ℹ 110 more rows
+    ## # ℹ 111 more rows
     ## # ℹ 1 more variable: complete <lgl>
 
 ``` r
-fwrite(hops_continuity_test, file = "hops_continuity_test.csv")
+fwrite(hops_continuity_test, file = here(YIELD_SUBDIR, "hops_continuity_test.csv"))
 
 # select yields by year for complete obs, ignoring aggregates
 hops_continuity_test %>%
@@ -969,13 +976,13 @@ lapply(keys, function(gk) {
   vn <- sprintf("hops_%s_yields", tolower(gk))
   yd <- filter(tot_yields, Group == gk) %>% 
     select(-Group)
-  fwrite(yd, file = here(paste0(vn, ".csv")))
+  fwrite(yd, file = here(YIELD_SUBDIR, paste0(vn, ".csv")))
   assign(vn, value = yd, inherits = T)
 })
 ```
 
     ## [[1]]
-    ## # A tibble: 75 × 6
+    ## # A tibble: 78 × 6
     ##    Variety     Yield  Year State Source     outlier
     ##    <chr>       <dbl> <dbl> <chr> <chr>      <lgl>  
     ##  1 TOTAL IDAHO  1484  2000 Idaho HGA 22.pdf FALSE  
@@ -988,10 +995,10 @@ lapply(keys, function(gk) {
     ##  8 TOTAL IDAHO  1417  2007 Idaho HGA 15.pdf FALSE  
     ##  9 TOTAL IDAHO  1841  2008 Idaho HGA 14.pdf FALSE  
     ## 10 TOTAL IDAHO  1943  2009 Idaho HGA 13.pdf FALSE  
-    ## # ℹ 65 more rows
+    ## # ℹ 68 more rows
     ## 
     ## [[2]]
-    ## # A tibble: 25 × 6
+    ## # A tibble: 26 × 6
     ##    Variety             Yield  Year State         Source     outlier
     ##    <chr>               <dbl> <dbl> <chr>         <chr>      <lgl>  
     ##  1 TOTAL UNITED STATES  1871  2000 United States HGA 22.pdf FALSE  
@@ -1004,10 +1011,10 @@ lapply(keys, function(gk) {
     ##  8 TOTAL UNITED STATES  1949  2007 United States HGA 15.pdf FALSE  
     ##  9 TOTAL UNITED STATES  1971  2008 United States HGA 14.pdf FALSE  
     ## 10 TOTAL UNITED STATES  2383  2009 United States HGA 13.pdf TRUE   
-    ## # ℹ 15 more rows
+    ## # ℹ 16 more rows
     ## 
     ## [[3]]
-    ## # A tibble: 1,084 × 6
+    ## # A tibble: 1,133 × 6
     ##    Variety       Yield  Year State      Source      outlier
     ##    <chr>         <dbl> <dbl> <chr>      <chr>       <lgl>  
     ##  1 AHTANUM YCR 1   758  2005 Washington HGA 17.pdf  FALSE  
@@ -1020,7 +1027,7 @@ lapply(keys, function(gk) {
     ##  8 AHTANUM YCR 1  1012  2016 Washington HGA 76.pdf  FALSE  
     ##  9 AHTANUM YCR 1  1052  2017 Washington HGA 105.pdf FALSE  
     ## 10 AHTANUM YCR 1  2730  2018 Washington HGA 168.pdf FALSE  
-    ## # ℹ 1,074 more rows
+    ## # ℹ 1,123 more rows
 
 [Back to top](#top)
 
@@ -1069,9 +1076,9 @@ xtabs(~Group + Source,
 
     ##        Source
     ## Group   HGA NASS
-    ##   State  55   20
-    ##   US     19    6
-    ##   Var   918  166
+    ##   State  55   23
+    ##   US     19    7
+    ##   Var   918  215
 
 Even after accounting for revisions to HGA yield tabulations that we
 corrected with NASS, the majority of validated yields are produced from
@@ -1119,13 +1126,13 @@ modeling or other analysis.
 sessionInfo()
 ```
 
-    ## R version 4.4.3 (2025-02-28)
+    ## R version 4.5.3 (2026-03-11)
     ## Platform: aarch64-apple-darwin20
-    ## Running under: macOS Monterey 12.7.6
+    ## Running under: macOS Sonoma 14.8.3
     ## 
     ## Matrix products: default
-    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
     ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1137,24 +1144,25 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] rnassqs_0.6.3     keyring_1.4.1     lubridate_1.9.4   data.table_1.17.8
-    ##  [5] tseries_0.10-58   ggplot2_4.0.0     pdftools_3.6.0    tibble_3.3.0     
-    ##  [9] tidyr_1.3.1       stringr_1.5.1     dplyr_1.1.4       tictoc_1.2.1     
-    ## [13] here_1.0.2       
+    ##  [1] rnassqs_0.6.3       keyring_1.4.1       lubridate_1.9.5    
+    ##  [4] data.table_1.18.2.1 tseries_0.10-61     ggplot2_4.0.3      
+    ##  [7] pdftools_3.8.0      tibble_3.3.1        tidyr_1.3.2        
+    ## [10] stringr_1.6.0       dplyr_1.2.1         tictoc_1.2.1       
+    ## [13] here_1.0.2         
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] utf8_1.2.6         generics_0.1.4     stringi_1.8.7      lattice_0.22-6    
-    ##  [5] digest_0.6.37      magrittr_2.0.3     evaluate_1.0.4     grid_4.4.3        
-    ##  [9] timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.0   
-    ## [13] httr_1.4.7         purrr_1.1.0        scales_1.4.0       cli_3.6.5         
-    ## [17] rlang_1.1.6        withr_3.0.2        yaml_2.3.10        tools_4.4.3       
-    ## [21] curl_6.4.0         vctrs_0.6.5        R6_2.6.1           zoo_1.8-14        
-    ## [25] lifecycle_1.0.4    pkgconfig_2.0.3    pillar_1.11.0      gtable_0.3.6      
-    ## [29] glue_1.8.0         quantmod_0.4.28    Rcpp_1.1.0         xfun_0.52         
-    ## [33] tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50         farver_2.1.2      
-    ## [37] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.30     xts_0.14.1        
-    ## [41] qpdf_1.4.1         compiler_4.4.3     S7_0.2.0           quadprog_1.5-8    
-    ## [45] TTR_0.24.4         askpass_1.2.1
+    ##  [1] utf8_1.2.6         generics_0.1.4     stringi_1.8.7      lattice_0.22-9    
+    ##  [5] digest_0.6.39      magrittr_2.0.5     timechange_0.4.0   evaluate_1.0.5    
+    ##  [9] grid_4.5.3         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.1   
+    ## [13] httr_1.4.8         purrr_1.2.2        scales_1.4.0       cli_3.6.6         
+    ## [17] rlang_1.2.0        withr_3.0.2        yaml_2.3.12        otel_0.2.0        
+    ## [21] tools_4.5.3        curl_7.1.0         vctrs_0.7.3        R6_2.6.1          
+    ## [25] zoo_1.8-15         lifecycle_1.0.5    pkgconfig_2.0.3    pillar_1.11.1     
+    ## [29] gtable_0.3.6       glue_1.8.1         quantmod_0.4.28    Rcpp_1.1.1-1.1    
+    ## [33] xfun_0.57          tidyselect_1.2.1   rstudioapi_0.18.0  knitr_1.51        
+    ## [37] farver_2.1.2       htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.31    
+    ## [41] xts_0.14.2         qpdf_1.4.1         compiler_4.5.3     S7_0.2.2          
+    ## [45] quadprog_1.5-8     TTR_0.24.4         askpass_1.2.1
 
 ### Updates
 
