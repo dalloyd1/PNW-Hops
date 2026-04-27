@@ -9,13 +9,6 @@ editor_options:
 
 <!-- 1 June 25 new Rmd for creation of hops_counties data -->
 
-```{r HC_Setup, echo=TRUE, warning=FALSE, message=FALSE}
-require(keyring)
-require(rnassqs) # API
-require(dplyr)
-require(tidyr) # pivot_wider
-require(here)
-```
 <a id="top"></a>
 [Obtain NASS census data](#obtain-nass-census-data)
 
@@ -28,6 +21,16 @@ This exercise is part of a larger data project to analyze hop yields in the PNW,
 Crop yields can be affected by environmental factors regardless of how far away they were produce. For example wildfire smoke might negatively impact the quality and quantity of a harvest, whether the smoke originated nearby or hundreds of miles away. Understanding where hops are grown and where environmental measurements are taken will help us decide later how to combine the data for modeling. While the locations of environmental samplers are well documented, there are many other obstacles to producing a dataset for modeling or other analysis. Hop yields are reported by NASS surveys only at state level not county. Even with county-level reporting, we would still not know where within the county to look for the nearest environmental samplers.
 
 This write-up develops the first steps toward understanding the strengths and weaknesses of USDA NASS data sources.
+
+```{r libs, echo=TRUE, warning=FALSE, message=FALSE}
+library(keyring)
+library(rnassqs) # API
+library(dplyr)
+library(tidyr) # pivot_wider
+library(here)
+
+SUBDIR = "geo"
+```
 
 ### Obtain NASS census data
 
@@ -159,7 +162,7 @@ Here is our final ranked list of hops producing counties, with FIPS. We now have
    )
 )
 
-write.csv(nass_hops_counties, here("nass_hops_counties.csv"))
+write.csv(nass_hops_counties, here(SUBDIR, "nass_hops_counties.csv"))
 ```
 
 ```{r hops_counties_manual, eval=FALSE, include=FALSE}
@@ -193,7 +196,7 @@ hops_counties <- tribble(~ county, ~state
   rename(State=state_name, County=county) %>%
   mutate(FIPS = paste0(state_code, county_code))
 
-write.csv(hops_counties, here("hops_counties.csv"))
+write.csv(hops_counties, here(SUBDIR, "hops_counties.csv"))
 ```
 
 <!-- IDAHO for year of 2023. Canyon contains the most growers. -->
@@ -217,7 +220,6 @@ write.csv(hops_counties, here("hops_counties.csv"))
 <!-- We can use geographic information from `tigris` to determine boundaries for each hops growing county from our list. -->
 
 Back to [top](#top)
-
 
 ```{r hops_stations_1, eval=FALSE, include=FALSE}
 # get county geometries

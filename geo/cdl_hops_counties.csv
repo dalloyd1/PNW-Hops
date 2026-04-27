@@ -1,0 +1,7 @@
+FIPS,MIN_AC,MEAN_AC,MAX_AC,MEAN_GR,state,state_code,state_name,county_code,county
+53077,1439.8,32021.6,50163.8,2094.4,WA,53,Washington,077,Yakima County
+41047,1820.5,5341,8007.8,251,OR,41,Oregon,047,Marion County
+16027,737,4039.4,7564.3,401.3,ID,16,Idaho,027,Canyon County
+53005,145.7,4664,7434.7,327.3,WA,53,Washington,005,Benton County
+41053,76.1,914.5,1752.9,66.8,OR,41,Oregon,053,Polk County
+53025,5.4,318.3,1694,42.2,WA,53,Washington,025,Grant County

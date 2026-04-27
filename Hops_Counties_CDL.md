@@ -2,26 +2,26 @@ Hops Counties from Cropland Data Layer
 ================
 Don A. Lloyd
 
-Updated 23 November, 2025
+Updated 27 April, 2026
 
 ``` r
-require(dplyr)
-require(tidyr)
-require(lubridate)
-require(ggplot2)
-require(here)
-require(keyring)
-require(CropScapeR) # API
-require(sf)
-require(terra)
-require(raster)
-require(tmap)
-require(tigris)
-require(scales)
-# require(kableExtra)
-require(tictoc)
-require(data.table) #fwrite
-require(rnassqs) # API for acreage validation
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(ggplot2)
+library(here)
+library(keyring)
+library(CropScapeR) # API
+library(sf)
+library(terra)
+library(raster)
+library(tmap)
+library(tigris)
+library(scales)
+# library(kableExtra)
+library(tictoc)
+library(data.table) #fwrite
+library(rnassqs) # API for acreage validation
 ```
 
 <a id="top"></a> [Testing CropScape Data Layer
@@ -44,19 +44,22 @@ rasters](#process-rasters-for-primary-hops-growing-counties)
 DIR_TIF <- "~/Dropbox/Data/CDL/"
 FORCE_DL_TEST_TIF = TRUE
 FORCE_RASTER_READ = FALSE
-# archival processed data
-FN_CDL_STATS <- here("cdl_stats.csv")
-FN_COUNTY_STATS = here("cdl_pnw_county_stats.csv")
-FN_HOP_PTS_RDATA = here("cdl_hops_points_by_year.Rdata")
-# FN_HOP_DSCT_PTS_RDATA = here("cdl_hops_distinct_points")
+SUBDIR <- "geo"
 
-FN_HOP_PTS_GPKG = here("cdl_hops_points_by_year.gpkg")
-# I like hops but you can try other crops in this analysis
+# archival processed data
+FN_CDL_STATS <- here(SUBDIR, "cdl_stats.csv")
+FN_COUNTY_STATS = here(SUBDIR, "cdl_pnw_county_stats.csv")
+
+FN_HOP_PTS_RDATA = here(SUBDIR, "cdl_hops_points_by_year.Rdata")
+FN_HOP_PTS_GPKG = here(SUBDIR, "cdl_hops_points_by_year.gpkg")
+
+# I obviously like hops but you can try other crops in this analysis
 CROP_LIST <- "Hops" # use c() here to vector multiple crops
 CROP_VAL <- 
   filter(linkdata, Crop %in% CROP_LIST) %>% pull(MasterCat)
 
-# we don't need US census TIGER data until late in the script but pull it early and fail faster in case the service is down
+# we don't need US census TIGER data until late in the script but pull it early to fail faster in case the service is down
+options(tigris_use_cache=TRUE)
 county_boundaries <- tigris::counties(progress_bar = FALSE)
 ```
 
@@ -70,7 +73,7 @@ state_boundaries <- tigris::states(progress_bar = FALSE)
 
 ``` r
 set.seed(250804)
-tic()
+tic() # full script exec timer started...
 ```
 
 ### Testing CropScape Data Layer formats
@@ -256,7 +259,7 @@ if (file.exists(FN_COUNTY_STATS)) {
 }
 ```
 
-    ## Reading /Users/dlloyd/Dropbox/Projects/PNW-Hops/cdl_pnw_county_stats.csv
+    ## Reading /Users/dlloyd/Dropbox/Projects/PNW-Hops/geo/cdl_pnw_county_stats.csv
 
 ``` r
 # FIPS is int in county_stats if read from table
@@ -282,31 +285,31 @@ head(cdl_hops_stats, n=15)
     ## # A tibble: 15 × 10
     ##    FIPS  MIN_AC MEAN_AC MAX_AC MEAN_GR state state_code state_name county_code
     ##    <chr>  <dbl>   <dbl>  <dbl>   <dbl> <chr> <chr>      <chr>      <chr>      
-    ##  1 53077 1440.  31708   50164.  2353.  WA    53         Washington 077        
-    ##  2 41047 1820.   5271.   8008.   270.  OR    41         Oregon     047        
-    ##  3 16027  737    3883.   7564.   417   ID    16         Idaho      027        
-    ##  4 53005  146.   4546.   7435.   343.  WA    53         Washington 005        
-    ##  5 41045   14.7   437.   3426.   -24   OR    41         Oregon     045        
-    ##  6 41053   76.1   920    1753.    80.5 OR    41         Oregon     053        
-    ##  7 53025    5.4   317.   1694     49.3 WA    53         Washington 025        
-    ##  8 41005   43.6   407.    785.    19.7 OR    41         Oregon     005        
-    ##  9 41071   26.7   290.    743.    25.9 OR    41         Oregon     071        
+    ##  1 53077 1440.  32022.  50164.  2094.  WA    53         Washington 077        
+    ##  2 41047 1820.   5341    8008.   251   OR    41         Oregon     047        
+    ##  3 16027  737    4039.   7564.   401.  ID    16         Idaho      027        
+    ##  4 53005  146.   4664    7435.   327.  WA    53         Washington 005        
+    ##  5 41045   14.7   428.   3426.   -22.9 OR    41         Oregon     045        
+    ##  6 41053   76.1   914.   1753.    66.8 OR    41         Oregon     053        
+    ##  7 53025    5.4   318.   1694     42.2 WA    53         Washington 025        
+    ##  8 41005   43.6   426.    785.    22.3 OR    41         Oregon     005        
+    ##  9 41071   26.7   282.    743.    19.7 OR    41         Oregon     071        
     ## 10 53021    0.4    71.3   732.    14.5 WA    53         Washington 021        
     ## 11 41043    2.7   143.    566.     6.2 OR    41         Oregon     043        
-    ## 12 41067   29.6   280.    559.    10.7 OR    41         Oregon     067        
-    ## 13 53071    0.2    51.6   397.    -4   WA    53         Washington 071        
-    ## 14 16073   19.6   153.    373.    12.2 ID    16         Idaho      073        
-    ## 15 16075    3.9   102.    332.     1.8 ID    16         Idaho      075        
+    ## 12 41067    0.2   265.    559.     4.7 OR    41         Oregon     067        
+    ## 13 16073   19.6   168.    439.    14.9 ID    16         Idaho      073        
+    ## 14 53071    0.2    51.6   397.    -4   WA    53         Washington 071        
+    ## 15 16075    3.9   103.    332.     1.6 ID    16         Idaho      075        
     ## # ℹ 1 more variable: county <chr>
 
 ``` r
-fwrite(cdl_hops_stats, here("cdl_hops_stats.csv"))
+fwrite(cdl_hops_stats, here(SUBDIR, "cdl_hops_stats.csv"))
 
 # to focus on productive counties, we will select those with positive
 # growth of at least 10 acres/yr and at least 1k acres at one time
 cdl_hops_counties <- filter(cdl_hops_stats, MEAN_GR >= 10, MAX_AC >= 1000)
 
-fwrite(cdl_hops_counties, here("cdl_hops_counties.csv"))
+fwrite(cdl_hops_counties, here(SUBDIR, "cdl_hops_counties.csv"))
 
 county_stats %>%
   filter(Category %in% CROP_LIST, 
@@ -337,8 +340,12 @@ county_test <-
   group_by(FIPS)
 ```
 
-    ## `summarise()` has grouped output by 'Year'. You can override using the
-    ## `.groups` argument.
+    ## `summarise()` has regrouped the output.
+    ## ℹ Summaries were computed grouped by Year and FIPS.
+    ## ℹ Output is grouped by Year.
+    ## ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+    ## ℹ Use `summarise(.by = c(Year, FIPS))` for per-operation grouping
+    ##   (`?dplyr::dplyr_by`) instead.
 
 ``` r
 # easier to see the variation by year with log scale 
@@ -369,12 +376,12 @@ county_test %>%
     ## # A tibble: 6 × 2
     ##   FIPS           gr
     ##   <chr>       <dbl>
-    ## 1 16027     -0.0559
-    ## 2 41047 -10549.    
-    ## 3 41053     -0.0506
-    ## 4 53005      0.415 
-    ## 5 53025      0.238 
-    ## 6 53077      0.139
+    ## 1 16027     -0.0435
+    ## 2 41047 -11956.    
+    ## 3 41053     -0.0461
+    ## 4 53005      0.371 
+    ## 5 53025      0.221 
+    ## 6 53077      0.128
 
 ``` r
 # look for cases where total county acreage is more than 1% larger
@@ -524,7 +531,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 15.326 sec elapsed
+    ## 9.249 sec elapsed
 
 ``` r
 # there we go
@@ -623,17 +630,13 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
   #   Reduce(cdl_hops_point_list, function(x) distinct(x, geometry))
 
   saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
-  # saveRDS(cdl_hops_distinct_points, FN_HOP_DSCT_PTS_RDATA)
-
-  file.remove(FN_HOP_PTS_GPKG)
+  
 }
 ```
 
     ## masking fips 41047 for 2013
     ## masking fips 41047 for 2015
-    ## 147.456 sec elapsed
-
-    ## [1] TRUE
+    ## 97.165 sec elapsed
 
 ``` r
 # avoid the temptation to use projectRaster, transforms the Layer_1 values
@@ -663,8 +666,8 @@ st_write(cdl_hops_points_by_year, FN_HOP_PTS_GPKG,
 ```
 
     ## Writing layer `cdl_hops_points_by_year' to data source 
-    ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/cdl_hops_points_by_year.gpkg' using driver `GPKG'
-    ## Writing 3755883 features with 5 fields and geometry type Point.
+    ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/geo/cdl_hops_points_by_year.gpkg' using driver `GPKG'
+    ## Writing 4021484 features with 5 fields and geometry type Point.
 
 We can also illustrate the variation in hops landuse assignments in the
 CDL methodology over time.
@@ -848,8 +851,12 @@ prior_census <- max(census_yrs[-which.max(census_yrs)])
 )
 ```
 
-    ## `summarise()` has grouped output by 'FIPS'. You can override using the
-    ## `.groups` argument.
+    ## `summarise()` has regrouped the output.
+    ## ℹ Summaries were computed grouped by FIPS and rank.
+    ## ℹ Output is grouped by FIPS.
+    ## ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+    ## ℹ Use `summarise(.by = c(FIPS, rank))` for per-operation grouping
+    ##   (`?dplyr::dplyr_by`) instead.
 
     ## # A tibble: 8 × 4
     ## # Groups:   FIPS [8]
@@ -877,15 +884,15 @@ prior_census <- max(census_yrs[-which.max(census_yrs)])
     ## # A tibble: 95 × 7
     ##    FIPS  MEAN_AC MAX_AC MEAN_GR  rank state county   
     ##    <chr>   <dbl>  <dbl>   <dbl> <int> <chr> <chr>    
-    ##  1 53077 31708   50164.  2353.      1 WA    Yakima   
-    ##  2 41047  5271.   8008.   270.      2 OR    Marion   
-    ##  3 16027  3883.   7564.   417       3 ID    Canyon   
-    ##  4 53005  4546.   7435.   343.      4 WA    Benton   
-    ##  5 41045   437.   3426.   -24       5 OR    Malheur  
-    ##  6 41053   920    1753.    80.5     6 OR    Polk     
-    ##  7 53025   317.   1694     49.3     7 WA    Grant    
-    ##  8 41005   407.    785.    19.7     8 OR    Clackamas
-    ##  9 41071   290.    743.    25.9     9 OR    Yamhill  
+    ##  1 53077 32022.  50164.  2094.      1 WA    Yakima   
+    ##  2 41047  5341    8008.   251       2 OR    Marion   
+    ##  3 16027  4039.   7564.   401.      3 ID    Canyon   
+    ##  4 53005  4664    7435.   327.      4 WA    Benton   
+    ##  5 41045   428.   3426.   -22.9     5 OR    Malheur  
+    ##  6 41053   914.   1753.    66.8     6 OR    Polk     
+    ##  7 53025   318.   1694     42.2     7 WA    Grant    
+    ##  8 41005   426.    785.    22.3     8 OR    Clackamas
+    ##  9 41071   282.    743.    19.7     9 OR    Yamhill  
     ## 10 53021    71.3   732.    14.5    10 WA    Franklin 
     ## # ℹ 85 more rows
 
@@ -899,18 +906,18 @@ filter(all_ranked, !is.na(rank_NASS) | rank_CDL <10)
     ## # A tibble: 14 × 10
     ##    FIPS  MEAN_AC_CDL MAX_AC_CDL MEAN_GR rank_CDL state county    rank_NASS
     ##    <chr>       <dbl>      <dbl>   <dbl>    <int> <chr> <chr>         <int>
-    ##  1 53077     31708      50164.   2353.         1 WA    Yakima            1
-    ##  2 41047      5271.      8008.    270.         2 OR    Marion            2
-    ##  3 16027      3883.      7564.    417          3 ID    Canyon           NA
-    ##  4 53005      4546.      7435.    343.         4 WA    Benton            5
-    ##  5 41045       437.      3426.    -24          5 OR    Malheur          NA
-    ##  6 41053       920       1753.     80.5        6 OR    Polk             NA
-    ##  7 53025       317.      1694      49.3        7 WA    Grant            NA
-    ##  8 41005       407.       785.     19.7        8 OR    Clackamas        NA
-    ##  9 41071       290.       743.     25.9        9 OR    Yamhill          NA
+    ##  1 53077     32022.     50164.   2094.         1 WA    Yakima            1
+    ##  2 41047      5341       8008.    251          2 OR    Marion            2
+    ##  3 16027      4039.      7564.    401.         3 ID    Canyon           NA
+    ##  4 53005      4664       7435.    327.         4 WA    Benton            5
+    ##  5 41045       428.      3426.    -22.9        5 OR    Malheur          NA
+    ##  6 41053       914.      1753.     66.8        6 OR    Polk             NA
+    ##  7 53025       318.      1694      42.2        7 WA    Grant            NA
+    ##  8 41005       426.       785.     22.3        8 OR    Clackamas        NA
+    ##  9 41071       282.       743.     19.7        9 OR    Yamhill          NA
     ## 10 41003        71.3      204.      2.8       18 OR    Benton            7
     ## 11 41033         8.2       30       0.7       34 OR    Josephine         4
-    ## 12 53065         4.2       12.7     0.4       42 WA    Stevens           6
+    ## 12 53065         4.2       12.7     0.4       43 WA    Stevens           6
     ## 13 41029         1          2.7     0         64 OR    Jackson           3
     ## 14 41017         0.5        1.1     0         79 OR    Deschutes         8
     ## # ℹ 2 more variables: MEAN_AC_NASS <dbl>, MAX_AC_NASS <dbl>
@@ -941,18 +948,18 @@ Here is our final list:
     ## # A tibble: 6 × 8
     ##   FIPS  MIN_AC MEAN_AC MAX_AC MEAN_GR state state_name county       
     ##   <chr>  <dbl>   <dbl>  <dbl>   <dbl> <chr> <chr>      <chr>        
-    ## 1 53077 1440.   31708  50164.  2353.  WA    Washington Yakima County
-    ## 2 41047 1820.    5271.  8008.   270.  OR    Oregon     Marion County
-    ## 3 16027  737     3883.  7564.   417   ID    Idaho      Canyon County
-    ## 4 53005  146.    4546.  7435.   343.  WA    Washington Benton County
-    ## 5 41053   76.1    920   1753.    80.5 OR    Oregon     Polk County  
-    ## 6 53025    5.4    317.  1694     49.3 WA    Washington Grant County
+    ## 1 53077 1440.   32022. 50164.  2094.  WA    Washington Yakima County
+    ## 2 41047 1820.    5341   8008.   251   OR    Oregon     Marion County
+    ## 3 16027  737     4039.  7564.   401.  ID    Idaho      Canyon County
+    ## 4 53005  146.    4664   7435.   327.  WA    Washington Benton County
+    ## 5 41053   76.1    914.  1753.    66.8 OR    Oregon     Polk County  
+    ## 6 53025    5.4    318.  1694     42.2 WA    Washington Grant County
 
 ``` r
 toc()
 ```
 
-    ## 314.13 sec elapsed
+    ## 231.796 sec elapsed
 
 ### Session info and notes
 
@@ -960,13 +967,13 @@ toc()
 sessionInfo()
 ```
 
-    ## R version 4.4.3 (2025-02-28)
-    ## Platform: aarch64-apple-darwin20
-    ## Running under: macOS Monterey 12.7.6
+    ## R version 4.6.0 (2026-04-24)
+    ## Platform: aarch64-apple-darwin23
+    ## Running under: macOS Sonoma 14.8.3
     ## 
     ## Matrix products: default
-    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
     ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -978,37 +985,32 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] rnassqs_0.6.3     data.table_1.17.8 tictoc_1.2.1      scales_1.4.0     
-    ##  [5] tigris_2.2.1      tmap_4.2          raster_3.6-32     sp_2.2-0         
-    ##  [9] terra_1.8-70      sf_1.0-21         CropScapeR_1.1.5  keyring_1.4.1    
-    ## [13] here_1.0.2        ggplot2_4.0.0     lubridate_1.9.4   tidyr_1.3.1      
-    ## [17] dplyr_1.1.4      
+    ##  [1] rnassqs_0.6.3       data.table_1.18.2.1 tictoc_1.2.1       
+    ##  [4] scales_1.4.0        tigris_2.2.1        tmap_4.3           
+    ##  [7] raster_3.6-32       sp_2.2-1            terra_1.9-11       
+    ## [10] sf_1.1-0            CropScapeR_1.1.5    keyring_1.4.1      
+    ## [13] here_1.0.2          ggplot2_4.0.3       lubridate_1.9.5    
+    ## [16] tidyr_1.3.2         dplyr_1.2.1        
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.2.1     farver_2.1.2         S7_0.2.0            
-    ##  [4] fastmap_1.2.0        leaflegend_1.2.1     leaflet_2.2.2       
-    ##  [7] XML_3.99-0.18        digest_0.6.37        timechange_0.3.0    
-    ## [10] lifecycle_1.0.4      magrittr_2.0.3       compiler_4.4.3      
-    ## [13] rlang_1.1.6          tools_4.4.3          utf8_1.2.6          
-    ## [16] yaml_2.3.10          knitr_1.50           labeling_0.4.3      
-    ## [19] htmlwidgets_1.6.4    classInt_0.4-11      curl_6.4.0          
-    ## [22] RColorBrewer_1.1-3   abind_1.4-8          KernSmooth_2.23-26  
-    ## [25] withr_3.0.2          purrr_1.1.0          leafsync_0.1.0      
-    ## [28] grid_4.4.3           cols4all_0.10        e1071_1.7-16        
-    ## [31] leafem_0.2.4         colorspace_2.1-1     spacesXYZ_1.6-0     
-    ## [34] cli_3.6.5            rmarkdown_2.30       generics_0.1.4      
-    ## [37] rstudioapi_0.17.1    httr_1.4.7           tmaptools_3.3       
-    ## [40] DBI_1.2.3            proxy_0.4-27         stringr_1.5.1       
-    ## [43] stars_0.6-8          parallel_4.4.3       s2_1.1.9            
-    ## [46] base64enc_0.1-3      vctrs_0.6.5          crosstalk_1.2.1     
-    ## [49] units_0.8-7          maptiles_0.10.0      glue_1.8.0          
-    ## [52] lwgeom_0.2-14        codetools_0.2-20     stringi_1.8.7       
-    ## [55] gtable_0.3.6         tibble_3.3.0         logger_0.4.0        
-    ## [58] pillar_1.11.0        rappdirs_0.3.3       htmltools_0.5.8.1   
-    ## [61] R6_2.6.1             wk_0.9.4             microbenchmark_1.5.0
-    ## [64] rprojroot_2.1.0      evaluate_1.0.4       lattice_0.22-6      
-    ## [67] png_0.1-8            class_7.3-23         Rcpp_1.1.0          
-    ## [70] uuid_1.2-1           xfun_0.52            pkgconfig_2.0.3
+    ##  [1] tidyselect_1.2.1   farver_2.1.2       S7_0.2.2           fastmap_1.2.0     
+    ##  [5] leaflegend_1.2.1   leaflet_2.2.3      XML_3.99-0.23      digest_0.6.39     
+    ##  [9] timechange_0.4.0   lifecycle_1.0.5    magrittr_2.0.5     compiler_4.6.0    
+    ## [13] rlang_1.2.0        tools_4.6.0        utf8_1.2.6         yaml_2.3.12       
+    ## [17] knitr_1.51         labeling_0.4.3     htmlwidgets_1.6.4  classInt_0.4-11   
+    ## [21] curl_7.1.0         RColorBrewer_1.1-3 abind_1.4-8        KernSmooth_2.23-26
+    ## [25] withr_3.0.2        purrr_1.2.2        leafsync_0.1.0     grid_4.6.0        
+    ## [29] cols4all_0.10      e1071_1.7-17       leafem_0.2.5       colorspace_2.1-2  
+    ## [33] spacesXYZ_1.6-0    cli_3.6.6          rmarkdown_2.31     generics_0.1.4    
+    ## [37] otel_0.2.0         httr_1.4.8         tmaptools_3.3      DBI_1.3.0         
+    ## [41] proxy_0.4-29       stringr_1.6.0      stars_0.7-2        parallel_4.6.0    
+    ## [45] s2_1.1.9           base64enc_0.1-6    vctrs_0.7.3        crosstalk_1.2.2   
+    ## [49] units_1.0-1        maptiles_0.11.0    glue_1.8.1         lwgeom_0.2-15     
+    ## [53] codetools_0.2-20   stringi_1.8.7      gtable_0.3.6       tibble_3.3.1      
+    ## [57] logger_0.4.1       pillar_1.11.1      rappdirs_0.3.4     htmltools_0.5.9   
+    ## [61] R6_2.6.1           wk_0.9.5           rprojroot_2.1.1    evaluate_1.0.5    
+    ## [65] lattice_0.22-9     png_0.1-9          class_7.3-23       Rcpp_1.1.1-1.1    
+    ## [69] uuid_1.2-2         xfun_0.57          pkgconfig_2.0.3
 
 #### TO DO
 

@@ -32,25 +32,25 @@ Write the [final yields](#final-yields)
 [Session info](#session-info-and-notes)
 
 ``` r
-require(here)
-require(tictoc)
-require(dplyr)
-require(stringr)
-require(tidyr)
-require(tibble)
-require(pdftools)
-require(ggplot2)
-require(tseries)
-require(data.table) # fwrite
-require(lubridate) # today
-require(keyring)
-require(rnassqs) # NASS API
+library(here)
+library(tictoc)
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(tibble)
+library(pdftools)
+library(ggplot2)
+library(tseries)
+library(data.table) # fwrite
+library(lubridate) # today
+library(keyring)
+library(rnassqs) # NASS API
 ```
 
 ``` r
 HGA_VERBOSE = FALSE
 HGA_DATA_PATH = "~/Dropbox/Data/HGA"
-YIELD_SUBDIR = "yield"
+SUBDIR = "yield"
 ```
 
 ## Extracting hop yields from HGA
@@ -247,7 +247,7 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.275 sec elapsed
+    ## 4.301 sec elapsed
 
 ``` r
 hga_years <- unlist(lapply(listtbl, function(x) x$year))
@@ -332,7 +332,7 @@ hga_yield <-
          ) 
   )
 
-fwrite(hga_yield, here(YIELD_SUBDIR, "hga_yield.csv"))
+fwrite(hga_yield, here(SUBDIR, "hga_yield.csv"))
 
 # hga_yield table retains "Other" varieties and totals
 (hga_varieties <- 
@@ -449,7 +449,7 @@ nass_all <- nassqs(
   # yields and other data are not usually finalized until December
   filter(as.numeric(year) < year(today()))
 
-fwrite(nass_all, file = here(YIELD_SUBDIR, "nass_all_data.csv"))
+fwrite(nass_all, file = here(SUBDIR, "nass_all_data.csv"))
 ```
 
 ### Validate NASS internal reporting
@@ -579,7 +579,7 @@ nass_yield <-
     ## [71] "ZAPPA"                    "ZEUS"
 
 ``` r
-fwrite(nass_yield, file = here(YIELD_SUBDIR, "nass_yield.csv"))
+fwrite(nass_yield, file = here(SUBDIR, "nass_yield.csv"))
 ```
 
 [Back to top](#top)
@@ -747,7 +747,7 @@ tmp_yields <-
     ## # ℹ 647 more rows
 
 ``` r
-fwrite(yield_errors, here(YIELD_SUBDIR, "yield_errors.csv"))
+fwrite(yield_errors, here(SUBDIR, "yield_errors.csv"))
 
 yield_errors %>%
   mutate(abs_perc = abs(PERC_ERR),
@@ -859,7 +859,7 @@ cat(sprintf("%d outliers from IQR (%.1f%%)\n", n_out, n_out/nrow(hops_outlier_te
     ## 53 outliers from IQR (4.3%)
 
 ``` r
-fwrite(hops_outlier_test, file = here(YIELD_SUBDIR, "hops_outlier_test.csv"))
+fwrite(hops_outlier_test, file = here(SUBDIR, "hops_outlier_test.csv"))
 
 tot_yields <- select(hops_outlier_test, -q1, -q3, -iqr, -t1, -t3) %>%
   arrange(Variety, State, Year) 
@@ -951,7 +951,7 @@ n_yr <- with(tot_yields, max(Year) -min(Year) +1)
     ## # ℹ 1 more variable: complete <lgl>
 
 ``` r
-fwrite(hops_continuity_test, file = here(YIELD_SUBDIR, "hops_continuity_test.csv"))
+fwrite(hops_continuity_test, file = here(SUBDIR, "hops_continuity_test.csv"))
 
 # select yields by year for complete obs, ignoring aggregates
 hops_continuity_test %>%
@@ -978,7 +978,7 @@ lapply(keys, function(gk) {
   vn <- sprintf("hops_%s_yields", tolower(gk))
   yd <- filter(tot_yields, Group == gk) %>% 
     select(-Group)
-  fwrite(yd, file = here(YIELD_SUBDIR, paste0(vn, ".csv")))
+  fwrite(yd, file = here(SUBDIR, paste0(vn, ".csv")))
   assign(vn, value = yd, inherits = T)
 })
 ```

@@ -2,17 +2,9 @@ Hops Counties from NASS
 ================
 Don A. Lloyd
 
-Updated 23 November, 2025
+Updated 26 April, 2026
 
 <!-- 1 June 25 new Rmd for creation of hops_counties data -->
-
-``` r
-require(keyring)
-require(rnassqs) # API
-require(dplyr)
-require(tidyr) # pivot_wider
-require(here)
-```
 
 <a id="top"></a> [Obtain NASS census data](#obtain-nass-census-data)
 
@@ -41,6 +33,16 @@ county to look for the nearest environmental samplers.
 
 This write-up develops the first steps toward understanding the
 strengths and weaknesses of USDA NASS data sources.
+
+``` r
+library(keyring)
+library(rnassqs) # API
+library(dplyr)
+library(tidyr) # pivot_wider
+library(here)
+
+SUBDIR = "geo"
+```
 
 ### Obtain NASS census data
 
@@ -249,7 +251,7 @@ further, but none yet for Idaho.
     ## 8 OREGON     JOSEPHINE           2          2        2 41033
 
 ``` r
-write.csv(nass_hops_counties, here("nass_hops_counties.csv"))
+write.csv(nass_hops_counties, here(SUBDIR, "nass_hops_counties.csv"))
 ```
 
 <!-- IDAHO for year of 2023. Canyon contains the most growers. -->
@@ -284,13 +286,13 @@ Back to [top](#top)
 sessionInfo()
 ```
 
-    ## R version 4.4.3 (2025-02-28)
-    ## Platform: aarch64-apple-darwin20
-    ## Running under: macOS Monterey 12.7.6
+    ## R version 4.6.0 (2026-04-24)
+    ## Platform: aarch64-apple-darwin23
+    ## Running under: macOS Sonoma 14.8.3
     ## 
     ## Matrix products: default
-    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
     ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -302,14 +304,14 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] here_1.0.2    tidyr_1.3.1   dplyr_1.1.4   rnassqs_0.6.3 keyring_1.4.1
+    ## [1] here_1.0.2    tidyr_1.3.2   dplyr_1.2.1   rnassqs_0.6.3 keyring_1.4.1
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.5         knitr_1.50       
-    ##  [5] rlang_1.1.6       xfun_0.52         purrr_1.1.0       generics_0.1.4   
-    ##  [9] glue_1.8.0        rprojroot_2.1.0   htmltools_0.5.8.1 rmarkdown_2.30   
-    ## [13] evaluate_1.0.4    tibble_3.3.0      fastmap_1.2.0     yaml_2.3.10      
-    ## [17] lifecycle_1.0.4   compiler_4.4.3    pkgconfig_2.0.3   rstudioapi_0.17.1
-    ## [21] digest_0.6.37     R6_2.6.1          utf8_1.2.6        tidyselect_1.2.1 
-    ## [25] curl_6.4.0        pillar_1.11.0     magrittr_2.0.3    withr_3.0.2      
-    ## [29] tools_4.4.3
+    ##  [1] vctrs_0.7.3      httr_1.4.8       cli_3.6.6        knitr_1.51      
+    ##  [5] rlang_1.2.0      xfun_0.57        otel_0.2.0       purrr_1.2.2     
+    ##  [9] generics_0.1.4   glue_1.8.1       rprojroot_2.1.1  htmltools_0.5.9 
+    ## [13] rmarkdown_2.31   evaluate_1.0.5   tibble_3.3.1     fastmap_1.2.0   
+    ## [17] yaml_2.3.12      lifecycle_1.0.5  compiler_4.6.0   pkgconfig_2.0.3 
+    ## [21] digest_0.6.39    R6_2.6.1         utf8_1.2.6       tidyselect_1.2.1
+    ## [25] curl_7.1.0       pillar_1.11.1    magrittr_2.0.5   withr_3.0.2     
+    ## [29] tools_4.6.0

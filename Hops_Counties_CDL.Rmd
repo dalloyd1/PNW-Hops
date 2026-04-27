@@ -13,23 +13,23 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r libs, message=FALSE, warning=FALSE, include=TRUE}
-require(dplyr)
-require(tidyr)
-require(lubridate)
-require(ggplot2)
-require(here)
-require(keyring)
-require(CropScapeR) # API
-require(sf)
-require(terra)
-require(raster)
-require(tmap)
-require(tigris)
-require(scales)
-# require(kableExtra)
-require(tictoc)
-require(data.table) #fwrite
-require(rnassqs) # API for acreage validation
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(ggplot2)
+library(here)
+library(keyring)
+library(CropScapeR) # API
+library(sf)
+library(terra)
+library(raster)
+library(tmap)
+library(tigris)
+library(scales)
+# library(kableExtra)
+library(tictoc)
+library(data.table) #fwrite
+library(rnassqs) # API for acreage validation
 ```
 <a id="top"></a>
 [Testing CropScape Data Layer formats](#testing-cropscape-data-layer-formats) 
@@ -51,24 +51,27 @@ with Marion County, OR
 DIR_TIF <- "~/Dropbox/Data/CDL/"
 FORCE_DL_TEST_TIF = TRUE
 FORCE_RASTER_READ = FALSE
-# archival processed data
-FN_CDL_STATS <- here("cdl_stats.csv")
-FN_COUNTY_STATS = here("cdl_pnw_county_stats.csv")
-FN_HOP_PTS_RDATA = here("cdl_hops_points_by_year.Rdata")
-# FN_HOP_DSCT_PTS_RDATA = here("cdl_hops_distinct_points")
+SUBDIR <- "geo"
 
-FN_HOP_PTS_GPKG = here("cdl_hops_points_by_year.gpkg")
-# I like hops but you can try other crops in this analysis
+# archival processed data
+FN_CDL_STATS <- here(SUBDIR, "cdl_stats.csv")
+FN_COUNTY_STATS = here(SUBDIR, "cdl_pnw_county_stats.csv")
+
+FN_HOP_PTS_RDATA = here(SUBDIR, "cdl_hops_points_by_year.Rdata")
+FN_HOP_PTS_GPKG = here(SUBDIR, "cdl_hops_points_by_year.gpkg")
+
+# I obviously like hops but you can try other crops in this analysis
 CROP_LIST <- "Hops" # use c() here to vector multiple crops
 CROP_VAL <- 
   filter(linkdata, Crop %in% CROP_LIST) %>% pull(MasterCat)
 
-# we don't need US census TIGER data until late in the script but pull it early and fail faster in case the service is down
+# we don't need US census TIGER data until late in the script but pull it early to fail faster in case the service is down
+options(tigris_use_cache=TRUE)
 county_boundaries <- tigris::counties(progress_bar = FALSE)
 state_boundaries <- tigris::states(progress_bar = FALSE)
 
 set.seed(250804)
-tic()
+tic() # full script exec timer started...
 ```
 
 ### Testing CropScape Data Layer formats
@@ -213,13 +216,13 @@ cdl_hops_stats <-
   arrange(desc(MAX_AC))
 head(cdl_hops_stats, n=15)
 
-fwrite(cdl_hops_stats, here("cdl_hops_stats.csv"))
+fwrite(cdl_hops_stats, here(SUBDIR, "cdl_hops_stats.csv"))
 
 # to focus on productive counties, we will select those with positive
 # growth of at least 10 acres/yr and at least 1k acres at one time
 cdl_hops_counties <- filter(cdl_hops_stats, MEAN_GR >= 10, MAX_AC >= 1000)
 
-fwrite(cdl_hops_counties, here("cdl_hops_counties.csv"))
+fwrite(cdl_hops_counties, here(SUBDIR, "cdl_hops_counties.csv"))
 
 county_stats %>%
   filter(Category %in% CROP_LIST, 
@@ -429,9 +432,7 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
   #   Reduce(cdl_hops_point_list, function(x) distinct(x, geometry))
 
   saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
-  # saveRDS(cdl_hops_distinct_points, FN_HOP_DSCT_PTS_RDATA)
-
-  file.remove(FN_HOP_PTS_GPKG)
+  
 }
 
 # avoid the temptation to use projectRaster, transforms the Layer_1 values
@@ -468,7 +469,7 @@ cdl_hops_points_distinct <-
 toc()
 
 st_write(cdl_hops_points_distinct, 
-         here("cdl_hops_points_distinct.gpkg"), 
+         here(SUBDIR, "cdl_hops_points_distinct.gpkg"), 
          append = F, delete_dsn = F)
 ```
 
