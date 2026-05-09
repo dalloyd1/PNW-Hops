@@ -1,0 +1,1300 @@
+---
+title: "NCEI data for Analysis of Hops Yields by CDL Land-Use"
+author: "Don A. Lloyd"
+date: 2023-12-31
+modified: "`r format(Sys.time(), '%d %B, %Y')`"
+categories: [2023, ncei, cdl, climatic data]
+# description: 
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+ISSUES:
+
+`hops_counties_geo` not defined
+pnw_cdl_stations, 686
+
+<a name="top"></a> 
+
+<!-- Two approaches: use county level geography to select reporting stations to create statistical summaries. Or, find stations closest to hops growing areas identified using CDL to create summaries. The latter approach should produce a smaller set of samplers than the former. -->
+
+### Preliminaries
+
+[CDL hops assignments in PNW](#cdl-hops-assignments-in-pnw)
+
+[PNW hops growing regions](#pnw-hops-growing-regions)
+
+[CDL hops landuse statistics](#cdl-hops-landuse-statistics)
+
+### Climate statistics by hops landuse category
+
+[CDL hops landuse with GSOY](#cdl-landuse-aggregate-statistics)
+
+[CDL hops landuse with GSOM](#cdl-gsom-for-cdl-selection)
+
+[CDL Summer statistics from GSOM](#cdl_gsom-measures-for-june-july-august)
+
+```{r libs, echo=TRUE, include=TRUE, warning=FALSE, message=FALSE}
+require(readr)
+require(dplyr)
+require(tibble)
+require(tidyr) # unnest
+require(lubridate) # year
+require(zoo) # as.yearmon
+require(archive) # archive_read
+require(data.table) # fwrite
+require(ggplot2)
+require(here)
+require(stringr) # case
+
+require(tigris) # counties, states, fips_codes
+require(sf) # st_transform
+require(tmap) # tm plotting
+require(tictoc)
+
+require(rvest)
+
+not_all_na <- function(x) any(!is.na(x))
+not_any_na <- function(x) all(!is.na(x))
+
+"%ni%" <- Negate("%in%")
+
+# the rnoaa package is no longer maintained, this code now uses
+# the gsoy download file to pull the required NCDC/NCEI data
+# require(rnoaa) # ncdc_stations, use keyring::key_get("NCDC")
+# require(keyring)
+
+# 10 Mar 24 replaced summarise() with reframe() for summary statistics
+#           and added multiple distributional measures, quantiles, means
+#           for feature testing and selection
+#
+# 17 Mar 24 replaced the old rnoaa calls. rewrote the GSOY data access to 
+#           manually find stations within our hops counties using NCEI
+#           metadata for reference. station files are downloaded from
+#           their web directory
+#
+# 22 Dec 24 now using the yield reporting years to construct date
+#           ranges
+# 1 June 25 moved creation of hops_counties data to a separate Rmd
+#
+# Sept 2025 cleanup of original county level scripting. adapted and
+#           replicated much of the county analysis to use CDL hops
+#           land-use assignments
+```
+
+```{r, file="data_utilities.R"}
+```
+```{r eval=FALSE, file="read_hops_counties.R", include=FALSE}
+```
+
+```{r parameters}
+FN_COUNTIES = here("geo/cdl_hops_counties.csv")
+FN_YIELDS = here("yield/hops_us_yields.csv")
+
+FN_HOP_PTS_GPKG = here("geo/cdl_hops_points_by_year.gpkg")
+
+# source of climate station metadata, including LAT/LONG
+STATIONS_URL <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+
+# GSOY and GSOM file archives at
+GSOY_URL <- "https://www.ncei.noaa.gov/data/global-summary-of-the-year/access"
+GSOM_URL <- "https://www.ncei.noaa.gov/data/global-summary-of-the-month/access/"
+
+# See GSOY and GSOM readme for definition of observations
+# https://www.ncei.noaa.gov/pub/data/metadata/documents/GSOYReadme.txt
+# https://www.ncei.noaa.gov/pub/data/metadata/documents/GSOMReadme.txt
+
+tic() # start timer for full script processing
+```
+
+<!-- We perform these operations twice, once by county then again for hops land use assignments from CDL. -->
+
+<!-- ### Hop growing counties in PNW -->
+
+<!-- We expect environmental impacts to hop yields to be measurable locally, regardless of their source. For example wildfire smoke might negatively impact the quality and quantity of a harvest, whether the smoke originated nearby or hundreds of miles away. -->
+
+<!-- While we prefer to incorporate climate and atmospheric observations near hop fields, yields are reported only at state level not county. Climate measures, pollutant concentrations, and  air-quality factors that can impact hop harvests and yields are found in well-defined locations. For this analysis, we will use state declarations about hop growing counties to make more granular selection of meteorological and air quality samplers to prepare local observations. -->
+
+<!-- Here, we manually assign a list of hop growing counties and join their FIPS codes for reference. Later we will join each county with its geographic boundaries to help select air quality sampler locations. -->
+
+<!-- IDAHO for year of 2023. Canyon contains the most growers. -->
+<!-- https://agri.idaho.gov/main/hop-growers-in-idaho/ -->
+
+<!-- OREGON -->
+<!-- only Marion and Polk counties in Oregon grow commercially -->
+<!-- https://www.oregonencyclopedia.org/articles/hop_industry/ -->
+
+<!-- other OR counties in Willamette Valley include: -->
+<!-- Douglas, Lane, Linn, Benton, Yamhill, and Washington -->
+
+<!-- ### Assumptions and Limitations -->
+
+<!-- Counties included in this analysis were identified from state agricultural -->
+<!-- websites. -->
+<!-- _I have not yet found data about acreage or production by county over time._ This analysis assumes that the selected counties have continuously produced hops throughout the analysis period. This may overestimate the county level climate and air-quality variability if those counties' hops production have changed over time (transition to or from hops production from other crops, farmland lost to other development, etc.) -->
+
+<!-- ### NCEI Global Summary of the Year (GSOY) -->
+
+<!-- We can use geographic information from `tigris` to determine boundaries for each hops growing county from our list. -->
+
+```{r yield_years}
+yield_years <- read_csv(FN_YIELDS) %>% pull(Year)
+years <- seq(min(yield_years), max(yield_years))
+n_yr <- length(years)
+warning("Missing yield years? ", length(yield_years) < n_yr)
+
+BEGIN_DATE <- paste0(min(years), "-01-01")
+END_DATE <- paste0(max(years), "-12-31")
+```
+
+### CDL hops assignments in PNW
+
+<!-- Create the geographic boundary data for counties previously identified as hops producers. For this analysis `FN_COUNTIES` was read from "`r FN_COUNTIES`" -->
+
+```{r counties_geo, eval=FALSE, include=FALSE}
+# (hops_counties <- read_hops_counties(FN_COUNTIES))
+
+# get county geometries
+counties_geo <- 
+  counties(progress_bar = FALSE,
+           refresh = FALSE,
+           keep_zipped_shapefile = TRUE)
+
+# preserve MULTIPOLYGON geometry of counties_geo while filtering it on hops_counties and adding its attributes
+# hops_counties_geo <- 
+#   right_join(
+#     counties_geo
+#     ,dplyr::select(hops_counties, STATE = state_name, GEOID = fips)
+#     ,by = "GEOID"
+#   ) 
+
+# hops_counties_geo should be the only county level data we need for the remainder of the analysis
+# I use `rm` mainly to ensure temp variables don't get referenced unintentionally
+# rm(hops_counties) 
+```
+
+First, obtain the list of all met station locations from NCDC. 
+<!-- After omitting all outside the US, we can use `st_intersects` to find those stations within our hop county boundaries, `hops_counties_geo`. -->
+
+```{r us_stations}
+all_stations <- 
+  read_fwf(
+    STATIONS_URL, 
+    col_positions = fwf_positions(
+      c( 1, 13, 22, 32, 42, 73, 81),
+      end = c(11, 20, 30, 37, 72, 75, 85),
+      col_names = c("STATION", "LATITUDE", "LONGITUDE", "ELEVATION",
+                    "NAME", "GSN", "WMO.ID"))
+  )
+
+us_stations <- 
+  all_stations %>%
+  # exclude international stations
+  filter(grepl("^US", STATION)) %>%
+  # we don't have any reliable attributes to filter further by state
+  st_as_sf(coords = c('LONGITUDE','LATITUDE'), crs = st_crs(4269)) 
+
+nrow(us_stations)
+```
+
+```{r county_geom}
+# get county and state boundaries
+counties_geo <- 
+  tigris::counties(progress_bar = FALSE,
+                   refresh = FALSE,
+                   keep_zipped_shapefile = TRUE)
+
+states_geo <- 
+  tigris::states(progress_bar = FALSE,
+                 refresh = FALSE,
+                 keep_zipped_shapefile = TRUE)
+
+hops_counties_geo <-
+  # using right_join to preserve MULTIPOLYGON geometry from counties_geo
+  counties_geo %>%
+  right_join(
+    read.csv(FN_COUNTIES) %>%
+      mutate(FIPS = as.character(FIPS))
+  ,by=c("GEOID"="FIPS"))
+```
+
+The POINT geometry sampled from CDL hops assignments were limited to PNW counties meeting minimums for hops acreage and acreage growth over time. The sample retain the original POINT geometry and resolution attributes by year from CDL, and the full FIPS code assigned from the CDL geometry. We will use FIPS to assign other county level attributes from `counties::tigris` to each point.
+
+```{r pnw_cdl_stations}
+tic()
+
+# the CDL dataset contains a few million points that are distinguishable
+# only by their POINT geometry and year of observation. it is very inefficient to
+# reduce the set to unique points using `distinct` so we won't do that
+
+# ultimately we want to augment the original cdl_points list with
+#  1. the closest NOAA met station
+#  2. the county location of the closest NOAA met station 
+#  3. the county location of the CDL point
+
+# county assigned to each row of cdl_points
+
+# (hops_counties <- read.csv(FN_COUNTIES))
+
+tic()
+cdl_points <- 
+  st_read(FN_HOP_PTS_GPKG) %>% # saved with EPSG:5070 Conus Albers NAD83
+  st_transform(crs = 4269) # %>% # NAD83
+  # assigns the COUNTY (=NAME) of each CDL hops land use point
+  # from `counties_geo`
+  # left_join(st_drop_geometry(counties_geo), by=c("fips"="GEOID")) %>%
+  # rename(COUNTY=NAME)
+toc()
+
+# next, we want to assign an NOAA met station to each CDL point, but the
+# efficiency of obtaining a result will depend on the order in which we
+# discard the respective geometries and filter with other attributes...
+# this is the most efficient approach I have found despite appearances.
+
+# to isolate unique stations, we will want to drop the year of CDL
+# observation and select `distinct` points. but this is much easier to do 
+# after also dropping geometries...
+
+# find closest station to each CDL hops assignment
+# closest station may be outside county boundaries, including out of state
+# one us_station assigned to each row of cdl_points
+# indices of us_stations that are closest to each hops CDL point
+# for analysis we want to keep the CDL state and county assignments
+# NOT those of the us_stations that might be in adjacent counties 
+# (or a different state)
+# tic()
+
+idx_closest_stations <- st_nearest_feature(cdl_points, us_stations)
+
+tic()
+# selects unique NOAA stations with proximity to at least one CDL point
+# and assigns the COUNTY of each station's location
+# retains the us_stations POINT geometry
+unique_cdl_stations <- 
+  # filter unique stations closest to any CDL point (from nearest feature)
+  us_stations %>%
+  slice(unique(idx_closest_stations)) %>%
+  st_intersection(
+    # assign each station point to a state/county pair by county MULTIPOLYGON
+    left_join(counties_geo %>%
+                select(STATEFP, GEOID, COUNTY=NAME)
+              # retains county geometries for st_intersection with cdl_points
+              ,states_geo %>%
+                st_drop_geometry() %>%
+                select(STATEFP, STUSPS, STATE=NAME)
+              ,by="STATEFP") %>%
+      filter(STUSPS %in% c("ID","OR","WA"))
+  ) %>%
+  # retain the station geometry for plotting
+  select(STATION, STN_GEOID=GEOID, STN_COUNTY=COUNTY, STN_STATE=STATE)
+toc()
+
+tic()
+tm_shape(cdl_points) +
+  tm_dots(
+    fill = 'forestgreen',
+    size = 0.05,
+    fill_alpha = 0.1) +
+  tm_shape(counties_geo) +
+  tm_borders(
+    col = "grey"
+  ) +
+  tm_shape(states_geo) +
+  tm_borders() +
+  tm_shape(unique_cdl_stations) +
+  tm_dots(
+    size = 0.10,
+    fill_alpha = 0.5)
+toc()
+
+# longform cdl_stations with station POINT geometry
+tic()
+cdl_stations <-
+  us_stations %>%
+  slice(idx_closest_stations) %>%
+  st_drop_geometry() %>%
+  select(-GSN, -WMO.ID) %>%
+  left_join(unique_cdl_stations)
+toc()
+
+# this is a vector of met stations closest to each CDL hops point
+# both are POINT geometries
+# n.b. st_nearest_feature is designed to efficiently find the closest point in the second arg to each point in the first arg
+idx_closest_counties <- st_nearest_feature(cdl_points, counties_geo)
+
+tic()
+pnw_cdl_stations <-
+  # use slice to ensure the stations and counties match the CDL order
+  cbindlist(
+    list(
+      cdl_points %>%
+        st_drop_geometry() 
+      ,counties_geo %>%
+        st_drop_geometry() %>%
+        slice(idx_closest_counties) %>%
+        select(GEOID, COUNTY=NAME)
+      ,cdl_stations %>%
+        st_drop_geometry()
+    ))
+toc()
+head(pnw_cdl_stations)
+
+# here we have some differences in the performance of `st_intersection` used to assign the fips for the county in which a CDL hops point was found, and `st_nearest_feature` used to assign each CDL point to its county in the preceding lines. 
+xtabs(~ fips + COUNTY, data=pnw_cdl_stations)
+
+# pnw_cdl_stations_qnd <-
+#   cbindlist(list(
+#     cdl_points %>%
+#       st_drop_geometry()
+#     ,cdl_stations <-
+#       us_stations %>%
+#       slice(idx_closest_stations) %>%
+#       st_drop_geometry() %>%
+#       select(-GSN, -WMO.ID) 
+#   ))
+# 
+
+# this lists the stations assigned to each CDL point by year
+# pnw_cdl_stations <-
+  # pnw_cdl_stations_details %>%
+  # recall STATE, COUNTY and FIPS refer to the hops county, not STATION county
+  # dplyr::select(STATION, NAME, STATE, COUNTY, FIPS=fips) %>%
+  # dplyr::select(STATION, NAME, COUNTY, FIPS=fips) %>%
+  # now retain all unique pairings of STATION and COUNTY
+  # distinct()
+
+# as of Apr 2026 we have a new problem that can't be solved with `distinct` -- resolved by dropping COUNTY name from data set
+
+# unique_pnw_cdl_stations <-
+
+# select(pnw_cdl_stations, -year) %>% distinct
+
+# tic(); unique_cdl_points <- select(cdl_points, -year) %>% distinct; toc()
+
+# xtabs(~ STATE, pnw_cdl_stations)
+# xtabs(~ COUNTY, pnw_cdl_stations)
+
+# idx_unique_closest <- unique(idx_closest_stations)
+
+# this is only required to plot the selected stations and
+# CDL hops land use points, this takes time to prepare and
+# is entirely optional
+# cdl_gsoy_stations_plot <- 
+#   slice(us_stations, idx_closest_stations) %>%
+#   st_join(rename(counties_geo, COUNTY=NAME)) %>%
+#   cbind(st_drop_geometry(cdl_points))
+# 'GEOID' is the FIPS for each station, 'fips' is the FIPS for the CDL hops point
+# toc()
+
+# stations nearest CDL hops land use assignments
+# unique(cdl_gsoy_stations$GEOID)
+# counties for CDL hops land use assignments
+# unique(cdl_gsoy_stations$fips)
+
+# tic()
+# tm_shape(hops_counties_geo) +
+#   tm_borders() +
+#   tm_facets(by = "NAME") +
+#   tm_shape(cdl_points) +
+#   tm_dots(fill='grey', size=0.15) +
+#   tm_shape(cdl_gsoy_stations_plot) +
+#   tm_dots(fill='blue', size=0.25)
+# toc()
+
+# drop large dataset
+# rm(cdl_points)
+
+# rm(hops_counties_geo)
+
+toc()
+```
+
+```{r pnw_county_stations, eval=FALSE, include=FALSE}
+# find US met station coordinates that are within the boundary of any of hops_counties_geo 
+# using default model for `st_intersects`
+tic()
+tmp <- st_intersects(hops_counties_geo, us_stations, sparse = FALSE) 
+# then assign the county names to each station
+
+pnw_county_stations <-
+  us_stations %>%
+  # n.b. this assigns COUNTY from the vectors produced by st_intersection
+  mutate(COUNTY = apply(tmp, 2, function(x) hops_counties_geo[which(x),]$NAME)) %>%
+  unnest(COUNTY) %>% # un-nesting empty lists drops the corresponding table row...
+  # keeps the POINT geometry of us_stations while assigning STATE
+  st_join(dplyr::select(hops_counties_geo, -NAME)) 
+toc()
+
+# we now have the set of all stations within our PNW hops growing counties
+# will explore their limitations next...
+
+# remove large temporary datasets
+rm(all_stations, tmp)
+
+# show samplers within county and state boundaries
+states_geo <- states(progress_bar = FALSE,
+                         refresh = FALSE,
+                         keep_zipped_shapefile = TRUE)
+
+tm_shape(hops_counties_geo) +
+  tm_borders() +
+  tm_text('NAME') +
+  tm_shape(pnw_county_stations) +
+  tm_dots(fill='blue', size=0.05) +
+  tm_shape(states_geo) +
+  tm_borders()
+```
+
+<!-- ## County aggregate statistics -->
+
+<!-- ### NCEI Global Summary of the Year -->
+
+<!-- Now we have a list of met stations within the boundaries of each hop growing county. Not all stations are active throughout the timespan of our hops reporting, but eliminating those that do not overlap our yield data is straightforward.  -->
+
+<!-- This is not the most efficient solution but we will scan each candidate station and filter for reporting within. A better approach is to keep a local list of stations that contribute with the number of years of reporting within our timespan and, separately keep a list of stations we can safely omit. We could also prioritize stations that have long reporting histories over those with just a few observations. -->
+
+<!-- We can check which stations provide continuous reporting by year, but sometimes the reporting is incomplete within the file. -->
+
+```{r hops_county_gsoy_continuity, eval=FALSE, include=FALSE}
+hops_county_gsoy_continuity <- 
+  hops_county_gsoy %>%
+  filter(DATE %in% years) %>%
+  reframe(run_continuity(DATE, n_yr), .by="STATION")
+
+(arrange(hops_county_gsoy_continuity, desc(recent)))
+
+hops_county_gsoy_continuity %>%
+  left_join(pnw_county_stations, by="STATION") %>%
+  ggplot(aes(x=recent, fill=STATE)) +
+  labs(title = "Number of stations vs. Number of recent observations", x="# Recent obs") +
+  geom_bar() 
+
+fwrite(hops_county_gsoy_continuity, here("hops_county_gsoy_continuity.csv"))
+```
+
+```{r hops_pnw_gsoy, eval=FALSE, include=FALSE}
+# for all stations in our hops county regions, assign the hops county attributes by STATION
+# we have already dropped the geometry from `hops_county_gsoy`
+# n.b. ELEVATION and NAME are not consistent across us_stations (via pnw_county_stations) and the GSOY reporting
+hops_pnw_gsoy <- 
+  left_join(
+    hops_county_gsoy
+    ,pnw_county_stations %>%
+      dplyr::select(-ELEVATION, -NAME) %>%
+      st_drop_geometry()
+    ,by="STATION"
+  ) %>%
+  dplyr::select(names(.), YEAR=DATE, -LATITUDE, -LONGITUDE,  -ends_with("ATTRIBUTES")) %>%
+  arrange(STATION, YEAR)
+```
+
+```{r gsoy_PRCP_dist_1, eval=FALSE, include=FALSE}
+hops_pnw_gsoy %>%
+  # using group to perform boxplot stats by DATE
+  ggplot(aes(x=YEAR, y=PRCP, group=YEAR, color=COUNTY)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ COUNTY)
+```
+
+Combining counties by state, hop counties in Oregon see consistently higher rainfall and more variability than Idaho or Washington, both of which are more variable in rain totals. This is primarily a Cascade effect. The Yakima River Valley on the east slope of the Cascades gets far less rainfall than the Willamette River Valley on the west slope. Extreme rainfall amounts in Idaho and Washington are comparable to those in Oregon.
+
+```{r gsoy_PRCP_dist_2, eval=FALSE, include=FALSE}
+hops_pnw_gsoy %>%
+  ggplot(aes(x=YEAR, y=PRCP, group=YEAR, color=STATE)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ STATE)
+```
+
+```{r gsoy_TAVG_dist, eval=FALSE, include=FALSE}
+hops_pnw_gsoy %>%
+  ggplot(aes(x=YEAR, y=TAVG, group=YEAR, color=COUNTY)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ COUNTY)
+
+hops_pnw_gsoy %>%
+  ggplot(aes(x=YEAR, y=TAVG, group=YEAR, color=STATE)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ STATE)
+```
+
+<!-- Canyon County, ID has good rainfall coverage, but only irregularly reports temperature data. Incomplete NCEI series will interfere with modeling the yields.  -->
+
+```{r hops_summaries_gsoy, eval=FALSE, include=FALSE}
+hops_pnw_summaries_gsoy <- 
+  hops_pnw_gsoy %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = YEAR
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_pnw_summaries_gsoy
+
+fwrite(hops_pnw_summaries_gsoy, file = here("hops_pnw_summaries_gsoy.csv"))
+
+hops_state_summaries_gsoy <- 
+  hops_pnw_gsoy %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = c(STATE, YEAR)
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_state_summaries_gsoy
+
+fwrite(hops_state_summaries_gsoy, file = here("hops_state_summaries_gsoy.csv"))
+```
+
+```{r region_avg_plots, eval=FALSE, include=FALSE}
+# demo a plot of avg PRCP over time
+hops_state_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=PRCP_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_summaries_gsoy,
+            aes(x=YEAR, y=PRCP_AVG), 
+            color="black", linetype="dashed")
+
+# demo a plot of avg EMXT (annual extreme max temp) over time
+hops_state_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=EMXT_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_summaries_gsoy,
+            aes(x=YEAR, y=EMXT_AVG), 
+            color="black", linetype="dashed")
+
+# demo a plot of avg TAVG over time(!)
+hops_state_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=TAVG_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_summaries_gsoy,
+            aes(x=YEAR, y=TAVG_AVG), 
+            color="black", linetype="dashed")
+
+# demo a plot of avg DT32 over time
+hops_state_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=DT32_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_summaries_gsoy,
+            aes(x=YEAR, y=DT32_AVG), 
+            color="black", linetype="dashed")
+```
+
+<!-- *This requires explanation for what we are trying to accomplish* -->
+
+```{r NEEDS_WORK_kmeans_outliers, eval=FALSE, include=FALSE}
+tmp <- 
+  hops_pnw_summaries_gsoy %>%
+  # filter(YEAR < 2024) %>%
+  select(where(is.numeric), -n, -YEAR) %>%
+  select_if(not_any_na) %>%
+  data.frame # %>%
+  # View()
+
+# pcatmp <- prcomp(tmp)
+
+km <- kmeans(tmp, centers = 1, algorithm = "Lloyd")
+(km$size)
+km_centers <- km$centers[km$cluster,]
+tmp %>%
+  mutate(d = sqrt(rowSums((tmp - km_centers)^2))
+         ,cluster = km$cluster
+         ,orig = row_number()
+  ) %>%
+  arrange(desc(d)) %>%
+  select(orig, d, cluster) %>%
+  print()
+```
+
+```{r gsom_station_continuity, eval=FALSE, include=FALSE}
+ymlist <- unique(sort(hops_county_gsom$DATE))
+n_obs <- length(ymlist)
+
+hops_county_gsom_continuity <- 
+  hops_county_gsom %>%
+  mutate(YMIDX = match(DATE, ymlist)) %>%
+  filter(YEAR %in% years) %>%
+  reframe(run_continuity(YMIDX, n_obs, verbose=F), .by=c("STATION")) %>%
+  mutate(i=start, j=end
+         ,start = ymlist[i]
+         ,end = ymlist[j]
+  )
+
+(arrange(hops_county_gsom_continuity, desc(recent)))
+
+fwrite(hops_county_gsom_continuity, here("hops_county_gsom_continuity.csv"))
+```
+
+```{r hops_pnw_gsom, eval=FALSE, include=FALSE}
+hops_pnw_gsom <- 
+  left_join(
+    hops_county_gsom
+    ,pnw_county_stations %>%
+      dplyr::select(-ELEVATION, -NAME) %>%
+      st_drop_geometry()
+    ,by="STATION"
+  ) %>%
+  dplyr::select(names(.), -LATITUDE, -LONGITUDE,  -ends_with("ATTRIBUTES"))
+
+hops_pnw_gsom %>%
+  # using group to perform boxplot stats by DATE
+  ggplot(aes(x=YEAR, y=PRCP, group=YEAR, color=COUNTY)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ COUNTY)
+```
+
+```{r hops_summaries_gsom, eval=FALSE, include=FALSE}
+hops_pnw_summaries_gsom <- 
+  hops_pnw_gsom %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = YEAR
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_pnw_summaries_gsom
+
+fwrite(hops_pnw_summaries_gsom, here("hops_pnw_summaries_gsom.csv"))
+
+hops_state_summaries_gsom <- 
+  hops_pnw_gsom %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = c(STATE, YEAR)
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_state_summaries_gsom
+
+fwrite(hops_state_summaries_gsom, here("hops_state_summaries_gsom.csv"))
+```
+
+<!-- ## GSOM measures for June-July-August -->
+
+```{r hops_summer_gsom, eval=FALSE, include=FALSE}
+# this reproduces the author's dfn of Climate Factor (CF)
+hops_state_summer_gsom <- 
+  hops_pnw_gsom %>%
+  filter(MONTH %in% 6:8) %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = c(STATE, YEAR)
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_state_summer_gsom
+
+fwrite(hops_state_summer_gsom, here("hops_state_summer_gsom.csv"))
+
+hops_state_summer_gsom %>%
+  ggplot(aes(x=YEAR, y=PRCP_AVG, color=STATE)) +
+  geom_line(linetype="dashed") +
+   geom_line(data = hops_state_summaries_gsom,
+             aes(x=YEAR, y=PRCP_AVG)) +
+  facet_wrap(~ STATE)
+
+# close county level timer
+toc()
+```
+
+```{r wipe_county_outputs, eval=FALSE, include=FALSE}
+rm(
+  hops_county_gsoy
+  ,hops_county_gsoy_continuity
+  ,hops_pnw_summaries_gsoy
+  ,hops_state_summaries_gsoy
+  ,hops_county_gsom
+  ,hops_county_gsom_continuity
+  ,hops_pnw_summaries_gsom
+  ,hops_state_summaries_gsom
+  ,hops_state_summer_gsom
+)
+```
+
+## CDL hops landuse statistics
+
+### NCEI GSOY for CDL selection
+
+```{r gsoy_stations}
+gsoy_csv <- 
+  read_html(GSOY_URL) %>%
+  html_elements("a") %>%
+  html_attr("href") %>%
+  grep("\\.csv$", ., value = TRUE) %>%
+  tibble(csv = .) %>%
+  mutate(STATION = tools::file_path_sans_ext(csv))
+
+nrow(gsoy_csv)
+
+# not all stations listed in `STATIONS_URL` are reported in gsoy
+# check for missing station files among our PNW county set
+# check_gsoy_csv <- 
+#   left_join(pnw_county_stations, gsoy_csv, by = "STATION") %>%
+#   mutate(`csv found` = !is.na(csv))
+# 
+# xtabs(~ STATE + `csv found`, check_gsoy_csv)
+# xtabs(~ COUNTY + `csv found`, check_gsoy_csv)
+# 
+# # retain stations within our area of interest (AOI)
+# # that have csv reporting in the GSOY archive
+# gsoy_stations <- filter(check_gsoy_csv, `csv found`) %>% 
+#   pull(csv)
+
+# compile data from all stations in counties of interest
+# some stations in our AOI might not report for any of the years
+# we are interested in... but we won't know until we read their tables.
+# tic()
+# hops_county_gsoy <- 
+#   lapply(gsoy_stations, function(fn) {
+#     read_csv(paste(GSOY_URL, fn, sep = "/"), col_types = cols()) %>%
+#       mutate(across(ends_with("_ATTRIBUTES"), function(a) as.character(a)))
+#   }) %>%
+#   bind_rows %>%
+#   filter(DATE >= year(BEGIN_DATE))
+# toc()
+# 
+# fwrite(hops_county_gsoy, here("hops_county_gsoy.csv"))
+```
+
+Find the met station closest to each CDL assigned hops assignments.
+
+```{r cdl_gsoy_stations}
+# use the previously defined gsoy_csv
+check_cdl_gsoy_csv <- 
+  left_join(unique_cdl_stations, gsoy_csv, by = "STATION") %>%
+  mutate(`csv found` = !is.na(csv))
+
+# xtabs(~ STATE + `csv found`, check_cdl_gsoy_csv)
+xtabs(~ STN_COUNTY + `csv found`, check_cdl_gsoy_csv)
+
+# retain stations within our area of interest (AOI)
+# that have csv reporting in the GSOY archive
+cdl_gsoy_stations <- filter(check_cdl_gsoy_csv, `csv found`) %>%
+  pull(csv) %>%
+  unique() # added 20260502 ensure we aren't stupidly hammering NOAA
+
+# quick count of reporting stations in each county
+# xtabs(~ COUNTY, cdl_gsoy_stations)
+
+# check whether some counties are simply not represented in NCEI GSOY
+# filter(hops_counties_geo, NAME %ni% cdl_gsoy_stations$COUNTY) %>% nrow
+
+# some stations in our AOI might not report for any of the years
+# we are interested in, but we won't know until we read their
+# tables.
+tic()
+
+hops_cdl_gsoy_1 <-
+  lapply(cdl_gsoy_stations, function(fn) {
+    read_csv(paste(GSOY_URL, fn, sep = "/"), col_types = cols()) %>%
+      mutate(across(ends_with("_ATTRIBUTES"), function(a) as.character(a))) 
+  }) %>%
+  bind_rows 
+
+hops_cdl_gsoy <-
+  hops_cdl_gsoy_1 %>%
+  filter(DATE >= year(BEGIN_DATE)) %>%
+    dplyr::select(names(.), YEAR=DATE, -LATITUDE, -LONGITUDE,  -ends_with("ATTRIBUTES")) %>%
+  left_join(pnw_cdl_stations, by=c("STATION", "ELEVATION", "NAME")) %>%
+  arrange(STATION, YEAR)
+
+toc()
+
+fwrite(hops_cdl_gsoy, here("hops_cdl_gsoy.csv"))
+```
+
+```{r hops_cdl_gsoy_continuity}
+hops_cdl_gsoy_continuity <- 
+  hops_cdl_gsoy %>%
+  filter(YEAR %in% years) %>%
+  reframe(run_continuity(YEAR, n_yr), .by=c("STATION")) 
+
+(arrange(hops_cdl_gsoy_continuity, desc(recent)))
+
+hops_cdl_gsoy_continuity %>%
+  left_join(pnw_cdl_stations, by="STATION") %>%
+  ggplot(aes(x=recent, fill=STN_STATE)) +
+  labs(title = "Number of stations vs. Number of recent observations", x="# Recent obs") +
+  geom_bar()
+
+fwrite(hops_cdl_gsoy_continuity, here("hops_cdl_gsoy_continuity.csv"))
+```
+
+```{r hops_cdl_gsoy, eval=FALSE, include=FALSE}
+# n.b. ELEVATION and NAME are not consistent across us_stations (via ncei_pnw_stations) and the GSOY reporting
+hops_cdl_gsoy <-
+  left_join(
+    hops_cdl_gsoy
+    ,pnw_cdl_stations %>%
+      dplyr::select(-NAME) %>%
+      st_drop_geometry()
+    ,by="STATION"
+  ) %>%
+  dplyr::select(names(.), YEAR=DATE, -LATITUDE, -LONGITUDE,  -ends_with("ATTRIBUTES")) %>%
+  arrange(STATION, YEAR)
+```
+
+Temps are in degrees C
+PRCP in mm to tenths
+
+Observations from different met stations form a distribution by county for each reported year. For now we will sample the distributions of each observable at select quantiles, and take the mean. We will do so for both the PNW region and individual states.
+
+From a boxplot of PRCP, total annual precipitation in mm, we can see the variability in county wide measurements. Benton (WA) and Canyon (ID) show  little variation across different samplers. This may be a consequence of proximity of sampler placement, or geographic features of the growing region within these counties. Boundary (ID) has the fewest reporting samplers among hop growing counties but shows much more variability, possibly because of geographic features that can influence rainfall. Other counties show even more variability -- and more outliers. Marion and Polk counties generally receive much more rainfall than any in ID (Canyon, Boundary, Owyhee, Twin Falls). 
+
+Precipitation in Benton and Canyon counties may offer few opportunities to explain variation in hop yields. Since we don't have county-level yield data, we will combine precipitation observations within each state, and use statistics from the combined distributions as candidate explanatory variables.
+
+```{r cdl_gsoy_PRCP_dist_1}
+hops_cdl_gsoy %>%
+  # using group to perform boxplot stats by DATE
+  ggplot(aes(x=YEAR, y=PRCP, group=YEAR, color=COUNTY)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ COUNTY)
+```
+
+This reproduces the other plots previously shown from county level summaries for precipitation (PRCP) and average temperature (TAVG), now using stations assigned with CDL locations for state and county.
+
+```{r cdl_gsoy_PRCP_dist_2}
+hops_cdl_gsoy %>%
+  ggplot(aes(x=YEAR, y=PRCP, group=YEAR, color=STATE)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ STATE)
+```
+
+```{r cdl_gsoy_TAVG_dist}
+hops_cdl_gsoy %>%
+  ggplot(aes(x=YEAR, y=TAVG, group=YEAR, color=COUNTY)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ COUNTY)
+
+hops_cdl_gsoy %>%
+  ggplot(aes(x=YEAR, y=TAVG, group=YEAR, color=STATE)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ STATE)
+```
+
+```{r cdl_hops_summaries_gsoy}
+hops_pnw_cdl_summaries_gsoy <- 
+  hops_cdl_gsoy %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = YEAR
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_pnw_cdl_summaries_gsoy
+
+fwrite(hops_pnw_cdl_summaries_gsoy, file = here("hops_pnw_cdl_summaries_gsoy.csv"))
+
+hops_state_cdl_summaries_gsoy <- 
+  hops_cdl_gsoy %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = c(STATE, YEAR)
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_state_cdl_summaries_gsoy
+
+fwrite(hops_state_cdl_summaries_gsoy, file = here("hops_state_cdl_summaries_gsoy.csv"))
+```
+
+```{r cdl_region_avg_plots}
+# demo a plot of avg PRCP over time
+hops_state_cdl_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=PRCP_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_cdl_summaries_gsoy,
+            aes(x=YEAR, y=PRCP_AVG), 
+            color="black", linetype="dashed")
+
+# demo a plot of avg EMXT (annual extreme max temp) over time
+hops_state_cdl_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=EMXT_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_cdl_summaries_gsoy,
+            aes(x=YEAR, y=EMXT_AVG), 
+            color="black", linetype="dashed")
+
+# demo a plot of avg TAVG over time(!)
+hops_state_cdl_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=TAVG_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_cdl_summaries_gsoy,
+            aes(x=YEAR, y=TAVG_AVG), 
+            color="black", linetype="dashed")
+
+# demo a plot of avg DT32 over time
+hops_state_cdl_summaries_gsoy %>%
+  ggplot(aes(x=YEAR, y=DT32_AVG, color=STATE)) +
+  geom_line() +
+  geom_line(data = hops_pnw_cdl_summaries_gsoy,
+            aes(x=YEAR, y=DT32_AVG), 
+            color="black", linetype="dashed")
+```
+
+[Back to top](#top)
+
+### NCEI GSOM for CDL selection
+
+<!-- ### NCEI Global Summary of the Month -->
+
+To follow the analysis of F&S we can repeat the data collection using monthly instead of yearly summaries, then create summaries for observations from June through August. Outputs will have appended `jja` to the filename.
+
+It appears that some stations that report monthly do so irregularly enough that they don't contribute to yearly summaries.
+
+```{r gsom_stations}
+gsom_csv <- 
+  read_html(GSOM_URL) %>%
+  html_elements("a") %>%
+  html_attr("href") %>%
+  grep("\\.csv$", ., value = TRUE) %>%
+  tibble(csv = .) %>%
+  mutate(STATION = tools::file_path_sans_ext(csv))
+
+nrow(gsom_csv)
+
+# not all stations are actually reported in gsom
+# check for missing station files among our pnw set
+# check_gsom_csv <-
+#   left_join(pnw_county_stations, gsom_csv, by = "STATION") %>%
+#   mutate(`csv found` = !is.na(csv))
+
+# quick count of reporting stations in each county
+# CHANGE ASSIGNMENT TO MAKE FILE NOT MISSING EASIER TO INTERPRET
+# xtabs(~ STATE + `csv found`, check_gsom_csv)
+# xtabs(~ COUNTY + `csv found`, check_gsom_csv)
+
+# first cut retains stations within our area of interest (AOI)
+# that have csv reporting in the GSOM archive
+# gsom_stations <- filter(check_gsom_csv, `csv found`) %>% 
+  # pull(csv)
+# hops_county_stations_gsom <- 
+#   check_stations_gsom %>%
+#   filter(!`missing csv`) %>%
+#   dplyr::select(-`missing csv`)
+
+# quick count of reporting stations in each county
+# xtabs(~ COUNTY, hops_county_stations_gsom)
+
+# show stations that report too infrequently to be captured in yearly summaries
+# filter(hops_counties_geo, NAME %ni% hops_county_stations_gsom$COUNTY) %>% nrow
+
+# check for stations in our AOI missing from our existing data set 
+# print(missing_stations <- setdiff(hops_county_stations_gsom$STATION, last_stations_gsom))
+
+# cat(sprintf("scraping %d stations\n", length(gsom_stations)))
+
+# tic()
+# hops_county_gsom <- 
+#   lapply(gsom_stations, function(fn) {
+#     read_csv(paste(GSOM_URL, fn, sep = "/"), col_types = cols()) %>%
+#       # binding sub-tables is more reliable by assigning attributes per table
+#       # we can manage memory a little more efficiently by also filtering
+#       # sub-tables on DATE attributes per table
+#       mutate(across(ends_with("_ATTRIBUTES"), function(a) as.character(a))
+#              ,DATE = zoo::as.yearmon(DATE)
+#              ,YEAR = lubridate::year(DATE)
+#              ,MONTH = lubridate::month(DATE)
+#       ) %>%
+#       filter(YEAR >= year(BEGIN_DATE)) # eliminate obs outside our yield dates
+#   }) %>%
+#   bind_rows
+# toc()
+
+# fwrite(gsom_csv, here("gsom_csv.csv"))
+# fwrite(check_stations_gsom, here("check_stations_gsom.csv"))
+
+# rm(gsom_csv, check_gsom_csv)
+
+# fwrite(st_drop_geometry(hops_county_stations_gsom), here("hops_county_stations_gsom.csv"))
+# fwrite(hops_gsom, here("hops_gsom.csv"))
+# fwrite(hops_county_gsom, here("hops_county_gsom.csv"))
+```
+
+```{r cdl_gsom_stations}
+# not all stations are actually reported in gsom
+# check for missing station files among our pnw set
+check_cdl_gsom_csv <- 
+  left_join(pnw_cdl_stations, gsom_csv, by = "STATION") %>%
+  mutate(`csv found` = !is.na(csv))
+
+# quick count of reporting stations in each county
+# CHANGE ASSIGNMENT TO MAKE FILE NOT MISSING EASIER TO INTERPRET
+# xtabs(~ STATE + `csv found`, check_cdl_gsom_csv)
+xtabs(~ COUNTY + `csv found`, check_cdl_gsom_csv)
+
+# first cut retains stations within our area of interest (AOI)
+# that have csv reporting in the GSOM archive
+cdl_gsom_stations <- filter(check_cdl_gsom_csv, `csv found`) %>% 
+  pull(csv) %>%
+  unique()
+
+# hops_county_stations_gsom <- 
+#   check_stations_gsom %>%
+#   filter(!`missing csv`) %>%
+#   dplyr::select(-`missing csv`)
+
+# quick count of reporting stations in each county
+# xtabs(~ COUNTY, hops_county_stations_gsom)
+
+# show stations that report too infrequently to be captured in yearly summaries
+# filter(hops_counties_geo, NAME %ni% hops_county_stations_gsom$COUNTY) %>% nrow
+
+# check for stations in our AOI missing from our existing data set 
+# print(missing_stations <- setdiff(hops_county_stations_gsom$STATION, last_stations_gsom))
+
+cat(sprintf("scraping %d stations\n", length(cdl_gsom_stations)))
+
+tic()
+hops_cdl_gsom <- 
+  lapply(cdl_gsom_stations, function(fn) {
+    read_csv(paste(GSOM_URL, fn, sep = "/"), col_types = cols()) %>%
+      # binding sub-tables is more reliable by assigning attributes per table
+      # we can manage memory a little more efficiently by also filtering
+      # sub-tables on DATE attributes per table
+      mutate(across(ends_with("_ATTRIBUTES"), function(a) as.character(a))
+             ,DATE = zoo::as.yearmon(DATE)
+             ,YEAR = lubridate::year(DATE)
+             ,MONTH = lubridate::month(DATE)
+      ) %>%
+      filter(YEAR >= year(BEGIN_DATE)) # eliminate obs outside our yield dates
+  }) %>%
+  bind_rows
+toc()
+
+# fwrite(gsom_csv, here("gsom_csv.csv"))
+# fwrite(check_stations_gsom, here("check_stations_gsom.csv"))
+
+# rm(gsom_csv, check_gsom_csv)
+
+# fwrite(st_drop_geometry(hops_county_stations_gsom), here("hops_county_stations_gsom.csv"))
+# fwrite(hops_gsom, here("hops_gsom.csv"))
+fwrite(hops_cdl_gsom, here("hops_cdl_gsom.csv"))
+```
+
+```{r cdl_gsom_station_continuity}
+ymlist <- unique(sort(hops_cdl_gsom$DATE))
+n_obs <- length(ymlist)
+
+hops_cdl_gsom_continuity <- 
+  hops_cdl_gsom %>%
+  mutate(YMIDX = match(DATE, ymlist)) %>%
+  filter(YEAR %in% years) %>%
+  reframe(run_continuity(YMIDX, n_obs, verbose=F), .by=c("STATION")) %>%
+  mutate(i=start, j=end
+         ,start = ymlist[i]
+         ,end = ymlist[j]
+  )
+
+(arrange(hops_cdl_gsom_continuity, desc(recent)))
+
+fwrite(hops_cdl_gsom_continuity, here("hops_cdl_gsom_continuity.csv"))
+```
+
+```{r hops_cdl_gsom}
+hops_cdl_gsom <- 
+  left_join(
+    hops_cdl_gsom
+    ,pnw_cdl_stations %>%
+      dplyr::select(-NAME) %>%
+      st_drop_geometry()
+    ,by="STATION"
+  ) %>%
+  dplyr::select(names(.), -LATITUDE, -LONGITUDE,  -ends_with("ATTRIBUTES"))
+
+hops_cdl_gsom %>%
+  # using group to perform boxplot stats by DATE
+  ggplot(aes(x=YEAR, y=PRCP, group=YEAR, color=COUNTY)) +
+  geom_boxplot(show.legend = FALSE) +
+  facet_wrap(~ COUNTY)
+```
+
+```{r hops_cdl_summaries_gsom}
+(hops_cdl_summaries_gsom <- 
+  hops_cdl_gsom %>%
+  # dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = YEAR
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+)
+
+fwrite(hops_cdl_summaries_gsom, here("hops_cdl_summaries_gsom.csv"))
+
+(hops_cdl_state_summaries_gsom <- 
+  hops_cdl_gsom %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = c(STATE, YEAR)
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+)
+
+fwrite(hops_cdl_state_summaries_gsom, here("hops_cdl_state_summaries_gsom.csv"))
+```
+
+## CDL GSOM measures for June-July-August
+
+```{r hops_cdl_summer_gsom}
+# this reproduces the author's dfn of Climate Factor (CF)
+hops_cdl_state_summer_gsom <- 
+  hops_cdl_gsom %>%
+  filter(MONTH %in% 6:8) %>%
+  dplyr::select(names(.), -ELEVATION) %>%
+  reframe(across(
+    .cols = where(is.numeric),
+    .fns = function(x) tibble(
+      n = n()
+      ,`10` = quantile(x, 0.1, na.rm = TRUE)
+      ,`50` = quantile(x, 0.5, na.rm = TRUE)
+      ,`90` = quantile(x, 0.9, na.rm = TRUE)
+      ,`AVG` = mean(x, na.rm = TRUE)
+    ), .unpack = TRUE)
+    , .by = c(STATE, YEAR)
+  ) %>%
+  arrange(.by_group = TRUE) %>%
+  rename_at(grep("_n$", colnames(.))[1], ~ "n") %>%
+  dplyr::select(-ends_with("_n"))
+hops_cdl_state_summer_gsom
+
+fwrite(hops_cdl_state_summer_gsom, here("hops_cdl_state_summer_gsom.csv"))
+
+hops_cdl_state_summer_gsom %>%
+  ggplot(aes(x=YEAR, y=PRCP_AVG, color=STATE)) +
+  geom_line(linetype="dashed") +
+   geom_line(data = hops_cdl_state_summaries_gsom,
+             aes(x=YEAR, y=PRCP_AVG)) +
+  facet_wrap(~ STATE)
+
+toc() # stops full script timer
+```
+
+```{r feature_engineering, eval=FALSE, include=FALSE}
+# From the GSOY README:
+# HNyz, Highest minimum soil temperature for the month
+# HXyz, Highest maximum soil temperature for the month
+# LNyz, Lowest maximum soil temperature for the month
+# LXyz, Lowest minimum soil temperature for the month
+# MNyz, Monthly (Annual) mean minimum temperature of evaporation pan water in hundredths degree Celsius.
+# MXPN, Monthly (Annual) mean maximum temperature of evaporation pan water in hundredths degree Celsius
+# For the HNyz, HXyz, LNyz, LXyz, MNyz and MXyz elements, the "y" and "z" values within the Element Type Name are as follows:
+# y = 0, unknown surface type 
+# and z=
+#                       1 = 2 inches or 5 centimeters depth
+#                       2 = 4 inches or 10 centimeters depth
+#                       3 = 8 inches or 20 centimeters depth
+#                       4 = 20 inches or 50 centimeters depth
+#                       5 = 40 inches or 100 centimeters depth
+
+# WS and WD are wind speed and direction, respectively
+
+
+tmp = hops_county_gsom %>%
+     dplyr::select(names(.), YEAR, DATE, -NAME, -LATITUDE, -LONGITUDE, -ELEVATION, -ends_with("ATTRIBUTES"))
+
+feats <- c("TAVG")
+tmp %>%
+  select(DATE, all_of(feats))
+
+toc()
+```
+
+## Session info and notes
+
+```{r session}
+sessionInfo()
+```
+
+#### TO DO
+
+test whether each station needs to be updated (for new data we want in 
+the analysis) or whether some stations have been added or removed
+(for changes to hops_counties)
+
+reintroduce MAX_STATIONS by ordering stations in each county by
+completeness in time and observables
+
+*check whether pnw_county_stations should have state or state_name assigned early on*
