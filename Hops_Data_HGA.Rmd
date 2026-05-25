@@ -442,7 +442,7 @@ inner_join(hga_yield %>%
 
 Now we can address three labeling issues before combining the yields.
 
-* NASS assigns state and region aggregate values to "ALL CLASSES", which I will re-label to match HGA aggregates.
+* NASS assigns state and region aggregate values to "ALL CLASSES", which I will re-label as TOTAL STATE, to match HGA aggregates.
 
 * HGA spell out Columbus/Tomahawk/Zeus while NASS uses the abbreviation C/T/Z. I choose to spell out the names to make it little easier to compare with other Columbus/Tomahawk and Zeus varieties.
 

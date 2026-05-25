@@ -2,7 +2,7 @@ HGA data for Analysis of Hops Yield
 ================
 Don A. Lloyd
 
-Updated 26 April, 2026
+Updated 25 May, 2026
 
 <a name="top"></a> Keywords: hops, yields, data extraction, data
 cleansing, data validation, regex, outlier analysis
@@ -247,7 +247,7 @@ listtbl <- lapply(pdf.list, function(x) {
 toc()
 ```
 
-    ## 4.301 sec elapsed
+    ## 4.305 sec elapsed
 
 ``` r
 hga_years <- unlist(lapply(listtbl, function(x) x$year))
@@ -395,7 +395,7 @@ of growers that are cultivating unique varieties within their state.
 summary(hga_yield$Yield)
 ```
 
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs 
     ##     365    1468    1772    1798    2072    3387     273
 
 ``` r
@@ -657,7 +657,7 @@ inner_join(hga_yield %>%
 Now we can address three labeling issues before combining the yields.
 
 - NASS assigns state and region aggregate values to “ALL CLASSES”, which
-  I will re-label to match HGA aggregates.
+  I will re-label as TOTAL STATE, to match HGA aggregates.
 
 - HGA spell out Columbus/Tomahawk/Zeus while NASS uses the abbreviation
   C/T/Z. I choose to spell out the names to make it little easier to
@@ -1109,13 +1109,13 @@ modeling or other analysis.
 sessionInfo()
 ```
 
-    ## R version 4.5.3 (2026-03-11)
-    ## Platform: aarch64-apple-darwin20
+    ## R version 4.6.0 (2026-04-24)
+    ## Platform: aarch64-apple-darwin23
     ## Running under: macOS Sonoma 14.8.3
     ## 
     ## Matrix products: default
-    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
-    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
     ## 
     ## locale:
     ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1136,15 +1136,15 @@ sessionInfo()
     ## loaded via a namespace (and not attached):
     ##  [1] utf8_1.2.6         generics_0.1.4     stringi_1.8.7      lattice_0.22-9    
     ##  [5] digest_0.6.39      magrittr_2.0.5     timechange_0.4.0   evaluate_1.0.5    
-    ##  [9] grid_4.5.3         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.1   
+    ##  [9] grid_4.6.0         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.1   
     ## [13] httr_1.4.8         purrr_1.2.2        scales_1.4.0       cli_3.6.6         
     ## [17] rlang_1.2.0        withr_3.0.2        yaml_2.3.12        otel_0.2.0        
-    ## [21] tools_4.5.3        curl_7.1.0         vctrs_0.7.3        R6_2.6.1          
+    ## [21] tools_4.6.0        curl_7.1.0         vctrs_0.7.3        R6_2.6.1          
     ## [25] zoo_1.8-15         lifecycle_1.0.5    pkgconfig_2.0.3    pillar_1.11.1     
     ## [29] gtable_0.3.6       glue_1.8.1         quantmod_0.4.28    Rcpp_1.1.1-1.1    
     ## [33] xfun_0.57          tidyselect_1.2.1   rstudioapi_0.18.0  knitr_1.51        
     ## [37] farver_2.1.2       htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.31    
-    ## [41] xts_0.14.2         qpdf_1.4.1         compiler_4.5.3     S7_0.2.2          
+    ## [41] xts_0.14.2         qpdf_1.4.1         compiler_4.6.0     S7_0.2.2          
     ## [45] quadprog_1.5-8     TTR_0.24.4         askpass_1.2.1
 
 ### Updates

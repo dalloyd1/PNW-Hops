@@ -2,7 +2,7 @@ Hops Counties from Cropland Data Layer
 ================
 Don A. Lloyd
 
-Updated 27 April, 2026
+Updated 25 May, 2026
 
 ``` r
 library(dplyr)
@@ -22,6 +22,8 @@ library(scales)
 library(tictoc)
 library(data.table) #fwrite
 library(rnassqs) # API for acreage validation
+library(elevatr) # API to USGS Elevation Point Query Service
+library(units)
 ```
 
 <a id="top"></a> [Testing CropScape Data Layer
@@ -52,6 +54,9 @@ FN_COUNTY_STATS = here(SUBDIR, "cdl_pnw_county_stats.csv")
 
 FN_HOP_PTS_RDATA = here(SUBDIR, "cdl_hops_points_by_year.Rdata")
 FN_HOP_PTS_GPKG = here(SUBDIR, "cdl_hops_points_by_year.gpkg")
+
+FN_HOPS_PTS_UNIQUE_RDATA = here(SUBDIR, "cdl_hops_points_unique.Rdata")
+FN_HOP_PTS_UNIQUE_GPKG = here(SUBDIR, "cdl_hops_points_unique.gpkg")
 
 # I obviously like hops but you can try other crops in this analysis
 CROP_LIST <- "Hops" # use c() here to vector multiple crops
@@ -175,6 +180,11 @@ max(abs(pull(testAcreage, error)), na.rm=T)
 The errors are miniscule, so our verification checks out for this case.
 The raster also includes all pixels within the bounding box of the
 county. Note that pixels outside the county boundaries are coded 0.
+
+It is worth noting for future reference that, regardless of the given
+resolution, longitude is reported to four digits and latitude to five
+digits. This analysis does not test for gaps in CDL coverage between
+POINTs in the geoemtry.
 
 ### Problem with CDL raster CRS
 
@@ -531,7 +541,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 9.249 sec elapsed
+    ## 10.807 sec elapsed
 
 ``` r
 # there we go
@@ -613,30 +623,32 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
       # to keep just the overlap among the reduced set
       if (fips == "41047" & yr %in% mc_fix$Year) {
         cat(sprintf("masking fips %s for %s\n", fips, yr))
-        rastdf <- inner_join(mc_coords, rastdf, by = c("x","y"))
+        # mc_coords is the mask for Marion County
+        rastdf <- inner_join(dplyr::select(mc_coords, -Layer_1), rastdf,
+                             by = c("x","y"))
       }
       rastdf
     })
   toc()
   
-  cdl_hops_points_by_year <- 
-    bind_rows(cdl_hops_point_list)
+  cdl_hops_points_by_year <- bind_rows(cdl_hops_point_list)
 
-  # too time consuming
-  # cdl_hops_distinct_points <-
-  #   distinct(cdl_hops_points_by_year, geometry)
+  # too time consuming to identify unique coordinates from these data in
+  # an SF object, distinct works here b/c we haven't yet recast the data
+  cdl_hops_points_unique <-
+    dplyr::select(cdl_hops_points_by_year, -year) %>%
+    distinct
 
-  # cdl_hops_distinct_points <-
-  #   Reduce(cdl_hops_point_list, function(x) distinct(x, geometry))
-
+  # this saves the compiled data as a dataframe without a CRS
   saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
-  
+  saveRDS(cdl_hops_points_unique, FN_HOPS_PTS_UNIQUE_RDATA)
+
 }
 ```
 
     ## masking fips 41047 for 2013
     ## masking fips 41047 for 2015
-    ## 97.165 sec elapsed
+    ## 111.094 sec elapsed
 
 ``` r
 # avoid the temptation to use projectRaster, transforms the Layer_1 values
@@ -654,20 +666,24 @@ transform them directly to a simple feature using the correct CRS.
 ``` r
 # promote the data frame to simple feature
 cdl_hops_points_by_year <- 
-  # bind_rows(cdl_hops_point_list) %>%
   cdl_hops_points_by_year %>%
-  # raster masks select :)
-  dplyr::select(-starts_with("Layer_1.")) %>%
+  # raster pkg masks select :)
+  # dplyr::select(-starts_with("Layer_1.")) %>%
   # finally specifying the actual NAD UTM coordinates
   st_as_sf(coords = c("x", "y"), crs = st_crs(5070))
 
-st_write(cdl_hops_points_by_year, FN_HOP_PTS_GPKG,
-         append = F, delete_dsn = F)
+cdl_hops_points_unique <-
+  cdl_hops_points_unique %>%
+  # raster pkg masks select :)
+  # dplyr::select(-starts_with("Layer_1.")) %>%
+  # finally specifying the actual NAD UTM coordinates
+  st_as_sf(coords = c("x", "y"), crs = st_crs(5070))
+
+# the GPKG files are saved *after* assigning elevation
 ```
 
-    ## Writing layer `cdl_hops_points_by_year' to data source 
-    ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/geo/cdl_hops_points_by_year.gpkg' using driver `GPKG'
-    ## Writing 4021484 features with 5 fields and geometry type Point.
+The CDL data remain in NAD83 / Conus Albers CRS, as intended by the
+raster files, and expressed in UTM integer coordinates.
 
 We can also illustrate the variation in hops landuse assignments in the
 CDL methodology over time.
@@ -714,6 +730,177 @@ alt="Points labeled as hops in CDL landuse" />
 <figcaption aria-hidden="true">Points labeled as hops in CDL
 landuse</figcaption>
 </figure>
+
+### Add elevation data to hops CDL points
+
+First, let’s do some timing and accuracy checks using a small sample of
+hops CDL points from Marion County, OR.
+
+``` r
+cdl_sample <- 
+  cdl_hops_points_unique %>%
+  filter(fips == 41047) %>%
+  sample_n(1000) %>%
+  st_transform(crs = 4269) %>% # NAD83 (lon/lat)
+  dplyr::mutate(lon = sf::st_coordinates(.)[,1],
+                lat = sf::st_coordinates(.)[,2]
+  ) %>% 
+  arrange(fips)
+
+######################################################
+##
+##  elevation errors from AWS with respect to EPQS using
+##  the same sample from Marion County as for distance errors
+##  (elevation units are meters by default)
+##
+tic()
+# EPQS is very slow
+elevtest_epqs <-
+  get_elev_point(
+    cdl_sample,
+    src = "epqs"
+  )
+```
+
+    ## Downloading point elevations:
+
+    ## Note: Elevation units are in meters
+
+``` r
+toc()
+```
+
+    ## 142.232 sec elapsed
+
+``` r
+tic()
+# the resolution parameter `z` can go up to 14 (highest res)
+# but the download time is excessive for this analysis
+z_alts <-rev(c(2, 4, 5, 7, 9, 11)) #,12,14)
+elevtest_aws <-
+  lapply(z_alts, function(z) {
+    suppressMessages(
+      get_elev_point(
+        cdl_sample,
+        src = "aws",
+        ncpu = ifelse(future::availableCores() > 2, 2, 1),
+        z = z
+      ) %>%
+        mutate(z = z)
+    )
+  }) %>%
+  bind_rows
+toc()
+```
+
+    ## 18.845 sec elapsed
+
+``` r
+elevtest_join <-
+  st_join(elevtest_aws
+          ,elevtest_epqs
+          ,suffix = c(".aws", ".epqs")
+  )  %>%
+  mutate(elevdiff = elevation.aws - elevation.epqs)
+
+elevtest_join %>%
+  ggplot(aes(x=elevdiff, fill=factor(z))) +
+  geom_histogram(show.legend = F, bins = 15) +
+  facet_wrap( ~ z, scales="free")
+```
+
+![](Hops_Counties_CDL_files/figure-gfm/test_elevation-1.png)<!-- -->
+
+``` r
+# z=9 appears to be a good compromise between accuracy and time
+# for this project, 3X sd is within the 10m standard height above ground
+# for a met station. The default, z=5, seems too generous.
+elevtest_join %>%
+  st_drop_geometry() %>%
+  group_by(z) %>%
+  summarise(sd=sd(elevdiff))
+```
+
+    ## # A tibble: 6 × 2
+    ##       z     sd
+    ##   <dbl>  <dbl>
+    ## 1     2 34.5  
+    ## 2     4 18.5  
+    ## 3     5 10.0  
+    ## 4     7  3.08 
+    ## 5     9  1.50 
+    ## 6    11  0.505
+
+Now assign elevation to all unique hops CDL points.
+
+``` r
+# update unique hops CDL points with the elevation for chosen resolution
+tic()
+cdl_hops_points_unique <-
+  arrange(cdl_hops_points_unique, fips) %>%
+  get_elev_point(
+    .,
+    src = "aws",
+    ncpu = ifelse(future::availableCores() > 2, 2, 1),
+    overwrite = TRUE,
+    z = 9
+  )
+```
+
+    ## Mosaicing & Projecting
+
+    ## Note: Elevation units are in meters
+
+``` r
+toc()
+```
+
+    ## 85.116 sec elapsed
+
+``` r
+# distribution of elevation from EPQS
+cdl_hops_points_unique %>%
+  ggplot(aes(x=elevation, fill=fips)) +
+  geom_histogram(show.legend = F, bins = 15) +
+  facet_wrap(~ fips, scales="free")
+```
+
+![](Hops_Counties_CDL_files/figure-gfm/add_elevation-1.png)<!-- -->
+
+``` r
+cdl_hops_points_unique %>%
+  st_drop_geometry() %>%
+  group_by(fips) %>%
+  summarise(mean=mean(elevation), sd=sd(elevation))
+```
+
+    ## # A tibble: 6 × 3
+    ##   fips   mean    sd
+    ##   <chr> <dbl> <dbl>
+    ## 1 16027 721.   28.3
+    ## 2 41047  55.2  28.0
+    ## 3 41053  52.9  21.2
+    ## 4 53005 272.   75.8
+    ## 5 53025 345.   68.1
+    ## 6 53077 270.   64.4
+
+``` r
+st_write(cdl_hops_points_by_year, FN_HOP_PTS_GPKG, append = F, delete_dsn = F)
+```
+
+    ## Deleting layer `cdl_hops_points_by_year' using driver `GPKG'
+    ## Writing layer `cdl_hops_points_by_year' to data source 
+    ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/geo/cdl_hops_points_by_year.gpkg' using driver `GPKG'
+    ## Writing 4021484 features with 5 fields and geometry type Point.
+
+``` r
+st_write(cdl_hops_points_unique, FN_HOP_PTS_UNIQUE_GPKG, append = F, delete_dsn = F)
+```
+
+    ## Deleting layer `cdl_hops_points_unique' using driver `GPKG'
+    ## Writing layer `cdl_hops_points_unique' to data source 
+    ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/geo/cdl_hops_points_unique.gpkg' using driver `GPKG'
+    ## Writing 702119 features with 6 fields and geometry type Point.
 
 ### Validating CDL data with NASS
 
@@ -959,7 +1146,7 @@ Here is our final list:
 toc()
 ```
 
-    ## 231.796 sec elapsed
+    ## 579.407 sec elapsed
 
 ### Session info and notes
 
@@ -985,37 +1172,54 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] rnassqs_0.6.3       data.table_1.18.2.1 tictoc_1.2.1       
-    ##  [4] scales_1.4.0        tigris_2.2.1        tmap_4.3           
-    ##  [7] raster_3.6-32       sp_2.2-1            terra_1.9-11       
-    ## [10] sf_1.1-0            CropScapeR_1.1.5    keyring_1.4.1      
-    ## [13] here_1.0.2          ggplot2_4.0.3       lubridate_1.9.5    
-    ## [16] tidyr_1.3.2         dplyr_1.2.1        
+    ##  [1] units_1.0-1         elevatr_0.99.1      rnassqs_0.6.3      
+    ##  [4] data.table_1.18.2.1 tictoc_1.2.1        scales_1.4.0       
+    ##  [7] tigris_2.2.1        tmap_4.3            raster_3.6-32      
+    ## [10] sp_2.2-1            terra_1.9-11        sf_1.1-0           
+    ## [13] CropScapeR_1.1.5    keyring_1.4.1       here_1.0.2         
+    ## [16] ggplot2_4.0.3       lubridate_1.9.5     tidyr_1.3.2        
+    ## [19] dplyr_1.2.1        
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.2.1   farver_2.1.2       S7_0.2.2           fastmap_1.2.0     
-    ##  [5] leaflegend_1.2.1   leaflet_2.2.3      XML_3.99-0.23      digest_0.6.39     
-    ##  [9] timechange_0.4.0   lifecycle_1.0.5    magrittr_2.0.5     compiler_4.6.0    
-    ## [13] rlang_1.2.0        tools_4.6.0        utf8_1.2.6         yaml_2.3.12       
-    ## [17] knitr_1.51         labeling_0.4.3     htmlwidgets_1.6.4  classInt_0.4-11   
-    ## [21] curl_7.1.0         RColorBrewer_1.1-3 abind_1.4-8        KernSmooth_2.23-26
-    ## [25] withr_3.0.2        purrr_1.2.2        leafsync_0.1.0     grid_4.6.0        
-    ## [29] cols4all_0.10      e1071_1.7-17       leafem_0.2.5       colorspace_2.1-2  
-    ## [33] spacesXYZ_1.6-0    cli_3.6.6          rmarkdown_2.31     generics_0.1.4    
-    ## [37] otel_0.2.0         httr_1.4.8         tmaptools_3.3      DBI_1.3.0         
-    ## [41] proxy_0.4-29       stringr_1.6.0      stars_0.7-2        parallel_4.6.0    
-    ## [45] s2_1.1.9           base64enc_0.1-6    vctrs_0.7.3        crosstalk_1.2.2   
-    ## [49] units_1.0-1        maptiles_0.11.0    glue_1.8.1         lwgeom_0.2-15     
-    ## [53] codetools_0.2-20   stringi_1.8.7      gtable_0.3.6       tibble_3.3.1      
-    ## [57] logger_0.4.1       pillar_1.11.1      rappdirs_0.3.4     htmltools_0.5.9   
-    ## [61] R6_2.6.1           wk_0.9.5           rprojroot_2.1.1    evaluate_1.0.5    
-    ## [65] lattice_0.22-9     png_0.1-9          class_7.3-23       Rcpp_1.1.1-1.1    
-    ## [69] uuid_1.2-2         xfun_0.57          pkgconfig_2.0.3
+    ##  [1] tidyselect_1.2.1     farver_2.1.2         S7_0.2.2            
+    ##  [4] fastmap_1.2.0        leaflegend_1.2.1     leaflet_2.2.3       
+    ##  [7] XML_3.99-0.23        digest_0.6.39        timechange_0.4.0    
+    ## [10] lifecycle_1.0.5      magrittr_2.0.5       compiler_4.6.0      
+    ## [13] progress_1.2.3       rlang_1.2.0          tools_4.6.0         
+    ## [16] utf8_1.2.6           yaml_2.3.12          knitr_1.51          
+    ## [19] prettyunits_1.2.0    labeling_0.4.3       htmlwidgets_1.6.4   
+    ## [22] curl_7.1.0           classInt_0.4-11      RColorBrewer_1.1-3  
+    ## [25] abind_1.4-8          KernSmooth_2.23-26   withr_3.0.2         
+    ## [28] purrr_1.2.2          leafsync_0.1.0       grid_4.6.0          
+    ## [31] cols4all_0.10        future_1.70.0        e1071_1.7-17        
+    ## [34] leafem_0.2.5         colorspace_2.1-2     progressr_0.19.0    
+    ## [37] spacesXYZ_1.6-0      globals_0.19.1       cli_3.6.6           
+    ## [40] crayon_1.5.3         rmarkdown_2.31       generics_0.1.4      
+    ## [43] otel_0.2.0           rstudioapi_0.18.0    httr_1.4.8          
+    ## [46] tmaptools_3.3        DBI_1.3.0            proxy_0.4-29        
+    ## [49] stringr_1.6.0        stars_0.7-2          slippymath_0.3.1    
+    ## [52] parallel_4.6.0       s2_1.1.9             base64enc_0.1-6     
+    ## [55] vctrs_0.7.3          hms_1.1.4            listenv_0.10.1      
+    ## [58] crosstalk_1.2.2      maptiles_0.11.0      parallelly_1.47.0   
+    ## [61] glue_1.8.1           lwgeom_0.2-15        codetools_0.2-20    
+    ## [64] stringi_1.8.7        gtable_0.3.6         tibble_3.3.1        
+    ## [67] furrr_0.4.0          logger_0.4.1         pillar_1.11.1       
+    ## [70] rappdirs_0.3.4       htmltools_0.5.9      R6_2.6.1            
+    ## [73] wk_0.9.5             microbenchmark_1.5.0 rprojroot_2.1.1     
+    ## [76] evaluate_1.0.5       lattice_0.22-9       png_0.1-9           
+    ## [79] class_7.3-23         Rcpp_1.1.1-1.1       uuid_1.2-2          
+    ## [82] xfun_0.57            pkgconfig_2.0.3
+
+#### CHANGES
+
+Fall 2025 – added logic to avoid downloading TIFs unnecessarily by
+testing for saved `cdl_hops_points_by_year.gpkg` as a starting point for
+`tif_req`
+
+May 2026 – added call to AWS Terrain Tiles via elevatr before write of
+GPKG output
 
 #### TO DO
-
-Write logic to avoid downloading TIFs unnecessarily by testing for saved
-`cdl_hops_points_by_year.gpkg` as a starting point for `tif_req`
 
 Generalize the test of “bad bounding box” TIFs when processing all
 rasters
