@@ -2,7 +2,7 @@ Hops Counties from Cropland Data Layer
 ================
 Don A. Lloyd
 
-Updated 25 May, 2026
+Updated 26 May, 2026
 
 ``` r
 library(dplyr)
@@ -38,6 +38,9 @@ formats](#testing-cropscape-data-layer-formats) with Marion County, OR
 [Obtain and process
 rasters](#process-rasters-for-primary-hops-growing-counties)
 
+[Attach elevation to hops CDL
+points](#add-elevation-data-to-hops-cdl-points)
+
 [Data validation with NASS](#validating-cdl-data-with-nass)
 
 [Session info and notes](#session-info-and-notes)
@@ -57,6 +60,7 @@ FN_HOP_PTS_GPKG = here(SUBDIR, "cdl_hops_points_by_year.gpkg")
 
 FN_HOPS_PTS_UNIQUE_RDATA = here(SUBDIR, "cdl_hops_points_unique.Rdata")
 FN_HOP_PTS_UNIQUE_GPKG = here(SUBDIR, "cdl_hops_points_unique.gpkg")
+FN_HOP_PTS_UNIQUE_CSV = here(SUBDIR, "cdl_hops_points_unique.csv")
 
 # I obviously like hops but you can try other crops in this analysis
 CROP_LIST <- "Hops" # use c() here to vector multiple crops
@@ -541,7 +545,7 @@ mc_rast <- raster::raster(mc_temp, layer=2, values=T)
 toc()
 ```
 
-    ## 10.807 sec elapsed
+    ## 9.557 sec elapsed
 
 ``` r
 # there we go
@@ -636,10 +640,12 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
   # too time consuming to identify unique coordinates from these data in
   # an SF object, distinct works here b/c we haven't yet recast the data
   cdl_hops_points_unique <-
-    dplyr::select(cdl_hops_points_by_year, -year) %>%
+    # 20260526 dropped res from frame to prevent the resolution from
+    #.          occasionally duplicating a coordinate pair
+    dplyr::select(cdl_hops_points_by_year, -year, -ends_with("res")) %>%
     distinct
 
-  # this saves the compiled data as a dataframe without a CRS
+  # this saves the compiled data as dataframes without a CRS
   saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
   saveRDS(cdl_hops_points_unique, FN_HOPS_PTS_UNIQUE_RDATA)
 
@@ -648,7 +654,7 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
 
     ## masking fips 41047 for 2013
     ## masking fips 41047 for 2015
-    ## 111.094 sec elapsed
+    ## 96.654 sec elapsed
 
 ``` r
 # avoid the temptation to use projectRaster, transforms the Layer_1 values
@@ -682,8 +688,8 @@ cdl_hops_points_unique <-
 # the GPKG files are saved *after* assigning elevation
 ```
 
-The CDL data remain in NAD83 / Conus Albers CRS, as intended by the
-raster files, and expressed in UTM integer coordinates.
+The CDL data remain in NAD83 / Conus Albers CRS, with integer UTM XY
+points as found in the original raster files.
 
 We can also illustrate the variation in hops landuse assignments in the
 CDL methodology over time.
@@ -770,11 +776,11 @@ elevtest_epqs <-
 toc()
 ```
 
-    ## 142.232 sec elapsed
+    ## 377.486 sec elapsed
 
 ``` r
 tic()
-# the resolution parameter `z` can go up to 14 (highest res)
+# the zoom parameter `z` can go up to 14 (highest res)
 # but the download time is excessive for this analysis
 z_alts <-rev(c(2, 4, 5, 7, 9, 11)) #,12,14)
 elevtest_aws <-
@@ -793,7 +799,7 @@ elevtest_aws <-
 toc()
 ```
 
-    ## 18.845 sec elapsed
+    ## 18.757 sec elapsed
 
 ``` r
 elevtest_join <-
@@ -814,7 +820,7 @@ elevtest_join %>%
 ``` r
 # z=9 appears to be a good compromise between accuracy and time
 # for this project, 3X sd is within the 10m standard height above ground
-# for a met station. The default, z=5, seems too generous.
+# for a met station. The default zoom, z=5, seems too generous.
 elevtest_join %>%
   st_drop_geometry() %>%
   group_by(z) %>%
@@ -824,17 +830,17 @@ elevtest_join %>%
     ## # A tibble: 6 × 2
     ##       z     sd
     ##   <dbl>  <dbl>
-    ## 1     2 34.5  
-    ## 2     4 18.5  
-    ## 3     5 10.0  
-    ## 4     7  3.08 
-    ## 5     9  1.50 
-    ## 6    11  0.505
+    ## 1     2 31.6  
+    ## 2     4 17.8  
+    ## 3     5  8.16 
+    ## 4     7  2.96 
+    ## 5     9  1.51 
+    ## 6    11  0.556
 
 Now assign elevation to all unique hops CDL points.
 
 ``` r
-# update unique hops CDL points with the elevation for chosen resolution
+# update unique hops CDL points with the elevation for chosen zoom
 tic()
 cdl_hops_points_unique <-
   arrange(cdl_hops_points_unique, fips) %>%
@@ -855,7 +861,7 @@ cdl_hops_points_unique <-
 toc()
 ```
 
-    ## 85.116 sec elapsed
+    ## 78.18 sec elapsed
 
 ``` r
 # distribution of elevation from EPQS
@@ -900,7 +906,11 @@ st_write(cdl_hops_points_unique, FN_HOP_PTS_UNIQUE_GPKG, append = F, delete_dsn 
     ## Deleting layer `cdl_hops_points_unique' using driver `GPKG'
     ## Writing layer `cdl_hops_points_unique' to data source 
     ##   `/Users/dlloyd/Dropbox/Projects/PNW-Hops/geo/cdl_hops_points_unique.gpkg' using driver `GPKG'
-    ## Writing 702119 features with 6 fields and geometry type Point.
+    ## Writing 702090 features with 4 fields and geometry type Point.
+
+``` r
+fwrite(st_drop_geometry(cdl_hops_points_unique), FN_HOP_PTS_UNIQUE_CSV)
+```
 
 ### Validating CDL data with NASS
 
@@ -1146,7 +1156,7 @@ Here is our final list:
 toc()
 ```
 
-    ## 579.407 sec elapsed
+    ## 728.614 sec elapsed
 
 ### Session info and notes
 

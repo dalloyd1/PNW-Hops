@@ -45,6 +45,8 @@ with Marion County, OR
 
 [Obtain and process rasters](#process-rasters-for-primary-hops-growing-counties)
 
+[Attach elevation to hops CDL points](#add-elevation-data-to-hops-cdl-points)
+
 [Data validation with NASS](#validating-cdl-data-with-nass)
 
 [Session info and notes](#session-info-and-notes)
@@ -64,6 +66,7 @@ FN_HOP_PTS_GPKG = here(SUBDIR, "cdl_hops_points_by_year.gpkg")
 
 FN_HOPS_PTS_UNIQUE_RDATA = here(SUBDIR, "cdl_hops_points_unique.Rdata")
 FN_HOP_PTS_UNIQUE_GPKG = here(SUBDIR, "cdl_hops_points_unique.gpkg")
+FN_HOP_PTS_UNIQUE_CSV = here(SUBDIR, "cdl_hops_points_unique.csv")
 
 # I obviously like hops but you can try other crops in this analysis
 CROP_LIST <- "Hops" # use c() here to vector multiple crops
@@ -435,10 +438,12 @@ if (NEW_RASTERS | FORCE_RASTER_READ) {
   # too time consuming to identify unique coordinates from these data in
   # an SF object, distinct works here b/c we haven't yet recast the data
   cdl_hops_points_unique <-
-    dplyr::select(cdl_hops_points_by_year, -year) %>%
+    # 20260526 dropped res from frame to prevent the resolution from
+    #.          occasionally duplicating a coordinate pair
+    dplyr::select(cdl_hops_points_by_year, -year, -ends_with("res")) %>%
     distinct
 
-  # this saves the compiled data as a dataframe without a CRS
+  # this saves the compiled data as dataframes without a CRS
   saveRDS(cdl_hops_points_by_year, FN_HOP_PTS_RDATA)
   saveRDS(cdl_hops_points_unique, FN_HOPS_PTS_UNIQUE_RDATA)
 
@@ -471,7 +476,7 @@ cdl_hops_points_unique <-
 # the GPKG files are saved *after* assigning elevation
 ```
 
-The CDL data remain in NAD83 / Conus Albers CRS, as intended by the raster files, and expressed in UTM integer coordinates. 
+The CDL data remain in NAD83 / Conus Albers CRS, with integer UTM XY points as found in the original raster files. 
 
 ```{r test_distance_errors, eval=FALSE, include=FALSE}
 ######################################################
@@ -602,7 +607,7 @@ elevtest_epqs <-
 toc()
 
 tic()
-# the resolution parameter `z` can go up to 14 (highest res)
+# the zoom parameter `z` can go up to 14 (highest res)
 # but the download time is excessive for this analysis
 z_alts <-rev(c(2, 4, 5, 7, 9, 11)) #,12,14)
 elevtest_aws <-
@@ -634,7 +639,7 @@ elevtest_join %>%
 
 # z=9 appears to be a good compromise between accuracy and time
 # for this project, 3X sd is within the 10m standard height above ground
-# for a met station. The default, z=5, seems too generous.
+# for a met station. The default zoom, z=5, seems too generous.
 elevtest_join %>%
   st_drop_geometry() %>%
   group_by(z) %>%
@@ -644,7 +649,7 @@ elevtest_join %>%
 Now assign elevation to all unique hops CDL points.
 
 ```{r add_elevation}
-# update unique hops CDL points with the elevation for chosen resolution
+# update unique hops CDL points with the elevation for chosen zoom
 tic()
 cdl_hops_points_unique <-
   arrange(cdl_hops_points_unique, fips) %>%
@@ -672,6 +677,8 @@ cdl_hops_points_unique %>%
 ```{r save_gpkg}
 st_write(cdl_hops_points_by_year, FN_HOP_PTS_GPKG, append = F, delete_dsn = F)
 st_write(cdl_hops_points_unique, FN_HOP_PTS_UNIQUE_GPKG, append = F, delete_dsn = F)
+
+fwrite(st_drop_geometry(cdl_hops_points_unique), FN_HOP_PTS_UNIQUE_CSV)
 ```
 
 ### Validating CDL data with NASS
